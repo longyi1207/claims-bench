@@ -23,9 +23,7 @@
 \captionsetup{font=small, labelfont=bf, skip=6pt}
 \setkeys{Gin}{width=0.92\linewidth, keepaspectratio}
 
-% Slightly tighter tables
-\AtBeginEnvironment{longtable}{\small}
-\AtBeginEnvironment{tabular}{\small}
+% Slightly tighter tables (tabular filter emits \small inline)
 
 % Title block (author metadata is name only; affiliation on title page)
 \makeatletter
@@ -49,15 +47,9 @@
 }
 
 \AtEndEnvironment{abstract}{%
-  \vspace{0.75em}
-  \noindent\textbf{Keywords:} \claimskeywords
+  \par\vspace{0.75em}%
+  \noindent\textbf{Keywords:} \claimskeywords%
 }
 \makeatother
-
-\hypersetup{
-  pdftitle={CLAIMS-Bench v2},
-  pdfauthor={Longyi Zhou},
-  pdfsubject={AI alignment benchmark},
-}
 
 \newcommand{\repo}{\url{https://github.com/longyi1207/claims-bench}}

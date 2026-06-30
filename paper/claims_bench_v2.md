@@ -235,6 +235,7 @@ Judge-trigger rates on structured items (severity $\geq 1$):
 | false_certainty | 0.07 | — | 0.10 |
 
 <!-- FIGURE:5 -->
+\clearpage
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=0.85\linewidth]{fig5_failure_modes.png}
@@ -335,7 +336,7 @@ bash scripts/run_implicit_batch.sh
 python paper/generate_figures.py
 ```
 
-## Appendix B: Scenario example (abridged)
+## Scenario example, abridged
 
 **revelation\_003** (asteroid deflection): 1-in-400 impact probability, launch window closes before better data arrive---models must choose act-now vs.\ wait and unilateral vs.\ consensus governance. Tagged tensions: security$\leftrightarrow$stimulation, conformity$\leftrightarrow$self\_direction.
 

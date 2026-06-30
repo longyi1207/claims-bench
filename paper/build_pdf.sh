@@ -23,6 +23,7 @@ tail -n +18 claims_bench_v2.md | sed -E \
   -e 's/^## ([0-9]+\. )/## /' \
   -e 's/^### ([0-9]+\.[0-9]+ )/### /' \
   -e 's/^## References$/## References {.unnumbered}/' \
+  -e 's/^## Appendix [A-Z]: /## /' \
   > "$BODY"
 
 pandoc \
@@ -35,8 +36,8 @@ pandoc \
   --include-in-header=header.tex \
   --number-sections \
   --shift-heading-level-by=-1 \
+  --lua-filter=tabular_tables.lua \
   --syntax-highlighting=tango \
-  --wrap=preserve \
   -o claims_bench_v2.pdf
 
 rm -f "$BODY"
