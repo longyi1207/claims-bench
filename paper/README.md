@@ -7,16 +7,14 @@
 | [`generate_figures.py`](generate_figures.py) | Build figures from `outputs/baseline_*` JSON reports |
 | [`figures/`](figures/) | Generated PDF/PNG (re-run script after new baselines) |
 
-## Quick build
+## Build PDF (production)
 
 ```bash
-# Regenerate figures after baseline re-runs
-python paper/generate_figures.py
-
-# PDF (optional)
-pandoc paper/claims_bench_v2.md -o paper/claims_bench_v2.pdf \
-  --resource-path=paper -V geometry:margin=1in
+cd paper
+bash build_pdf.sh   # requires pandoc + tectonic (brew install pandoc tectonic)
 ```
+
+Output: `paper/claims_bench_v2.pdf`
 
 ## Venue suggestions
 
@@ -26,7 +24,7 @@ pandoc paper/claims_bench_v2.md -o paper/claims_bench_v2.pdf \
 
 ## Before submission
 
-- [ ] Human panel n≥5 on 8-item survey (`data/panel/survey/`)
+- [ ] Human panel n$\geq$5 on 8-item survey (`data/panel/survey/`)
 - [x] Temp=0.0 consistency comparison in §6.3 (mean CV 0.038 vs 0.113)
 - [ ] Expand model count if reviewers request
 - [ ] IRB / consent if paid panel

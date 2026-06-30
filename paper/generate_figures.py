@@ -123,7 +123,7 @@ def fig_failure_modes(directory: Path, out: Path) -> None:
     models = list(per_model.keys())
     x = np.arange(len(modes))
     width = 0.25
-    fig, ax = plt.subplots(figsize=(8, 3.5))
+    fig, ax = plt.subplots(figsize=(7, 2.8))
     for i, model in enumerate(models):
         vals = [per_model[model].get(m, 0) for m in modes]
         ax.bar(x + i * width, vals, width, label=model)

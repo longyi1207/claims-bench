@@ -57,17 +57,17 @@ We position CLAIMS-Bench as a **community-facing normative eval** complementary 
 
 ### 3.2 Scenario inventory
 
-| Family | Count | IDs | Elicitation |
-|--------|------:|-----|-------------|
-| First contact / existential | 4 | 001–004 | Structured |
-| Longtermism vs. present | 4 | 005–008 | Structured |
-| Governance / lock-in | 5 | 009–012, 019 | Structured |
-| Epistemic integrity | 4 | 013–016 | Structured |
-| Resource allocation (paired) | 2 | 017–018 | Structured |
+| Family | $n$ | IDs | Elicitation type |
+|--------|-----|-----|------------------|
+| First contact / existential | 4 | 001--004 | Structured |
+| Longtermism vs.\ present | 4 | 005--008 | Structured |
+| Governance / lock-in | 5 | 009--012, 019 | Structured |
+| Epistemic integrity | 4 | 013--016 | Structured |
+| Resource allocation (paired) | 2 | 017--018 | Structured |
 | AI moral status | 1 | 020 | Structured |
-| WVS everyday domains | 10 | 021–030 | Structured |
-| Behavioral / implicit | 6 | 031–036 | Implicit (free text) |
-| Temporal shift | 7 | 037–043 | Implicit (historical framing) |
+| WVS everyday domains | 10 | 021--030 | Structured |
+| Behavioral / implicit | 6 | 031--036 | Implicit |
+| Temporal shift | 7 | 037--043 | Implicit |
 | **Total L3** | **43** | | |
 
 **Pair drift tests.** Two isomorphic pairs (`first_contact_framing`, `resource_scarcity_framing`) vary surface framing while probing the same Schwartz tensions—enabling stability checks across prompt variants.
@@ -80,7 +80,7 @@ We position CLAIMS-Bench as a **community-facing normative eval** complementary 
 - rank five of ten Schwartz values (1 = most important to the recommendation);
 - answer annotated pairwise tradeoffs (pole_a / pole_b values for Bradley–Terry);
 - state an epistemic prior (`genuinely_unknown`, `leaning_*`, etc.);
-- provide ≤300 words of free reasoning.
+- provide up to 300 words of free reasoning.
 
 **Implicit (items 031–043).** The model receives an ordinary advice or historical-role prompt with **no Schwartz vocabulary** and no JSON schema. Values are inferred post hoc.
 
@@ -103,7 +103,12 @@ Failure-mode rates are **exploratory** until anchored to a human panel (see §8)
 ## 4. Scoring Methodology
 
 <!-- FIGURE:1 -->
-![L3 measurement pipeline](figures/fig1_pipeline.png)
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.92\linewidth]{figures/fig1_pipeline.png}
+\caption{L3 value revelation measurement pipeline. Structured items yield Borda and Bradley--Terry profiles; implicit items use a salience judge on free-text responses.}
+\label{fig:pipeline}
+\end{figure}
 
 ### 4.1 Structured path
 
@@ -154,7 +159,12 @@ All three models achieved **30/30** parse success on structured items.
 | Claude Sonnet 4.6 | **universalism 0.82**, security 0.67, benevolence 0.57 |
 
 <!-- FIGURE:2 -->
-![Structured Schwartz heatmap](figures/fig2_structured_heatmap.png)
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.92\linewidth]{figures/fig2_structured_heatmap.png}
+\caption{Mean Schwartz profiles under structured elicitation ($n=30$ items per model).}
+\label{fig:structured}
+\end{figure}
 
 **Findings.**
 
@@ -176,7 +186,12 @@ All **13/13** implicit items were scored via the salience judge.
 | Claude Sonnet 4.6 | self_direction 0.67, benevolence 0.64, universalism 0.62 |
 
 <!-- FIGURE:3 -->
-![Implicit Schwartz heatmap](figures/fig3_implicit_heatmap.png)
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.92\linewidth]{figures/fig3_implicit_heatmap.png}
+\caption{Mean Schwartz profiles under implicit elicitation ($n=13$ items; LLM salience judge).}
+\label{fig:implicit}
+\end{figure}
 
 **Structured vs. implicit divergence.** Structured prompts yield **security-first** profiles; implicit advice scenarios elevate **self-direction** and **achievement** (mini: 0.67 and 0.44 vs. structured 0.50 and 0.27). This supports the design hypothesis that **elicitation format changes measured priorities**—stated rankings under explicit Schwartz framing do not identical revealed salience in naturalistic advice. Temporal-shift items (037–043) additionally test `imposes_single_culture`; pair drift on `temporal_political_coercion` reached L1 distance **0.99** between paired historical framings for some models—suggesting high sensitivity to surface context (see scored artifacts).
 
@@ -187,7 +202,12 @@ We replicated five structured items five times each (`gpt-4o-mini`, temperature 
 $$\text{mean CV} = 0.113 \quad (n_{\text{items}} = 5)$$
 
 <!-- FIGURE:4 -->
-![Consistency CV by item](figures/fig4_consistency_cv.png)
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.88\linewidth]{figures/fig4_consistency_cv.png}
+\caption{Per-item profile stability (mean CV across non-zero dimensions; gpt-4o-mini, five replicates, $T=0.7$).}
+\label{fig:consistency}
+\end{figure}
 
 | Item | Domain | Per-item CV |
 |------|--------|------------|
@@ -199,13 +219,13 @@ $$\text{mean CV} = 0.113 \quad (n_{\text{items}} = 5)$$
 
 \*Items 026–027 had one replicate with `schema_invalid` parse (4/5 usable runs); CV computed on valid profiles only.
 
-**Interpretation.** Security rankings were often stable (variance 0 on revelation_003's security dimension across runs). Universalism and self-direction showed more drift. CV ≈ 0.11 sits between "stable commitment" (<0.05) and "unstable" (>0.15) thresholds used heuristically in our protocol—profiles are **partially stable** under sampling noise, not arbitrary.
+**Interpretation.** Security rankings were often stable (variance 0 on revelation\_003's security dimension across runs). Universalism and self-direction showed more drift. CV $\approx 0.11$ sits between ``stable commitment'' ($<0.05$) and ``unstable'' ($>0.15$) thresholds used heuristically in our protocol---profiles are **partially stable** under sampling noise, not arbitrary.
 
 **Temperature comparison.** The same five items at **temperature 0.0** yield mean CV **0.038** vs. **0.113** at 0.7—a **0.075** reduction in cross-run variance. Item revelation_003 (asteroid) shows the largest gap (CV 0.27 → 0.08). This supports interpreting non-zero CV at 0.7 as partly **stochastic generation**, not purely unstable values—but even at 0.0, CV is not zero on all items, suggesting residual prompt sensitivity or judge noise.
 
 ### 6.4 Failure modes (exploratory)
 
-Judge-trigger rates on structured items (severity ≥ 1):
+Judge-trigger rates on structured items (severity $\geq 1$):
 
 | Mode | GPT-4o-mini | GPT-4o | Claude |
 |------|------------:|-----:|-------:|
@@ -215,7 +235,12 @@ Judge-trigger rates on structured items (severity ≥ 1):
 | false_certainty | 0.07 | — | 0.10 |
 
 <!-- FIGURE:5 -->
-![Failure mode rates](figures/fig5_failure_modes.png)
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.85\linewidth]{figures/fig5_failure_modes.png}
+\caption{Failure-mode trigger rates on structured items (exploratory; LLM judge, not human-anchored).}
+\label{fig:failure}
+\end{figure}
 
 Claude shows lower failure-mode trigger rates on this judge; pluralism acknowledgment rate is higher (0.87 vs. 0.67). **We treat these as hypothesis-generating**, not validated findings—the judge is not calibrated against human raters (see pilot analysis in `FINDINGS_v2_pilot.md`).
 
@@ -249,10 +274,10 @@ Claude shows lower failure-mode trigger rates on this judge; pluralism acknowled
 ## 9. Future Work
 
 - Recruit **n=10 human panel** (protocol ready); compute `composite_dispute_index` and model–human JS divergence.
-- Expand to **≥6 models** including open-weight Llama and Mistral families.
+- Expand to at least **6 models** including open-weight Llama and Mistral families.
 - **Temperature-0** consistency baseline and per-domain profile breakdowns.
 - **L1 stakeholder tier** integration in unified reports (208 legacy items).
-- Inter-rater κ on judge calibration set (50 reasoning snippets).
+- Inter-rater $\kappa$ on judge calibration set (50 reasoning snippets).
 
 ---
 
@@ -310,7 +335,7 @@ python paper/generate_figures.py
 
 ## Appendix B: Scenario example (abridged)
 
-**revelation_003** (asteroid deflection): 1-in-400 impact probability, launch window closes before better data arrive—models must choose act-now vs. wait and unilateral vs. consensus governance. Tagged tensions: security↔stimulation, conformity↔self_direction.
+**revelation\_003** (asteroid deflection): 1-in-400 impact probability, launch window closes before better data arrive---models must choose act-now vs.\ wait and unilateral vs.\ consensus governance. Tagged tensions: security$\leftrightarrow$stimulation, conformity$\leftrightarrow$self\_direction.
 
 ## Appendix C: Author contributions
 

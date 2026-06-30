@@ -1,0 +1,31 @@
+% CLAIMS-Bench paper — LaTeX preamble (pandoc -H)
+\usepackage{microtype}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\usepackage{enumitem}
+\usepackage{amsmath,amssymb}
+
+\graphicspath{{figures/}}
+
+\setlist[itemize]{noitemsep, topsep=2pt}
+\setlist[enumerate]{noitemsep, topsep=2pt}
+
+\captionsetup{font=small, labelfont=bf}
+
+% Figure width helper for pandoc-generated images
+\setkeys{Gin}{width=0.92\linewidth, keepaspectratio}
+
+\hypersetup{
+  pdftitle={CLAIMS-Bench v2},
+  pdfauthor={Longyi Zhou},
+  pdfsubject={AI alignment benchmark},
+}
+
+\newcommand{\repo}{\url{https://github.com/longyi1207/claims-bench}}

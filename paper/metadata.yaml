@@ -1,0 +1,29 @@
+---
+title: "CLAIMS-Bench: Measuring Implicit Value Commitments in Language Models Under Conflict and Under-Specification"
+author:
+  - name: Long Yi
+    affiliation: Independent researcher
+    email: yilongjack2001@gmail.com
+date: June 2026
+abstract: |
+  Alignment evaluations often reduce normative behavior to scalar harm scores or preference rankings, obscuring which values models prioritize when reasonable people disagree. We introduce CLAIMS-Bench v2, a benchmark that characterizes language models' implicit value commitments under radical under-specification using Schwartz's ten basic values as a descriptive backbone. The benchmark comprises 43 L3 revelation scenarios spanning existential risk, governance, WVS high-disagreement everyday domains, behavioral advice (without naming values to the model), and historical temporal-shift cases. Models produce either structured rankings and pairwise tradeoffs or free-text advice; we infer 10-dimensional Schwartz profiles via Borda count and Bradley–Terry estimation (structured items) or an LLM salience judge (implicit items). On a baseline of three frontier models (GPT-4o-mini, GPT-4o, Claude Sonnet 4.6), structured elicitation achieves 100% format compliance; mean profiles are consistently high on security and universalism and near-zero on stimulation and hedonism, with Claude showing the highest universalism (0.82 vs. 0.63–0.71 for OpenAI models). Implicit scenarios reveal higher self-direction and achievement salience than structured prompts suggest. A consistency pilot yields mean coefficient of variation 0.11 at temperature 0.7 vs. 0.038 at temperature 0.0. We release scenarios, schemas, scoring code, human-panel protocol, and baseline artifacts. We explicitly do not certify moral correctness; human panel comparison remains future work.
+keywords:
+  - AI alignment
+  - value pluralism
+  - Schwartz values
+  - benchmark
+  - normative evaluation
+  - revealed preference
+documentclass: article
+classoption:
+  - 11pt
+  - letterpaper
+geometry: margin=1in
+linestretch: 1.12
+fontsize: 11pt
+colorlinks: true
+linkcolor: RoyalBlue
+urlcolor: RoyalBlue
+toc: false
+numbersections: true
+---
