@@ -154,7 +154,11 @@ Cross-cultural pair: `temporal_political_coercion` — revelation_037 (US 1953 M
 
 ## Open items for next phase
 
-- Implement implicit scorer in `score_revelation.py` (currently behavioral + temporal items export but skip structured parse — 13 items affected)
+- ~~Implement implicit scorer~~ ✅
+- ~~Run structured baseline~~ ✅ `outputs/baseline_v2_structured/`
+- ~~Run implicit baseline (13×3)~~ → `outputs/baseline_v2_implicit/` (in progress or done)
+- ~~Consistency temp=0 vs 0.7~~ → `outputs/consistency_pilot/`
+- **Human panel** — survey exported `data/panel/survey/`; recruit n=5 (tooling complete)
 - `epistemic_prior` options (`likely_hostile` / `likely_benevolent` / `genuinely_unknown`) don't map cleanly onto non-agent scenarios (asteroid, climate tradeoffs, tax policy); revisit before scaling
 - Human panel protocol (`docs/HUMAN_PANEL_PROTOCOL.md`) still not run — needed for any "compare to human pluralism" claim; prioritize recruiting after CAIS onboarding
 - `scripts/panel_aggregate.py` built and ready; `panel_collect.py` and `model_human_distance.py` not yet built

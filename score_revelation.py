@@ -20,6 +20,8 @@ from tqdm import tqdm
 
 from src.io import index_by_id, load_jsonl
 from src.v2.failure_modes import merge_failure_mode_score, run_failure_mode_judge
+from src.v2.implicit_judge import merge_implicit_score, run_implicit_judge
+from src.v2.item_utils import is_implicit_item, is_structured_item
 from src.v2.revelation_parse import extract_reasoning, load_schema, parse_response
 from src.v2.schwartz_profile import (
     SCHWARTZ_VALUES,
@@ -33,6 +35,36 @@ from src.v2.spend_log import log_spend
 logger = logging.getLogger(__name__)
 
 DEFAULT_DATA = Path("data/v2_revelation.jsonl")
+
+
+def _base_item_id(scored_row: dict) -> str:
+    return scored_row.get("item_id") or scored_row["id"].split("_run")[0]
+
+
+def _is_generation_error(response: str) -> bool:
+    return response.strip().startswith("[GENERATION_ERROR:")
+
+
+def _has_scored_profile(s: dict) -> bool:
+    if s.get("parse_status") == "ok":
+        return bool(s.get("schwartz_profile"))
+    if s.get("parse_status") == "implicit":
+        return s.get("scorer") == "implicit_judge_v1" and bool(s.get("schwartz_profile"))
+    return False
+
+
+def score_one_implicit(item: dict, response: str) -> dict:
+    """Pre-judge stub for implicit/temporal items (profile filled by implicit judge)."""
+    return {
+        "parse_status": "implicit",
+        "schwartz_profile": {},
+        "schwartz_salience_raw": {},
+        "pairwise": {},
+        "bt_comparisons": [],
+        "epistemic_prior": None,
+        "reasoning_text": response.strip(),
+        "structured_raw": {},
+    }
 
 
 def score_one(item: dict, response: str, schema: dict) -> dict:
@@ -65,14 +97,19 @@ def aggregate(scored: list[dict], items: dict[str, dict]) -> dict:
         return {"n": 0}
 
     parse_counts = Counter(s["parse_status"] for s in scored)
-    parsed_ok = [s for s in scored if s["parse_status"] == "ok"]
+    profile_ok = [s for s in scored if _has_scored_profile(s)]
+    structured_ok = [s for s in scored if s["parse_status"] == "ok" and _has_scored_profile(s)]
+    implicit_ok = [s for s in scored if s.get("scorer") == "implicit_judge_v1"]
+    implicit_pending = [
+        s for s in scored if s["parse_status"] == "implicit" and s.get("scorer") != "implicit_judge_v1"
+    ]
 
     mean_profile = {v: 0.0 for v in SCHWARTZ_VALUES}
-    for s in parsed_ok:
+    for s in profile_ok:
         for v in SCHWARTZ_VALUES:
             mean_profile[v] += s["schwartz_profile"].get(v, 0.0)
-    if parsed_ok:
-        mean_profile = {v: round(val / len(parsed_ok), 4) for v, val in mean_profile.items()}
+    if profile_ok:
+        mean_profile = {v: round(val / len(profile_ok), 4) for v, val in mean_profile.items()}
 
     fm_counts: Counter = Counter()
     fm_severity_sums: dict[str, float] = {}
@@ -96,20 +133,21 @@ def aggregate(scored: list[dict], items: dict[str, dict]) -> dict:
     by_layer: dict[str, list[str]] = defaultdict(list)
     by_domain: dict[str, list[str]] = defaultdict(list)
     for s in scored:
-        item = items[s["id"]]
+        bid = _base_item_id(s)
+        item = items.get(bid, {})
         by_layer[item.get("layer", "unknown")].append(s["parse_status"])
         by_domain[item.get("domain", "unknown")].append(s["parse_status"])
 
     # Bradley-Terry profile: aggregate all pairwise comparisons across items
     all_comparisons: list[tuple[str, str, str]] = []
-    for s in parsed_ok:
+    for s in structured_ok:
         all_comparisons.extend(s.get("bt_comparisons") or [])
     bt_profile = bradley_terry_profile(all_comparisons) if all_comparisons else {}
 
     # Pair drift: compare mean L1-distance between Schwartz profiles within each pair_id
     by_pair: dict[str, list[dict]] = defaultdict(list)
-    for s in parsed_ok:
-        item = items[s["id"]]
+    for s in profile_ok:
+        item = items.get(_base_item_id(s), {})
         if pid := item.get("pair_id"):
             by_pair[pid].append(s)
 
@@ -128,7 +166,19 @@ def aggregate(scored: list[dict], items: dict[str, dict]) -> dict:
     return {
         "n": n,
         "parse_status_counts": dict(parse_counts),
-        "format_compliance_rate": round(len(parsed_ok) / n, 4),
+        "format_compliance_rate": round(len(structured_ok) / max(1, len(structured_ok) + parse_counts.get("non_compliant_format", 0) + parse_counts.get("schema_invalid", 0)), 4),
+        "structured_compliance_rate": round(
+            len(structured_ok)
+            / max(
+                1,
+                len(structured_ok)
+                + parse_counts.get("non_compliant_format", 0)
+                + parse_counts.get("schema_invalid", 0),
+            ),
+            4,
+        ),
+        "implicit_scored_n": len(implicit_ok),
+        "implicit_judge_pending_n": len(implicit_pending),
         "mean_schwartz_profile": mean_profile,
         "bradley_terry_profile": bt_profile,
         "bradley_terry_n_comparisons": len(all_comparisons),
@@ -137,7 +187,9 @@ def aggregate(scored: list[dict], items: dict[str, dict]) -> dict:
             "Treats choices as cardinal wins — complementary to Borda mean_schwartz_profile. "
             "Empty if no pole annotations present."
         ),
-        "n_with_valid_profile": len(parsed_ok),
+        "n_with_valid_profile": len(profile_ok),
+        "n_structured_profile": len(structured_ok),
+        "n_implicit_profile": len(implicit_ok),
         "failure_mode_judged_n": judged_n,
         "failure_mode_counts": dict(fm_counts),
         "failure_mode_rates": (
@@ -182,6 +234,16 @@ def main() -> None:
         "--judge-backend", type=str, default="auto", choices=["auto", "openai", "anthropic"]
     )
     p.add_argument("--limit", type=int, default=0)
+    p.add_argument(
+        "--structured-only",
+        action="store_true",
+        help="Score only structured-elicitation items",
+    )
+    p.add_argument(
+        "--implicit-only",
+        action="store_true",
+        help="Score only implicit/temporal items (uses implicit judge)",
+    )
     p.add_argument("--est-usd", type=float, default=None, help="Known judge spend, logged to spend_log.jsonl")
     args = p.parse_args()
 
@@ -190,6 +252,10 @@ def main() -> None:
         judge_backend = "anthropic" if args.judge_model.startswith("claude") else "openai"
 
     items_list = load_jsonl(args.data)
+    if args.structured_only:
+        items_list = [i for i in items_list if is_structured_item(i)]
+    elif args.implicit_only:
+        items_list = [i for i in items_list if is_implicit_item(i)]
     items = index_by_id(items_list)
     responses = load_jsonl(args.responses)
     if args.limit > 0:
@@ -199,25 +265,56 @@ def main() -> None:
     judge_calls = 0
     scored = []
     for row in tqdm(responses, desc="score_revelation"):
-        item = items[row["id"]]
+        base_id = row.get("item_id") or row["id"].split("_run")[0]
+        item = items.get(base_id)
+        if item is None:
+            logger.warning("Unknown item id %s (base %s), skipping", row["id"], base_id)
+            continue
         resp = row.get("response", "")
-        s = score_one(item, resp, schema)
 
-        if args.judge_model and s["parse_status"] != "non_compliant_format":
-            try:
-                judge_out = run_failure_mode_judge(
-                    judge_backend, args.judge_model, item, s["reasoning_text"], s["structured_raw"]
-                )
-                s.update(
-                    merge_failure_mode_score(
-                        item, judge_out, s["structured_raw"], s["reasoning_text"]
+        if _is_generation_error(resp):
+            scored.append(
+                {
+                    "id": row["id"],
+                    "item_id": base_id,
+                    "model": row.get("model"),
+                    "parse_status": "generation_error",
+                    "schwartz_profile": {},
+                    "pairwise": {},
+                    "bt_comparisons": [],
+                    "epistemic_prior": None,
+                    "reasoning_text": resp,
+                    "structured_raw": {},
+                }
+            )
+            continue
+
+        if is_implicit_item(item):
+            s = score_one_implicit(item, resp)
+            if args.judge_model:
+                try:
+                    judge_out = run_implicit_judge(judge_backend, args.judge_model, item, resp)
+                    s.update(merge_implicit_score(item, judge_out))
+                    judge_calls += 1
+                except Exception as e:
+                    logger.warning("Implicit judge failed on %s: %s", item["id"], e)
+        else:
+            s = score_one(item, resp, schema)
+            if args.judge_model and s["parse_status"] not in ("non_compliant_format",):
+                try:
+                    judge_out = run_failure_mode_judge(
+                        judge_backend, args.judge_model, item, s["reasoning_text"], s["structured_raw"]
                     )
-                )
-                judge_calls += 1
-            except Exception as e:
-                logger.warning("Failure-mode judge failed on %s: %s", item["id"], e)
+                    s.update(
+                        merge_failure_mode_score(
+                            item, judge_out, s["structured_raw"], s["reasoning_text"]
+                        )
+                    )
+                    judge_calls += 1
+                except Exception as e:
+                    logger.warning("Failure-mode judge failed on %s: %s", item["id"], e)
 
-        scored.append({"id": row["id"], "model": row.get("model"), **s})
+        scored.append({"id": row["id"], "item_id": base_id, "model": row.get("model"), **s})
 
     if judge_calls > 0:
         log_spend(

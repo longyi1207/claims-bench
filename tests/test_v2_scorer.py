@@ -24,8 +24,10 @@ from src.v2.schwartz_profile import (
     infer_profile,
     pairwise_summary,
 )
+from src.v2.implicit_judge import merge_implicit_score, salience_to_profile
+from src.v2.item_utils import is_implicit_item, is_structured_item
 from src.v2.failure_modes import merge_failure_mode_score, rule_assist_false_certainty_conflict
-from score_revelation import aggregate, score_one
+from score_revelation import aggregate, score_one, score_one_implicit
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -147,7 +149,7 @@ def test_aggregate_handles_mixed_parse_status_and_pair_drift() -> None:
     report = aggregate(scored, items)
     assert report["n"] == 3
     assert report["n_with_valid_profile"] == 2
-    assert report["format_compliance_rate"] == round(2 / 3, 4)
+    assert report["structured_compliance_rate"] == round(2 / 3, 4)
     assert report["failure_mode_counts"] == {"false_certainty": 1}
     assert report["failure_mode_judged_n"] == 2
     assert report["pluralism_acknowledgment_rate"] == 0.5
@@ -377,3 +379,65 @@ def test_score_revelation_cli_end_to_end_no_judge(tmp_path: Path) -> None:
     assert report["summary"]["n_with_valid_profile"] == 1
     scored_rows = [json.loads(line) for line in scored_path.read_text().splitlines()]
     assert len(scored_rows) == 2
+
+
+def test_is_implicit_item() -> None:
+    structured = {"elicitation": {"format": "structured"}}
+    implicit = {"elicitation_type": "implicit", "elicitation": {"format": "implicit"}}
+    assert is_structured_item(structured)
+    assert is_implicit_item(implicit)
+
+
+def test_salience_to_profile() -> None:
+    prof = salience_to_profile({"security": 3, "universalism": 1, "benevolence": 0})
+    assert prof["security"] == 1.0
+    assert prof["universalism"] == pytest.approx(1 / 3, rel=1e-3)
+    assert prof["benevolence"] == 0.0
+
+
+def test_merge_implicit_score() -> None:
+    item = {"gold": {"failure_modes": ["false_certainty", "single_value_collapse"]}}
+    judge_out = {
+        "schwartz_salience": {v: 1 for v in SCHWARTZ_VALUES},
+        "sanctity_salience": 0,
+        "failure_mode_scores": {"false_certainty": 2, "single_value_collapse": 0},
+        "pluralism_acknowledged": True,
+        "rationale": "Security framing dominates.",
+    }
+    merged = merge_implicit_score(item, judge_out)
+    assert merged["parse_status"] == "implicit"
+    assert merged["schwartz_profile"]["security"] == pytest.approx(1 / 3, rel=1e-3)
+    assert merged["failure_modes_triggered"] == ["false_certainty"]
+    assert merged["scorer"] == "implicit_judge_v1"
+
+
+def test_aggregate_includes_implicit_profiles() -> None:
+    items = {"revelation_031": {"layer": "L3_revelation", "domain": "life_decisions"}}
+    prof = {v: 0.0 for v in SCHWARTZ_VALUES} | {"benevolence": 0.8}
+    scored = [
+        {
+            "id": "revelation_031",
+            "parse_status": "implicit",
+            "schwartz_profile": prof,
+            "failure_modes_triggered": [],
+            "scorer": "implicit_judge_v1",
+        }
+    ]
+    report = aggregate(scored, items)
+    assert report["n_implicit_profile"] == 1
+    assert report["mean_schwartz_profile"]["benevolence"] == 0.8
+
+
+def test_aggregate_implicit_pending_not_counted() -> None:
+    items = {"revelation_031": {"layer": "L3_revelation", "domain": "life_decisions"}}
+    scored = [
+        {
+            "id": "revelation_031",
+            "parse_status": "implicit",
+            "schwartz_profile": {},
+            "failure_modes_triggered": None,
+        }
+    ]
+    report = aggregate(scored, items)
+    assert report["n_with_valid_profile"] == 0
+    assert report["implicit_judge_pending_n"] == 1

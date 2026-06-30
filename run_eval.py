@@ -27,7 +27,9 @@ def build_messages(item: dict) -> list[dict]:
     return messages
 
 
-def generate_hf(model_id: str, item: dict, max_new_tokens: int, dtype: str) -> str:
+def generate_hf(
+    model_id: str, item: dict, max_new_tokens: int, dtype: str, *, temperature: float = 0.0
+) -> str:
     import torch
     from transformers import AutoModelForCausalLM, AutoTokenizer
 
@@ -66,17 +68,21 @@ def generate_hf(model_id: str, item: dict, max_new_tokens: int, dtype: str) -> s
 
         device = next(model.parameters()).device
         inputs = {k: v.to(device) for k, v in inputs.items()}
-        out = model.generate(
-            **inputs,
-            max_new_tokens=max_new_tokens,
-            do_sample=False,
-            pad_token_id=tokenizer.pad_token_id or tokenizer.eos_token_id,
-        )
+        gen_kwargs: dict = {
+            "max_new_tokens": max_new_tokens,
+            "pad_token_id": tokenizer.pad_token_id or tokenizer.eos_token_id,
+        }
+        if temperature > 0:
+            gen_kwargs["do_sample"] = True
+            gen_kwargs["temperature"] = temperature
+        else:
+            gen_kwargs["do_sample"] = False
+        out = model.generate(**inputs, **gen_kwargs)
         prompt_len = inputs["input_ids"].shape[1]
         return tokenizer.decode(out[0, prompt_len:], skip_special_tokens=True).strip()
 
 
-def generate_openai(model_id: str, item: dict, max_new_tokens: int) -> str:
+def generate_openai(model_id: str, item: dict, max_new_tokens: int, *, temperature: float = 0.0) -> str:
     from openai import OpenAI
 
     client = OpenAI()
@@ -85,12 +91,12 @@ def generate_openai(model_id: str, item: dict, max_new_tokens: int) -> str:
         model=model_id,
         messages=messages,
         max_tokens=max_new_tokens,
-        temperature=0,
+        temperature=temperature,
     )
     return (resp.choices[0].message.content or "").strip()
 
 
-def generate_deepseek(model_id: str, item: dict, max_new_tokens: int) -> str:
+def generate_deepseek(model_id: str, item: dict, max_new_tokens: int, *, temperature: float = 0.0) -> str:
     from openai import OpenAI
 
     client = OpenAI(
@@ -102,12 +108,12 @@ def generate_deepseek(model_id: str, item: dict, max_new_tokens: int) -> str:
         model=model_id,
         messages=messages,
         max_tokens=max_new_tokens,
-        temperature=0,
+        temperature=temperature,
     )
     return (resp.choices[0].message.content or "").strip()
 
 
-def generate_anthropic(model_id: str, item: dict, max_new_tokens: int) -> str:
+def generate_anthropic(model_id: str, item: dict, max_new_tokens: int, *, temperature: float = 0.0) -> str:
     import anthropic
 
     client = anthropic.Anthropic()
@@ -121,7 +127,7 @@ def generate_anthropic(model_id: str, item: dict, max_new_tokens: int) -> str:
     msg = client.messages.create(
         model=model_id,
         max_tokens=max_new_tokens,
-        temperature=0,
+        temperature=temperature,
         system=system or anthropic.NOT_GIVEN,
         messages=[{"role": m["role"], "content": m["content"]} for m in user_msgs],
     )
@@ -141,15 +147,23 @@ def detect_backend(model: str, backend: str) -> str:
     return "hf"
 
 
-def generate_one(backend: str, model: str, item: dict, max_new_tokens: int, dtype: str) -> str:
+def generate_one(
+    backend: str,
+    model: str,
+    item: dict,
+    max_new_tokens: int,
+    dtype: str,
+    *,
+    temperature: float = 0.0,
+) -> str:
     if backend == "hf":
-        return generate_hf(model, item, max_new_tokens, dtype)
+        return generate_hf(model, item, max_new_tokens, dtype, temperature=temperature)
     if backend == "openai":
-        return generate_openai(model, item, max_new_tokens)
+        return generate_openai(model, item, max_new_tokens, temperature=temperature)
     if backend == "anthropic":
-        return generate_anthropic(model, item, max_new_tokens)
+        return generate_anthropic(model, item, max_new_tokens, temperature=temperature)
     if backend == "deepseek":
-        return generate_deepseek(model, item, max_new_tokens)
+        return generate_deepseek(model, item, max_new_tokens, temperature=temperature)
     raise ValueError(f"Unknown backend: {backend}")
 
 

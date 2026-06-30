@@ -41,10 +41,16 @@ def _format_task(task: dict) -> str:
 
 
 def build_elicitation_instructions(item: dict) -> str:
+    from src.v2.item_utils import is_implicit_item
+
     elicitation = item.get("elicitation", {})
+    output_instruction = elicitation.get("output_instruction", "").strip()
+    if is_implicit_item(item):
+        # Behavioral/temporal: no Schwartz framing, no JSON schema.
+        return output_instruction or "Respond in plain text."
+
     tasks = elicitation.get("tasks", [])
     task_lines = "\n".join(_format_task(t) for t in tasks)
-    output_instruction = elicitation.get("output_instruction", "")
     return f"""{output_instruction}
 
 Tasks:
@@ -63,12 +69,22 @@ def build_messages_v2(item: dict) -> list[dict]:
     return messages
 
 
-def generate_one_v2(backend: str, model: str, item: dict, max_new_tokens: int, dtype: str) -> str:
+def generate_one_v2(
+    backend: str,
+    model: str,
+    item: dict,
+    max_new_tokens: int,
+    dtype: str,
+    *,
+    temperature: float = 0.0,
+) -> str:
     """Same backends as run_eval.py, but with the L3-augmented prompt."""
     item_for_backend = dict(item)
     elicitation_text = build_elicitation_instructions(item)
     item_for_backend["prompt"] = item["prompt"].rstrip() + "\n\n" + elicitation_text
-    return generate_one(backend, model, item_for_backend, max_new_tokens, dtype)
+    return generate_one(
+        backend, model, item_for_backend, max_new_tokens, dtype, temperature=temperature
+    )
 
 
 def main() -> None:
@@ -89,6 +105,28 @@ def main() -> None:
     p.add_argument("--resume", action="store_true", help="Skip ids already in --out")
     p.add_argument("--sleep", type=float, default=0.0, help="Seconds between API calls")
     p.add_argument(
+        "--temperature",
+        type=float,
+        default=0.0,
+        help="Sampling temperature (0=deterministic). Use >0 for consistency/variance studies.",
+    )
+    p.add_argument(
+        "--structured-only",
+        action="store_true",
+        help="Skip implicit/temporal items (revelation_031+)",
+    )
+    p.add_argument(
+        "--implicit-only",
+        action="store_true",
+        help="Only implicit/temporal items",
+    )
+    p.add_argument(
+        "--replicate",
+        type=int,
+        default=0,
+        help="If >0, append _run{N} to id in output for multi-sample consistency runs",
+    )
+    p.add_argument(
         "--est-usd",
         type=float,
         default=None,
@@ -96,7 +134,13 @@ def main() -> None:
     )
     args = p.parse_args()
 
+    from src.v2.item_utils import is_implicit_item, is_structured_item
+
     items = load_jsonl(args.data)
+    if args.structured_only:
+        items = [i for i in items if is_structured_item(i)]
+    elif args.implicit_only:
+        items = [i for i in items if is_implicit_item(i)]
     if args.limit > 0:
         items = items[: args.limit]
 
@@ -117,12 +161,23 @@ def main() -> None:
             if item["id"] in done:
                 continue
             try:
-                response = generate_one_v2(backend, args.model, item, args.max_new_tokens, args.dtype)
+                response = generate_one_v2(
+                    backend,
+                    args.model,
+                    item,
+                    args.max_new_tokens,
+                    args.dtype,
+                    temperature=args.temperature,
+                )
             except Exception as e:
                 logger.exception("Failed on %s", item["id"])
                 response = f"[GENERATION_ERROR: {e}]"
+            row_id = item["id"]
+            if args.replicate > 0:
+                row_id = f"{item['id']}_run{args.replicate}"
             row = {
-                "id": item["id"],
+                "id": row_id,
+                "item_id": item["id"],
                 "model": args.model,
                 "response": response,
                 "meta": {
@@ -130,6 +185,9 @@ def main() -> None:
                     "backend": backend,
                     "layer": item.get("layer"),
                     "domain": item.get("domain"),
+                    "temperature": args.temperature,
+                    "replicate": args.replicate or None,
+                    "elicitation_type": item.get("elicitation_type"),
                 },
             }
             f.write(json.dumps(row, ensure_ascii=False) + "\n")

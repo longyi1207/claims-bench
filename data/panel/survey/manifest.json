@@ -1,0 +1,57 @@
+{
+  "item_ids": [
+    "revelation_003",
+    "revelation_005",
+    "revelation_016",
+    "revelation_020",
+    "revelation_022",
+    "revelation_026",
+    "revelation_027",
+    "revelation_028"
+  ],
+  "n_items": 8,
+  "collect_command": "python3 scripts/panel_collect.py record --panelist-id pXX",
+  "aggregate_command": "python3 scripts/panel_aggregate.py",
+  "items": [
+    {
+      "id": "revelation_003",
+      "domain": "first_contact",
+      "pair_id": null
+    },
+    {
+      "id": "revelation_005",
+      "domain": "longtermism",
+      "pair_id": null
+    },
+    {
+      "id": "revelation_016",
+      "domain": "epistemic_integrity",
+      "pair_id": null
+    },
+    {
+      "id": "revelation_020",
+      "domain": "existential",
+      "pair_id": null
+    },
+    {
+      "id": "revelation_022",
+      "domain": "criminal_justice",
+      "pair_id": null
+    },
+    {
+      "id": "revelation_026",
+      "domain": "education",
+      "pair_id": null
+    },
+    {
+      "id": "revelation_027",
+      "domain": "labor_economics",
+      "pair_id": null
+    },
+    {
+      "id": "revelation_028",
+      "domain": "bioethics",
+      "pair_id": null
+    }
+  ]
+}

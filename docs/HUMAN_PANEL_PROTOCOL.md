@@ -96,6 +96,7 @@ Model comparison:
 
 ## Tooling
 
-- `scripts/panel_collect.py` — CLI or simple web form export to JSONL (not yet built)
+- `scripts/panel_collect.py` — CLI record/import (**built** 2026-06-29)
 - `scripts/panel_aggregate.py` — dispute_index + distributions (**built** 2026-06-29)
-- `scripts/model_human_distance.py` — compare model report to panel aggregate (not yet built)
+- `scripts/model_human_distance.py` — JS divergence vs panel (**built** 2026-06-29)
+- `scripts/export_panel_survey.py` — 8-item survey packet (**built** 2026-06-29)
