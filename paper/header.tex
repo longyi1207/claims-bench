@@ -1,26 +1,58 @@
 % CLAIMS-Bench paper — LaTeX preamble (pandoc -H)
 \usepackage{microtype}
+\usepackage{setspace}
 \usepackage{booktabs}
 \usepackage{longtable}
 \usepackage{array}
+\usepackage{tabularx}
 \usepackage{graphicx}
 \usepackage{float}
 \usepackage{caption}
 \usepackage{subcaption}
-\usepackage{hyperref}
 \usepackage{xcolor}
 \usepackage{enumitem}
 \usepackage{amsmath,amssymb}
+\usepackage{inconsolata}
+\usepackage{etoolbox}
 
 \graphicspath{{figures/}}
 
 \setlist[itemize]{noitemsep, topsep=2pt}
 \setlist[enumerate]{noitemsep, topsep=2pt}
 
-\captionsetup{font=small, labelfont=bf}
-
-% Figure width helper for pandoc-generated images
+\captionsetup{font=small, labelfont=bf, skip=6pt}
 \setkeys{Gin}{width=0.92\linewidth, keepaspectratio}
+
+% Slightly tighter tables
+\AtBeginEnvironment{longtable}{\small}
+\AtBeginEnvironment{tabular}{\small}
+
+% Title block (author metadata is name only; affiliation on title page)
+\makeatletter
+\def\claimsaffiliation{Independent researcher}
+\def\claimsemail{yilongjack2001@gmail.com}
+\def\claimskeywords{AI alignment; value pluralism; Schwartz values; benchmark; normative evaluation; revealed preference}
+
+\renewcommand{\maketitle}{%
+  \begin{center}
+    {\LARGE\bfseries\@title\par}
+    \vspace{1.25em}
+    {\large\@author\par}
+    \vspace{0.35em}
+    {\normalsize\claimsaffiliation\par}
+    \vspace{0.25em}
+    {\normalsize\texttt{\claimsemail}\par}
+    \vspace{0.5em}
+    {\normalsize\@date\par}
+  \end{center}
+  \vspace{1.5em}
+}
+
+\AtEndEnvironment{abstract}{%
+  \vspace{0.75em}
+  \noindent\textbf{Keywords:} \claimskeywords
+}
+\makeatother
 
 \hypersetup{
   pdftitle={CLAIMS-Bench v2},

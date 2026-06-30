@@ -15,12 +15,18 @@ if ! command -v tectonic >/dev/null; then
   echo "tectonic required (brew install tectonic)" >&2; exit 1
 fi
 
-# Body: skip duplicate title/abstract block in md (lines 1–16); metadata.yaml supplies them
+# Body: skip duplicate title/abstract block in md (lines 1–16); metadata.yaml supplies them.
+# Strip manual section numbers (## 1. Foo -> ## Foo) so pandoc numbering is not doubled.
+# Mark References unnumbered; keep appendices after \appendix.
 BODY=claims_bench_v2_body.md
-tail -n +18 claims_bench_v2.md > "$BODY"
+tail -n +18 claims_bench_v2.md | sed -E \
+  -e 's/^## ([0-9]+\. )/## /' \
+  -e 's/^### ([0-9]+\.[0-9]+ )/### /' \
+  -e 's/^## References$/## References {.unnumbered}/' \
+  > "$BODY"
 
 pandoc \
-  metadata.yaml \
+  --metadata-file=metadata.yaml \
   "$BODY" \
   --from=markdown+smart+tex_math_dollars+raw_tex-yaml_metadata_block \
   --to=pdf \
@@ -28,8 +34,9 @@ pandoc \
   --resource-path=.:figures \
   --include-in-header=header.tex \
   --number-sections \
+  --shift-heading-level-by=-1 \
   --syntax-highlighting=tango \
-  -V block-headings \
+  --wrap=preserve \
   -o claims_bench_v2.pdf
 
 rm -f "$BODY"

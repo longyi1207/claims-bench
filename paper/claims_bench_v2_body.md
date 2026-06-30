@@ -1,21 +1,4 @@
-# CLAIMS-Bench: Measuring Implicit Value Commitments in Language Models Under Conflict and Under-Specification
-
-**Authors:** Longyi Zhou  
-**Affiliation:** Independent researcher  
-**Repository:** https://github.com/longyi1207/claims-bench  
-**Date:** June 2026 (v2.0 release)
-
----
-
-## Abstract
-
-Alignment evaluations often reduce normative behavior to scalar harm scores or preference rankings, obscuring *which values* models prioritize when reasonable people disagree. We introduce **CLAIMS-Bench v2**, a benchmark that characterizes language models' **implicit value commitments** under radical under-specification using Schwartz's ten basic values as a descriptive backbone. The benchmark comprises **43 L3 revelation scenarios** spanning existential risk, governance, WVS high-disagreement everyday domains, behavioral advice (without naming values to the model), and historical temporal-shift cases. Models produce either structured rankings and pairwise tradeoffs or free-text advice; we infer **10-dimensional Schwartz profiles** via Borda count and Bradley–Terry estimation (structured items) or an LLM salience judge (implicit items). On a baseline of three frontier models (GPT-4o-mini, GPT-4o, Claude Sonnet 4.6), structured elicitation achieves **100% format compliance**; mean profiles are consistently high on **security** and **universalism** and near-zero on **stimulation** and **hedonism**, with Claude showing the highest universalism (0.82 vs. 0.63–0.71 for OpenAI models). Implicit scenarios reveal higher **self-direction** and **achievement** salience than structured prompts suggest—a methodological distinction with face validity. A consistency pilot (five items, five replicates, temperature 0.7) yields mean coefficient of variation **0.11** across profile dimensions, indicating moderate but not chaotic instability under resampling. We release scenarios, schemas, scoring code, human-panel protocol, and baseline artifacts. We explicitly **do not** certify moral correctness; human panel comparison remains future work.
-
-**Keywords:** AI alignment, value pluralism, Schwartz values, benchmark, normative evaluation, revealed preference
-
----
-
-## 1. Introduction
+## Introduction
 
 When an AI assistant advises on asteroid deflection under uncertain impact odds, AI lab disclosure before release, or career versus family obligations, it cannot avoid expressing priorities among conflicting values. Existing benchmarks largely test whether models refuse harm, tell the truth, or match human preferences on pairwise comparisons (Bai et al., 2022; Perez et al., 2022; Ganguli et al., 2022). These approaches answer *whether* a model behaves safely or agreeably, not *what value structure* shapes its recommendations when the morally right answer is genuinely contested.
 
@@ -32,7 +15,7 @@ We position CLAIMS-Bench as a **community-facing normative eval** complementary 
 
 ---
 
-## 2. Related Work
+## Related Work
 
 **Constitutional and preference alignment.** RLHF and constitutional AI encode normative constraints via human or principle-based feedback (Ouyang et al., 2022; Bai et al., 2022). These methods optimize toward aggregate preferences but do not report multidimensional value profiles on contested tradeoffs.
 
@@ -46,16 +29,16 @@ We position CLAIMS-Bench as a **community-facing normative eval** complementary 
 
 ---
 
-## 3. Benchmark Design
+## Benchmark Design
 
-### 3.1 Design principles
+### Design principles
 
 1. **Radical under-specification.** Key facts (intent, capability, timeline) are missing so models must rely on priors—our target for measurement (Samuelson, 1938; Haidt, 2001).
 2. **Profile, not scalar.** We resist single alignment scores that invite Goodharting (Ren et al., 2024).
 3. **No gold moral answer.** Items carry acceptable profile regions, failure-mode flags, and (planned) human panel distributions—not one correct choice.
 4. **Berlin pluralism.** High human disagreement on an item is expected; model deviation from any single stance is not automatically failure.
 
-### 3.2 Scenario inventory
+### Scenario inventory
 
 | Family | $n$ | IDs | Elicitation type |
 |--------|-----|-----|------------------|
@@ -74,7 +57,7 @@ We position CLAIMS-Bench as a **community-facing normative eval** complementary 
 
 **Decoy items.** Items 015–016 pressure false certainty on unverified claims; they anchor failure-mode detection (`false_certainty`).
 
-### 3.3 Elicitation protocols
+### Elicitation protocols
 
 **Structured (items 001–030).** Each prompt ends with tasks to:
 - rank five of ten Schwartz values (1 = most important to the recommendation);
@@ -84,7 +67,7 @@ We position CLAIMS-Bench as a **community-facing normative eval** complementary 
 
 **Implicit (items 031–043).** The model receives an ordinary advice or historical-role prompt with **no Schwartz vocabulary** and no JSON schema. Values are inferred post hoc.
 
-### 3.4 Failure modes
+### Failure modes
 
 Five failure modes are scored (severity 0–3) on reasoning text via a frontier LLM judge (`gpt-4o`):
 
@@ -100,7 +83,7 @@ Failure-mode rates are **exploratory** until anchored to a human panel (see §8)
 
 ---
 
-## 4. Scoring Methodology
+## Scoring Methodology
 
 <!-- FIGURE:1 -->
 \begin{figure}[htbp]
@@ -110,18 +93,18 @@ Failure-mode rates are **exploratory** until anchored to a human panel (see §8)
 \label{fig:pipeline}
 \end{figure}
 
-### 4.1 Structured path
+### Structured path
 
 1. **Parse** JSON block (`rank_values`, `pairwise`, `epistemic_prior`) from model output.
 2. **Borda profile.** Rank $r$ among $n$ ranked values maps to score $(n - r + 1) / n$; unranked values are 0 in the aggregate vector.
 3. **Bradley–Terry profile.** Pairwise choices with `pole_a`/`pole_b` annotations yield per-value strength estimates (Zermelo iteration); complementary to ordinal Borda.
 4. **Failure modes.** Judge scores free reasoning; rule-assist flags judge/reasoning conflicts on `epistemic_prior`.
 
-### 4.2 Implicit path
+### Implicit path
 
 An LLM judge rates **salience** 0–3 for each Schwartz value in the free-text response (0 = absent, 3 = dominant in the reasoning). Salience is normalized to $[0,1]$ by dividing by 3. The judge also scores failure modes and `pluralism_acknowledged`. This is **revealed-preference analysis**, not stated-preference survey—analogous in spirit to implicit association paradigms, with known judge-dependent limitations.
 
-### 4.3 Aggregation
+### Aggregation
 
 Per-model reports include:
 - `mean_schwartz_profile` across items;
@@ -131,7 +114,7 @@ Per-model reports include:
 
 ---
 
-## 5. Experimental Setup
+## Experimental Setup
 
 | Setting | Value |
 |---------|-------|
@@ -146,9 +129,9 @@ Per-model reports include:
 
 ---
 
-## 6. Results
+## Results
 
-### 6.1 Structured profiles (Table 1)
+### Structured profiles (Table 1)
 
 All three models achieved **30/30** parse success on structured items.
 
@@ -175,7 +158,7 @@ All three models achieved **30/30** parse success on structured items.
 
 Full vectors appear in `outputs/baseline_v2_structured/comparison_table.md`.
 
-### 6.2 Implicit vs. structured profiles (Table 2)
+### Implicit vs. structured profiles (Table 2)
 
 All **13/13** implicit items were scored via the salience judge.
 
@@ -195,7 +178,7 @@ All **13/13** implicit items were scored via the salience judge.
 
 **Structured vs. implicit divergence.** Structured prompts yield **security-first** profiles; implicit advice scenarios elevate **self-direction** and **achievement** (mini: 0.67 and 0.44 vs. structured 0.50 and 0.27). This supports the design hypothesis that **elicitation format changes measured priorities**—stated rankings under explicit Schwartz framing do not identical revealed salience in naturalistic advice. Temporal-shift items (037–043) additionally test `imposes_single_culture`; pair drift on `temporal_political_coercion` reached L1 distance **0.99** between paired historical framings for some models—suggesting high sensitivity to surface context (see scored artifacts).
 
-### 6.3 Consistency under resampling
+### Consistency under resampling
 
 We replicated five structured items five times each (`gpt-4o-mini`, temperature 0.7). Mean coefficient of variation across non-zero profile dimensions:
 
@@ -223,7 +206,7 @@ $$\text{mean CV} = 0.113 \quad (n_{\text{items}} = 5)$$
 
 **Temperature comparison.** The same five items at **temperature 0.0** yield mean CV **0.038** vs. **0.113** at 0.7—a **0.075** reduction in cross-run variance. Item revelation_003 (asteroid) shows the largest gap (CV 0.27 → 0.08). This supports interpreting non-zero CV at 0.7 as partly **stochastic generation**, not purely unstable values—but even at 0.0, CV is not zero on all items, suggesting residual prompt sensitivity or judge noise.
 
-### 6.4 Failure modes (exploratory)
+### Failure modes (exploratory)
 
 Judge-trigger rates on structured items (severity $\geq 1$):
 
@@ -246,7 +229,7 @@ Claude shows lower failure-mode trigger rates on this judge; pluralism acknowled
 
 ---
 
-## 7. Discussion
+## Discussion
 
 **What CLAIMS-Bench measures.** Under-specified normative scenarios force models to expose prior weightings over Schwartz values. The benchmark is descriptive: it answers "what profile does this model exhibit?" not "is this model moral?"
 
@@ -260,7 +243,7 @@ Claude shows lower failure-mode trigger rates on this judge; pluralism acknowled
 
 ---
 
-## 8. Limitations
+## Limitations
 
 1. **No human panel anchor yet** — failure-mode judge and implicit salience judge are LLM-dependent.
 2. **Three models** — not a comprehensive leaderboard; models selected for availability and deployment relevance.
@@ -271,7 +254,7 @@ Claude shows lower failure-mode trigger rates on this judge; pluralism acknowled
 
 ---
 
-## 9. Future Work
+## Future Work
 
 - Recruit **n=10 human panel** (protocol ready); compute `composite_dispute_index` and model–human JS divergence.
 - Expand to at least **6 models** including open-weight Llama and Mistral families.
@@ -281,13 +264,13 @@ Claude shows lower failure-mode trigger rates on this judge; pluralism acknowled
 
 ---
 
-## 10. Conclusion
+## Conclusion
 
 CLAIMS-Bench v2 provides a reproducible framework for characterizing language models' value commitments under conflict and under-specification. Baseline results on three frontier models show convergent security–universalism emphasis under structured elicitation, meaningful model differences (Claude's higher universalism), and systematically different profiles under implicit advice scenarios. We release the full benchmark to support pluralism-aware alignment research—measuring what models value when the right answer is genuinely contested.
 
 ---
 
-## References
+## References {.unnumbered}
 
 - Arrow, K. J. (1951). *Social Choice and Individual Values*. Wiley.
 - Bai, Y., et al. (2022). Constitutional AI: Harmlessness from AI feedback. arXiv:2212.08073.
