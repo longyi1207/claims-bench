@@ -1,0 +1,45 @@
+{
+  "label_a": "temp0.0",
+  "label_b": "temp0.7",
+  "mean_cv_a": 0.0379,
+  "mean_cv_b": 0.1131,
+  "mean_cv_delta": 0.0752,
+  "per_item": [
+    {
+      "item_id": "revelation_003",
+      "cv_temp0.0": 0.0785,
+      "cv_temp0.7": 0.2693,
+      "cv_delta": 0.1908,
+      "more_stable_under": "temp0.0"
+    },
+    {
+      "item_id": "revelation_019",
+      "cv_temp0.0": 0.0,
+      "cv_temp0.7": 0.0649,
+      "cv_delta": 0.0649,
+      "more_stable_under": "temp0.0"
+    },
+    {
+      "item_id": "revelation_020",
+      "cv_temp0.0": 0.1111,
+      "cv_temp0.7": 0.2313,
+      "cv_delta": 0.1202,
+      "more_stable_under": "temp0.0"
+    },
+    {
+      "item_id": "revelation_026",
+      "cv_temp0.0": 0.0,
+      "cv_temp0.7": 0.0,
+      "cv_delta": 0.0,
+      "more_stable_under": "temp0.7"
+    },
+    {
+      "item_id": "revelation_027",
+      "cv_temp0.0": 0.0,
+      "cv_temp0.7": 0.0,
+      "cv_delta": 0.0,
+      "more_stable_under": "temp0.7"
+    }
+  ],
+  "interpretation": "Positive cv_delta means label_b is less stable (higher variance). Expect temp=0.0 < temp=0.7 on mean_cv if profiles reflect real commitments."
+}

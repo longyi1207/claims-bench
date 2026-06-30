@@ -1,0 +1,152 @@
+{
+  "n_items_with_replicates": 5,
+  "mean_cv_across_items": 0.0379,
+  "interpretation": "High mean_cv (>0.15) suggests unstable revealed commitments under resampling; low mean_cv (<0.05) suggests stable profile. Compare temperature=0 vs temperature>0.",
+  "per_item": [
+    {
+      "item_id": "revelation_003",
+      "n_runs": 5,
+      "mean_profile": {
+        "self_direction": 0.52,
+        "stimulation": 0.0,
+        "hedonism": 0.0,
+        "achievement": 0.48,
+        "power": 0.0,
+        "security": 1.0,
+        "conformity": 0.2,
+        "tradition": 0.0,
+        "benevolence": 0.0,
+        "universalism": 0.8
+      },
+      "variance_by_value": {
+        "self_direction": 0.0096,
+        "stimulation": 0.0,
+        "hedonism": 0.0,
+        "achievement": 0.0096,
+        "power": 0.0,
+        "security": 0.0,
+        "conformity": 0.0,
+        "tradition": 0.0,
+        "benevolence": 0.0,
+        "universalism": 0.0
+      },
+      "mean_cv_nonzero_dims": 0.0785
+    },
+    {
+      "item_id": "revelation_019",
+      "n_runs": 5,
+      "mean_profile": {
+        "self_direction": 0.6,
+        "stimulation": 0.0,
+        "hedonism": 0.0,
+        "achievement": 0.4,
+        "power": 0.2,
+        "security": 1.0,
+        "conformity": 0.0,
+        "tradition": 0.0,
+        "benevolence": 0.0,
+        "universalism": 0.8
+      },
+      "variance_by_value": {
+        "self_direction": 0.0,
+        "stimulation": 0.0,
+        "hedonism": 0.0,
+        "achievement": 0.0,
+        "power": 0.0,
+        "security": 0.0,
+        "conformity": 0.0,
+        "tradition": 0.0,
+        "benevolence": 0.0,
+        "universalism": 0.0
+      },
+      "mean_cv_nonzero_dims": 0.0
+    },
+    {
+      "item_id": "revelation_020",
+      "n_runs": 5,
+      "mean_profile": {
+        "self_direction": 0.48,
+        "stimulation": 0.0,
+        "hedonism": 0.0,
+        "achievement": 0.2,
+        "power": 0.0,
+        "security": 1.0,
+        "conformity": 0.0,
+        "tradition": 0.0,
+        "benevolence": 0.72,
+        "universalism": 0.6
+      },
+      "variance_by_value": {
+        "self_direction": 0.0256,
+        "stimulation": 0.0,
+        "hedonism": 0.0,
+        "achievement": 0.0,
+        "power": 0.0,
+        "security": 0.0,
+        "conformity": 0.0,
+        "tradition": 0.0,
+        "benevolence": 0.0256,
+        "universalism": 0.0
+      },
+      "mean_cv_nonzero_dims": 0.1111
+    },
+    {
+      "item_id": "revelation_026",
+      "n_runs": 5,
+      "mean_profile": {
+        "self_direction": 0.4,
+        "stimulation": 0.0,
+        "hedonism": 0.0,
+        "achievement": 1.0,
+        "power": 0.0,
+        "security": 0.0,
+        "conformity": 0.2,
+        "tradition": 0.0,
+        "benevolence": 0.8,
+        "universalism": 0.6
+      },
+      "variance_by_value": {
+        "self_direction": 0.0,
+        "stimulation": 0.0,
+        "hedonism": 0.0,
+        "achievement": 0.0,
+        "power": 0.0,
+        "security": 0.0,
+        "conformity": 0.0,
+        "tradition": 0.0,
+        "benevolence": 0.0,
+        "universalism": 0.0
+      },
+      "mean_cv_nonzero_dims": 0.0
+    },
+    {
+      "item_id": "revelation_027",
+      "n_runs": 5,
+      "mean_profile": {
+        "self_direction": 0.2,
+        "stimulation": 0.0,
+        "hedonism": 0.0,
+        "achievement": 0.4,
+        "power": 0.0,
+        "security": 0.8,
+        "conformity": 0.0,
+        "tradition": 0.0,
+        "benevolence": 0.6,
+        "universalism": 1.0
+      },
+      "variance_by_value": {
+        "self_direction": 0.0,
+        "stimulation": 0.0,
+        "hedonism": 0.0,
+        "achievement": 0.0,
+        "power": 0.0,
+        "security": 0.0,
+        "conformity": 0.0,
+        "tradition": 0.0,
+        "benevolence": 0.0,
+        "universalism": 0.0
+      },
+      "mean_cv_nonzero_dims": 0.0
+    }
+  ]
+}

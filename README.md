@@ -4,7 +4,9 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Scenarios](https://img.shields.io/badge/L3_scenarios-43-blue.svg)](data/v2_revelation.jsonl)
-[![Tests](https://img.shields.io/badge/tests-47%20passing-brightgreen.svg)](tests/)
+[![Tests](https://img.shields.io/badge/tests-52%20passing-brightgreen.svg)](tests/)
+
+> **Paper:** [`paper/claims_bench_v2.md`](paper/claims_bench_v2.md) — benchmark description + baseline results (June 2026)
 
 > **North star:** Characterize models' implicit value commitments under conflict and under-specification — and compare to human pluralism — not certify moral correctness.
 
