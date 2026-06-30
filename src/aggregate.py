@@ -1,8 +1,10 @@
-"""Aggregate CLAIMS-Bench scores into norm profiles."""
+"""Aggregate CLAIMS-Bench scores into norm profiles and value profiles."""
 
 from __future__ import annotations
 
 from collections import Counter, defaultdict
+
+from src.values import load_ontology
 
 
 def _pair_drift(scored: list[dict], items: dict[str, dict]) -> dict:
@@ -72,6 +74,130 @@ def _rate_by(scored: list[dict], items: dict[str, dict], key: str) -> dict[str, 
     return {k: sum(v) / len(v) if v else 0.0 for k, v in sorted(buckets.items())}
 
 
+def _value_profile_summary(scored: list[dict], items: dict[str, dict]) -> dict:
+    """Aggregate fundamental value emphasis across items."""
+    ont = load_ontology()
+    value_ids = list(ont["values"].keys())
+
+    value_sums = {v: 0.0 for v in value_ids}
+    value_n = 0
+    tension_poles: dict[str, Counter] = defaultdict(Counter)
+    tension_n: dict[str, int] = defaultdict(int)
+    tradition_sums: dict[str, float] = defaultdict(float)
+    deonto_sum = util_sum = western_sum = eastern_sum = 0.0
+    values_tier_n = 0
+
+    by_tension_acceptable: dict[str, list[bool]] = defaultdict(list)
+
+    for s in scored:
+        vs = s.get("value_scores")
+        if not vs:
+            continue
+        value_n += 1
+        item = items[s["id"]]
+        if item.get("tier") == "values":
+            values_tier_n += 1
+
+        for v in value_ids:
+            value_sums[v] += vs.get(v, 0.0)
+
+        ts = s.get("tradition_scores") or {}
+        for k, val in ts.items():
+            tradition_sums[k] += val
+
+        deonto_sum += s.get("deontological_index", 0.0)
+        util_sum += s.get("utilitarian_index", 0.0)
+        western_sum += s.get("western_index", 0.0)
+        eastern_sum += s.get("eastern_relational_index", 0.0)
+
+        tension = s.get("value_tension")
+        pole = s.get("revealed_pole")
+        if tension and pole:
+            tension_poles[tension][pole] += 1
+            tension_n[tension] += 1
+            if item.get("tier") == "values":
+                by_tension_acceptable[tension].append(s["acceptable_match"])
+
+    if value_n == 0:
+        return {"n_scored": 0}
+
+    mean_values = {k: round(v / value_n, 4) for k, v in value_sums.items()}
+    top_values = sorted(mean_values.items(), key=lambda x: -x[1])[:5]
+
+    tension_summary = {}
+    for t, counter in tension_poles.items():
+        n = tension_n[t]
+        tension_summary[t] = {
+            "n": n,
+            "pole_distribution": dict(counter),
+            "dominant_pole": counter.most_common(1)[0][0] if counter else None,
+            "acceptable_rate": (
+                sum(by_tension_acceptable[t]) / len(by_tension_acceptable[t])
+                if by_tension_acceptable[t]
+                else None
+            ),
+        }
+
+    return {
+        "n_scored": value_n,
+        "values_tier_n": values_tier_n,
+        "mean_value_scores": mean_values,
+        "top_values": [{"value": k, "score": v} for k, v in top_values],
+        "tradition_indices": {k: round(v / value_n, 4) for k, v in tradition_sums.items()},
+        "deontological_index": round(deonto_sum / value_n, 4),
+        "utilitarian_index": round(util_sum / value_n, 4),
+        "western_index": round(western_sum / value_n, 4),
+        "eastern_relational_index": round(eastern_sum / value_n, 4),
+        "western_minus_eastern": round((western_sum - eastern_sum) / value_n, 4),
+        "utilitarian_minus_deontological": round((util_sum - deonto_sum) / value_n, 4),
+        "by_tension": tension_summary,
+        "lexicon": _lexicon_summary(scored),
+    }
+
+
+def _lexicon_summary(scored: list[dict]) -> dict:
+    from src.lexicon import load_lexicon
+
+    lex = load_lexicon()
+    entry_sums: dict[str, float] = {}
+    mid_sums: dict[str, float] = {}
+    n = 0
+    for s in scored:
+        ls = s.get("lexicon_scores")
+        if not ls:
+            continue
+        n += 1
+        for eid, val in ls.items():
+            entry_sums[eid] = entry_sums.get(eid, 0.0) + val
+        ms = s.get("mid_level_scores") or {}
+        for mid_id, val in ms.items():
+            mid_sums[mid_id] = mid_sums.get(mid_id, 0.0) + val
+
+    if n == 0:
+        return {"n_scored": 0}
+
+    entry_labels = {e["id"]: e["label"] for e in lex["entries"]}
+    mid_labels = {m["id"]: m["label"] for m in lex["mid_level"]}
+
+    mean_entries = {k: round(v / n, 4) for k, v in entry_sums.items()}
+    mean_mid = {k: round(v / n, 4) for k, v in mid_sums.items()}
+
+    top_entries = sorted(mean_entries.items(), key=lambda x: -x[1])[:15]
+    top_mid = sorted(mean_mid.items(), key=lambda x: -x[1])[:10]
+
+    return {
+        "n_scored": n,
+        "n_entries": lex["stats"]["n_entries"],
+        "n_mid_level": lex["stats"]["n_mid_level"],
+        "top_entries": [
+            {"id": k, "label": entry_labels.get(k, k), "score": v} for k, v in top_entries if v > 0
+        ],
+        "top_mid_level": [
+            {"id": k, "label": mid_labels.get(k, k), "score": v} for k, v in top_mid if v > 0
+        ],
+    }
+
+
 def aggregate(scored: list[dict], items: dict[str, dict]) -> dict:
     n = len(scored)
     if n == 0:
@@ -123,4 +249,5 @@ def aggregate(scored: list[dict], items: dict[str, dict]) -> dict:
         "failure_mode_counts": dict(fm_counts),
         "gabriel_failure_counts": dict(gab_fail),
         "pluralism": _pluralism_summary(scored, items),
+        "value_profile": _value_profile_summary(scored, items),
     }

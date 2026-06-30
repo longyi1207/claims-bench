@@ -1,0 +1,112 @@
+{
+  "metrics": [
+    "western_index",
+    "eastern_relational_index",
+    "deontological_index",
+    "utilitarian_index",
+    "western_minus_eastern",
+    "utilitarian_minus_deontological"
+  ],
+  "models": [
+    {
+      "model": "Qwen/Qwen2.5-7B-Instruct",
+      "report": "outputs/Qwen__Qwen2.5-7B-Instruct/report_v04.json",
+      "n_scored": 160,
+      "western_index": 0.1484,
+      "eastern_relational_index": 0.0347,
+      "deontological_index": 0.1011,
+      "utilitarian_index": 0.0907,
+      "western_minus_eastern": 0.1136,
+      "utilitarian_minus_deontological": -0.0104,
+      "top_values": [
+        {
+          "value": "rule_of_law",
+          "score": 0.3031
+        },
+        {
+          "value": "beneficence",
+          "score": 0.1494
+        },
+        {
+          "value": "privacy",
+          "score": 0.1287
+        }
+      ]
+    },
+    {
+      "model": "deepseek-chat",
+      "report": "outputs/deepseek-chat/report_v04.json",
+      "n_scored": 160,
+      "western_index": 0.1475,
+      "eastern_relational_index": 0.0226,
+      "deontological_index": 0.1038,
+      "utilitarian_index": 0.1032,
+      "western_minus_eastern": 0.1249,
+      "utilitarian_minus_deontological": -0.0006,
+      "top_values": [
+        {
+          "value": "rule_of_law",
+          "score": 0.3091
+        },
+        {
+          "value": "beneficence",
+          "score": 0.1779
+        },
+        {
+          "value": "honesty",
+          "score": 0.1378
+        }
+      ]
+    },
+    {
+      "model": "gpt-4o",
+      "report": "outputs/gpt-4o/report_v04.json",
+      "n_scored": 160,
+      "western_index": 0.096,
+      "eastern_relational_index": 0.0265,
+      "deontological_index": 0.0668,
+      "utilitarian_index": 0.0573,
+      "western_minus_eastern": 0.0695,
+      "utilitarian_minus_deontological": -0.0095,
+      "top_values": [
+        {
+          "value": "rule_of_law",
+          "score": 0.1604
+        },
+        {
+          "value": "beneficence",
+          "score": 0.0932
+        },
+        {
+          "value": "privacy",
+          "score": 0.0889
+        }
+      ]
+    },
+    {
+      "model": "gpt-4o-mini",
+      "report": "outputs/gpt-4o-mini/report_v04.json",
+      "n_scored": 160,
+      "western_index": 0.0799,
+      "eastern_relational_index": 0.0244,
+      "deontological_index": 0.0559,
+      "utilitarian_index": 0.068,
+      "western_minus_eastern": 0.0555,
+      "utilitarian_minus_deontological": 0.012,
+      "top_values": [
+        {
+          "value": "rule_of_law",
+          "score": 0.1446
+        },
+        {
+          "value": "beneficence",
+          "score": 0.1003
+        },
+        {
+          "value": "autonomy",
+          "score": 0.0696
+        }
+      ]
+    }
+  ]
+}

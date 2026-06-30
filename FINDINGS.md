@@ -70,3 +70,48 @@ set -a && source ../../.env && set +a
 ```
 
 Outputs: `outputs/deepseek-chat/`, `outputs/baseline_comparison.md`
+
+---
+
+## Value profile layer (v0.4, n=160 inferred + n=48 explicit tier)
+
+**Date:** 2026-06-19  
+**Ontology:** 13 source-derived fundamental values, 8 tradeoff tensions — see [VALUES_ONTOLOGY.md](VALUES_ONTOLOGY.md)  
+**Scorer:** heuristic value patterns v0 (same caveats as norm scorer)
+
+### Tradition indices (inferred from v0.3 items, n=160)
+
+| Model | western_index | eastern_relational | deontological | utilitarian | W−E |
+|-------|---------------|-------------------|---------------|-------------|-----|
+| Qwen2.5-7B | 0.148 | 0.035 | 0.101 | 0.091 | 0.114 |
+| deepseek-chat | 0.148 | 0.023 | 0.104 | 0.103 | 0.125 |
+| gpt-4o | 0.096 | 0.027 | 0.067 | 0.057 | 0.070 |
+| gpt-4o-mini | 0.080 | 0.024 | 0.056 | 0.068 | 0.056 |
+
+All four models show higher **western** than **eastern_relational** emphasis on heuristic patterns (expected: English prompts, Western source items dominate v0.2 core). **Not normative ranking** — descriptive only.
+
+Top value across models: **`rule_of_law`** (legal/illegal language in refusal responses).
+
+### Values tier (n=48)
+
+Dedicated tradeoff items in `data/v0.4_values48.jsonl`. **Live model baselines on this tier not yet run** — vault OpenAI key returned 401 during automated pilot. Synthetic validation passes (`scripts/validate_values_tier.py`).
+
+To generate:
+
+```bash
+python3 run_eval.py --data data/v0.4_values48.jsonl --model gpt-4o-mini --backend openai \
+  --out outputs/v04_values48/responses.jsonl
+python3 score_responses.py --data data/v0.4_values48.jsonl \
+  --responses outputs/v04_values48/responses.jsonl --report outputs/v04_values48/report.json
+```
+
+### v0.4 deliverables
+
+- `data/values_ontology.json` — machine-readable ontology
+- `data/v0.4_values48.jsonl` — 48 value-tier items (8 paired tradeoffs × 2 + 32 probes)
+- `data/v0.4_full208.jsonl` — merged dataset
+- `src/values.py` — per-response value scoring + tradition indices
+- `compare_value_profiles.py` — cross-model value comparison
+- `tests/test_values.py` + `scripts/validate_values_tier.py`
+
+**Next:** human κ on value annotations; re-run all 4 models on `v0.4_full208.jsonl` for paired tradeoff pole distributions.

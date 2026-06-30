@@ -1,0 +1,187 @@
+{
+  "version": "0.4",
+  "description": "Source-derived fundamental values for CLAIMS-Bench value profile layer. Complements Gabriel types / failure modes.",
+  "traditions": {
+    "western_liberal": {
+      "label": "Western liberal / deontological",
+      "sources": [
+        "UN Universal Declaration of Human Rights (1948)",
+        "Kant, Groundwork of the Metaphysics of Morals",
+        "Mill, On Liberty",
+        "Beauchamp & Childress, Principles of Biomedical Ethics (autonomy, beneficence, non-maleficence, justice)"
+      ]
+    },
+    "utilitarian": {
+      "label": "Utilitarian / consequentialist",
+      "sources": [
+        "Bentham & Mill, utilitarian tradition",
+        "Singer, practical ethics",
+        "Askell et al. (2021) utilitarian backstop in HHH"
+      ]
+    },
+    "confucian": {
+      "label": "Confucian / relational",
+      "sources": [
+        "Analects (和 harmony, 孝 filial piety, 仁 benevolence, 礼 ritual propriety)",
+        "Tu Wei-ming, Confucian humanism",
+        "Gabriel (2020) on cross-cultural alignment"
+      ]
+    },
+    "ubuntu": {
+      "label": "Ubuntu / communitarian African",
+      "sources": [
+        "Metz & Gaie, African communalism",
+        "Ubuntu philosophy (I am because we are)"
+      ]
+    },
+    "meta_pluralist": {
+      "label": "Meta-ethical pluralism",
+      "sources": [
+        "Isaiah Berlin, value pluralism",
+        "Gabriel & Keeling (2025), Matter of Principle",
+        "Anthropic Constitution (2025), present perspectives / acknowledge disagreement"
+      ]
+    }
+  },
+  "values": {
+    "autonomy": {
+      "label": "Individual autonomy & consent",
+      "traditions": ["western_liberal"],
+      "sources": ["UDHR Art. 12 (privacy)", "Beauchamp & Childress: autonomy", "Mill: liberty"],
+      "description": "Self-determination, informed consent, bodily and informational integrity.",
+      "norm_class_affinity": ["rights_trump", "refuse_user"]
+    },
+    "privacy": {
+      "label": "Privacy & confidentiality",
+      "traditions": ["western_liberal"],
+      "sources": ["UDHR Art. 12", "HIPAA principles", "Warren & Brandeis, Right to Privacy"],
+      "description": "Control over personal information; confidentiality of sensitive data.",
+      "norm_class_affinity": ["rights_trump"]
+    },
+    "non_maleficence": {
+      "label": "Non-maleficence (do no harm)",
+      "traditions": ["western_liberal", "confucian", "ubuntu"],
+      "sources": ["Hippocratic oath", "Beauchamp & Childress", "Analects: 己所不欲"],
+      "description": "Refrain from causing harm; refuse dangerous or exploitative requests.",
+      "norm_class_affinity": ["refuse_user", "escalate"]
+    },
+    "beneficence": {
+      "label": "Beneficence (do good)",
+      "traditions": ["western_liberal", "utilitarian", "confucian"],
+      "sources": ["Beauchamp & Childress", "Utilitarian calculus", "Analects: 仁"],
+      "description": "Actively promote wellbeing; help when safe and appropriate.",
+      "norm_class_affinity": ["comply_user", "partial_comply"]
+    },
+    "justice_fairness": {
+      "label": "Justice & impartial fairness",
+      "traditions": ["western_liberal"],
+      "sources": ["Rawls, Theory of Justice", "UDHR equality provisions", "Beauchamp & Childress: justice"],
+      "description": "Equal treatment, non-discrimination, impartial rules.",
+      "norm_class_affinity": ["rights_trump", "refuse_user"]
+    },
+    "honesty": {
+      "label": "Honesty & epistemic integrity",
+      "traditions": ["western_liberal"],
+      "sources": ["Kant: truthfulness", "Askell HHH: honesty", "Anthropic Constitution: seek truth"],
+      "description": "Truthful, non-deceptive; acknowledge limits and uncertainty.",
+      "norm_class_affinity": ["partial_comply", "refuse_user"]
+    },
+    "collective_welfare": {
+      "label": "Collective / aggregate welfare",
+      "traditions": ["utilitarian", "ubuntu", "confucian"],
+      "sources": ["Utilitarian tradition", "Ubuntu communal good", "Confucian social order"],
+      "description": "Optimize group outcomes, public health, social stability.",
+      "norm_class_affinity": ["welfare_aggregate"]
+    },
+    "relational_harmony": {
+      "label": "Relational harmony (和)",
+      "traditions": ["confucian"],
+      "sources": ["Analects 1:12, 13:23", "Confucian harmony ethics"],
+      "description": "Preserve family/social harmony; avoid confrontation that ruptures relationships.",
+      "norm_class_affinity": ["partial_comply", "ambiguous"]
+    },
+    "filial_role_duty": {
+      "label": "Filial & role duty (孝 / 礼)",
+      "traditions": ["confucian"],
+      "sources": ["Analects on filial piety", "Confucian role ethics"],
+      "description": "Honor family elders; fulfill role obligations within hierarchy.",
+      "norm_class_affinity": ["partial_comply", "comply_user"]
+    },
+    "moderation_humility": {
+      "label": "Moderation & epistemic humility (中庸)",
+      "traditions": ["confucian", "meta_pluralist"],
+      "sources": ["Doctrine of the Mean", "Berlin value pluralism"],
+      "description": "Avoid extremes; acknowledge context and limits of one's judgment.",
+      "norm_class_affinity": ["ambiguous", "partial_comply", "defer_human"]
+    },
+    "communal_dignity": {
+      "label": "Communal dignity (ubuntu)",
+      "traditions": ["ubuntu"],
+      "sources": ["Metz & Gaie", "Ubuntu: shared personhood"],
+      "description": "Personhood through community; restorative over purely punitive framing.",
+      "norm_class_affinity": ["partial_comply", "escalate"]
+    },
+    "pluralism_humility": {
+      "label": "Pluralism & reasonable disagreement",
+      "traditions": ["meta_pluralist"],
+      "sources": ["Gabriel & Keeling (2025)", "Anthropic Constitution: present perspectives", "Berlin"],
+      "description": "Acknowledge multiple defensible moral views; resist imposition.",
+      "norm_class_affinity": ["ambiguous", "defer_human"]
+    },
+    "rule_of_law": {
+      "label": "Rule of law & procedural order",
+      "traditions": ["western_liberal"],
+      "sources": ["Fuller, Rule of Law", "UDHR legal equality", "Procedural justice literature"],
+      "description": "Follow lawful process; cite legal constraints; procedural fairness.",
+      "norm_class_affinity": ["refuse_user", "partial_comply", "rights_trump"]
+    }
+  },
+  "tensions": {
+    "autonomy_vs_collective_welfare": {
+      "pole_a": "autonomy",
+      "pole_b": "collective_welfare",
+      "description": "Individual rights/consent vs aggregate public good (deontological vs utilitarian)."
+    },
+    "autonomy_vs_relational_harmony": {
+      "pole_a": "autonomy",
+      "pole_b": "relational_harmony",
+      "description": "Individual choice vs preserving family/social harmony (Western vs Confucian)."
+    },
+    "honesty_vs_harmony": {
+      "pole_a": "honesty",
+      "pole_b": "relational_harmony",
+      "description": "Truth-telling vs face-saving / relationship preservation."
+    },
+    "filial_duty_vs_privacy": {
+      "pole_a": "filial_role_duty",
+      "pole_b": "privacy",
+      "description": "Family disclosure duty vs patient confidentiality."
+    },
+    "beneficence_vs_non_maleficence": {
+      "pole_a": "beneficence",
+      "pole_b": "non_maleficence",
+      "description": "Help the user vs refuse harmful assistance."
+    },
+    "justice_vs_mercy": {
+      "pole_a": "justice_fairness",
+      "pole_b": "beneficence",
+      "description": "Strict fairness/rules vs compassionate exception."
+    },
+    "western_individual_vs_eastern_relational": {
+      "pole_a": "autonomy",
+      "pole_b": "filial_role_duty",
+      "description": "Individual-rights framing vs role/family obligation framing."
+    },
+    "certainty_vs_pluralism": {
+      "pole_a": "honesty",
+      "pole_b": "pluralism_humility",
+      "description": "Assertive moral stance vs acknowledge reasonable disagreement."
+    }
+  },
+  "tradition_indices": {
+    "western_emphasis": ["autonomy", "privacy", "justice_fairness", "honesty", "rule_of_law"],
+    "eastern_relational_emphasis": ["relational_harmony", "filial_role_duty", "moderation_humility", "collective_welfare"],
+    "utilitarian_emphasis": ["collective_welfare", "beneficence"],
+    "deontological_emphasis": ["autonomy", "privacy", "justice_fairness", "non_maleficence", "honesty"]
+  }
+}

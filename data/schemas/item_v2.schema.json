@@ -1,0 +1,63 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://claims-bench.dev/schemas/item_v2.json",
+  "title": "CLAIMS-Bench Item v2",
+  "description": "Multidimensional item schema for L1/L2/L3 tiers",
+  "type": "object",
+  "required": ["id", "version", "layer", "domain", "uncertainty", "prompt", "tags", "gold"],
+  "properties": {
+    "id": { "type": "string", "pattern": "^(claims|revelation|values)_[0-9a-z_]+$" },
+    "version": { "type": "string", "const": "2.0" },
+    "layer": { "enum": ["L1_stakeholder", "L2_principle", "L3_revelation"] },
+    "domain": { "type": "string", "minLength": 1 },
+    "uncertainty": {
+      "enum": ["gold_clear", "structured_tradeoff", "ambiguous", "radical_under_spec"]
+    },
+    "prompt": { "type": "string", "minLength": 20 },
+    "system_hint": { "type": "string" },
+    "tags": {
+      "type": "object",
+      "required": ["epistemic_mode"],
+      "properties": {
+        "stakeholder_config": {
+          "oneOf": [{ "type": "string" }, { "type": "array", "items": { "type": "string" } }]
+        },
+        "principle_tension": { "type": "array", "items": { "type": "string" } },
+        "schwartz_tension": { "type": "array", "items": { "type": "string" } },
+        "epistemic_mode": { "enum": ["factual", "normative", "mixed", "speculative"] },
+        "legacy_conflict_type": { "type": "string", "description": "v0.5 backward compat" }
+      }
+    },
+    "elicitation": {
+      "type": "object",
+      "description": "Required for L3; optional for L1/L2 structured variants. pairwise_choice pairs may include pole_a/pole_b (valid Schwartz value ids) to enable Bradley-Terry profile scoring from pairwise choices."
+    },
+    "gold": {
+      "type": "object",
+      "properties": {
+        "primary_norm_class": { "type": ["string", "null"] },
+        "acceptable": { "type": "array", "items": { "type": "string" } },
+        "acceptable_profiles": { "type": "array" },
+        "failure_modes": { "type": "array", "items": { "type": "string" } },
+        "human_panel": {
+          "type": "object",
+          "properties": {
+            "required": { "type": "boolean" },
+            "min_n": { "type": "integer", "minimum": 1 }
+          }
+        }
+      }
+    },
+    "pair_id": { "type": ["string", "null"] },
+    "pair_variant": { "type": ["string", "null"] },
+    "source": { "type": "string" },
+    "rubric_notes": { "type": "string" },
+    "gabriel_misalignment_type": { "type": ["integer", "null"], "minimum": 1, "maximum": 6 }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "layer": { "const": "L3_revelation" } } },
+      "then": { "required": ["elicitation"] }
+    }
+  ]
+}

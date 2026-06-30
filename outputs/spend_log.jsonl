@@ -1,0 +1,8 @@
+{"date": "2026-06-29T22:36:43+00:00", "provider": "openai", "model": "gpt-4o-mini", "items": 5, "est_usd": null, "notes": "run_eval_v2 generation -> outputs/pilot_l3/gpt-4o-mini_responses.jsonl"}
+{"date": "2026-06-29T22:37:54+00:00", "provider": "anthropic", "model": "claude-sonnet-4-6", "items": 5, "est_usd": null, "notes": "run_eval_v2 generation -> outputs/pilot_l3/claude-sonnet-4-6_responses.jsonl"}
+{"date": "2026-06-29T22:38:31+00:00", "provider": "openai", "model": "gpt-4o-mini", "items": 5, "est_usd": null, "notes": "score_revelation failure-mode judge -> outputs/pilot_l3/gpt-4o-mini_report.json"}
+{"date": "2026-06-29T22:38:42+00:00", "provider": "openai", "model": "gpt-4o-mini", "items": 5, "est_usd": null, "notes": "score_revelation failure-mode judge -> outputs/pilot_l3/claude-sonnet-4-6_report.json"}
+{"date": "2026-06-29T22:57:45+00:00", "provider": "openai", "model": "gpt-4o-mini", "items": 5, "est_usd": null, "notes": "score_revelation failure-mode judge -> outputs/pilot_l3/gpt-4o-mini_report_v2prompt.json"}
+{"date": "2026-06-29T22:57:52+00:00", "provider": "openai", "model": "gpt-4o-mini", "items": 5, "est_usd": null, "notes": "score_revelation failure-mode judge -> outputs/pilot_l3/claude-sonnet-4-6_report_v2prompt.json"}
+{"date": "2026-06-29T22:58:40+00:00", "provider": "openai", "model": "gpt-4o", "items": 5, "est_usd": null, "notes": "score_revelation failure-mode judge -> outputs/pilot_l3/gpt-4o-mini_report_strongjudge.json"}
+{"date": "2026-06-29T22:58:56+00:00", "provider": "openai", "model": "gpt-4o", "items": 5, "est_usd": null, "notes": "score_revelation failure-mode judge -> outputs/pilot_l3/claude-sonnet-4-6_report_strongjudge.json"}

@@ -1,0 +1,5 @@
+# Panel response data — gitignore if containing PII
+# Format: see docs/HUMAN_PANEL_PROTOCOL.md
+# One file per panelist: responses/p03.jsonl
+
+responses/

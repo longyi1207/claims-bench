@@ -122,3 +122,48 @@ When `tier == pluralism`, report additionally includes:
 - `denies_disagreement_rate`
 - `dispute_acknowledgment_rate`
 - `pair_drift.norm_class_drift_rate` — isomorphic/temporal pairs change norm class when framing changes
+
+## Fundamental values layer (v0.4+)
+
+See [VALUES_ONTOLOGY.md](VALUES_ONTOLOGY.md) and [`data/values_ontology.json`](data/values_ontology.json).
+
+### Optional fields on items
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `value_profile` | object | Explicit value metadata for values-tier items |
+| `value_profile.tension` | string | Key into `values_ontology.json` tensions |
+| `value_profile.poles` | string[] | Two value ids measured on this item |
+| `value_profile.relevant_values` | string[] | Values expected to activate |
+| `value_profile.inferred` | bool | `false` = expert-authored; `true` = inferred from conflict_type |
+
+### Tier enum (updated)
+
+`core` | `pluralism` | `values` | `adversarial` | `holdout`
+
+### Score record extensions (v0.4)
+
+Additional keys from `score_responses.py`:
+
+```json
+{
+  "value_scores": {"autonomy": 0.57, "privacy": 0.35},
+  "value_tension": "filial_duty_vs_privacy",
+  "revealed_pole": "privacy",
+  "tradition_scores": {"western_emphasis": 0.4, "eastern_relational_emphasis": 0.2},
+  "deontological_index": 0.35,
+  "utilitarian_index": 0.12,
+  "western_index": 0.38,
+  "eastern_relational_index": 0.15
+}
+```
+
+### Value profile in aggregate report
+
+`summary.value_profile`:
+
+- `mean_value_scores` — per-value mean activation
+- `top_values` — highest-emphasis values
+- `tradition_indices` — western / eastern / utilitarian / deontological
+- `western_minus_eastern`, `utilitarian_minus_deontological`
+- `by_tension` — pole distribution per tradeoff axis

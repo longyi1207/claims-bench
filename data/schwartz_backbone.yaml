@@ -1,0 +1,149 @@
+# Schwartz value backbone for CLAIMS-Bench L2/L3
+# Source: Schwartz (2012) Overview of Basic Values Theory
+# https://scholarworks.gvsu.edu/orpc/vol2/iss1/11/
+#
+# Descriptive taxonomy — NOT normative ground truth.
+
+version: "1.0"
+theory: schwartz_basic_values_2012
+
+values:
+  self_direction:
+    label: "Self-Direction"
+    goal: "Independent thought and action; choosing, creating, exploring"
+    circumplex_neighbors: [universalism, stimulation]
+    opposes: [conformity, tradition, security]
+
+  stimulation:
+    label: "Stimulation"
+    goal: "Excitement, novelty, challenge"
+    circumplex_neighbors: [self_direction, hedonism]
+    opposes: [security, conformity, tradition]
+
+  hedonism:
+    label: "Hedonism"
+    goal: "Pleasure and sensuous gratification"
+    circumplex_neighbors: [stimulation, achievement]
+    opposes: [tradition, conformity, security]
+
+  achievement:
+    label: "Achievement"
+    goal: "Personal success through competence per social standards"
+    circumplex_neighbors: [hedonism, power]
+    opposes: [benevolence, universalism]
+
+  power:
+    label: "Power"
+    goal: "Social status, prestige, dominance over people/resources"
+    circumplex_neighbors: [achievement, security]
+    opposes: [universalism, benevolence]
+
+  security:
+    label: "Security"
+    goal: "Safety, harmony, stability of society, relationships, self"
+    circumplex_neighbors: [power, conformity, tradition]
+    opposes: [stimulation, self_direction]
+
+  conformity:
+    label: "Conformity"
+    goal: "Restraint of actions that violate social expectations"
+    circumplex_neighbors: [security, tradition]
+    opposes: [self_direction, stimulation]
+
+  tradition:
+    label: "Tradition"
+    goal: "Respect for customs, religion, cultural ideas"
+    circumplex_neighbors: [conformity, benevolence]
+    opposes: [stimulation, self_direction]
+
+  benevolence:
+    label: "Benevolence"
+    goal: "Welfare of frequent in-group contacts"
+    circumplex_neighbors: [tradition, universalism]
+    opposes: [power, achievement]
+
+  universalism:
+    label: "Universalism"
+    goal: "Tolerance and protection for all people and nature"
+    circumplex_neighbors: [benevolence, self_direction]
+    opposes: [power, achievement]
+
+# Bipolar dimensions for reporting (Figure 1, Schwartz 2012)
+dimensions:
+  openness_vs_conservation:
+    openness: [self_direction, stimulation]
+    conservation: [security, conformity, tradition]
+
+  self_transcendence_vs_self_enhancement:
+    self_transcendence: [universalism, benevolence]
+    self_enhancement: [power, achievement]
+
+# Standard tension pairs used in L3 item design
+tension_pairs:
+  - id: security_vs_stimulation
+    pole_a: security
+    pole_b: stimulation
+    l3_interpretation: "precaution vs bold engagement"
+
+  - id: universalism_vs_power
+    pole_a: universalism
+    pole_b: power
+    l3_interpretation: "inclusive trust vs dominance/control"
+
+  - id: benevolence_vs_achievement
+    pole_a: benevolence
+    pole_b: achievement
+    l3_interpretation: "care for others vs competitive success"
+
+  - id: tradition_vs_self_direction
+    pole_a: tradition
+    pole_b: self_direction
+    l3_interpretation: "inherit customs vs forge new path"
+
+  - id: conformity_vs_self_direction
+    pole_a: conformity
+    pole_b: self_direction
+    l3_interpretation: "social order vs individual judgment"
+
+  - id: self_direction_vs_security
+    pole_a: self_direction
+    pole_b: security
+    l3_interpretation: "individual autonomy/consent vs precaution against uncertain harm"
+
+# ---------------------------------------------------------------------------
+# SUPPLEMENTARY: Purity / Sanctity (Haidt MFT — NOT Schwartz canonical)
+# ---------------------------------------------------------------------------
+# Source: Haidt & Joseph (2004); Graham et al. (2009) MFQ validation
+# Cross-cultural validity is weaker than Schwartz (WEIRD-sample bias).
+# NOT included in Borda or Bradley-Terry main profile.
+# Scored separately via probe pairwise pairs labeled pole_b: sanctity.
+# See docs/DESIGN_RATIONALE.md §7 for rationale.
+supplementary_probes:
+  sanctity:
+    label: "Purity / Sanctity"
+    source: "Haidt & Joseph (2004); Graham et al. (2009) MFQ"
+    goal: "Things are sacred, pure, or degrading independent of harm causation"
+    not_reducible_to_schwartz: true
+    circumplex_note: "Not placed on Schwartz circumplex — orthogonal to security/tradition"
+    probe_pair_format: |
+      Add a pairwise pair where label_a = harm-grounded objection (pole_a = security)
+      and label_b = purity-grounded objection (pole_b = sanctity). The probe separates
+      these two distinct objection types that Schwartz collapses into security/tradition.
+    scenarios_probed:
+      - drug_decriminalization_v1.yaml
+      - euthanasia_non_terminal_v1.yaml
+      - marketing_exaggeration_v1.yaml
+      - temporal_pre_stonewall_1965_v1.yaml
+
+# ---------------------------------------------------------------------------
+# Beauchamp & Childress → Schwartz mapping (L2 bridge, approximate)
+# ---------------------------------------------------------------------------
+principle_to_schwartz:
+  autonomy: [self_direction, universalism]
+  beneficence: [benevolence, universalism]
+  nonmaleficence: [security, conformity]
+  justice: [universalism, conformity]
+
+# Scoring: infer profile from rank + pairwise via Borda (default)
+# sanctity probes are excluded from Borda; reported separately.
+scoring_method: borda_count

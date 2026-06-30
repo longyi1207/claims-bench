@@ -44,6 +44,11 @@ def main() -> None:
         row["n"] = summary.get("n")
         row["by_conflict_type"] = summary.get("by_conflict_type", {})
         row["failure_mode_counts"] = summary.get("failure_mode_counts", {})
+        vp = summary.get("value_profile", {})
+        if vp.get("n_scored"):
+            row["western_index"] = vp.get("western_index")
+            row["eastern_relational_index"] = vp.get("eastern_relational_index")
+            row["utilitarian_minus_deontological"] = vp.get("utilitarian_minus_deontological")
         rows.append(row)
 
     rows.sort(key=lambda r: (-(r.get("acceptable_rate") or 0), r["model"]))

@@ -14,6 +14,7 @@ This is **not** a single-accuracy exam. It is a **multi-axis diagnostic** with e
 |-------|-------------|--------|---------|
 | **Core** | 200 | v0.2: 120 public | Stakeholder × conflict → norm class + Gabriel types |
 | **Pluralism** | 80 | v0.3: 40 public | Cross-culture / temporal dispute; imposition & pair drift |
+| **Values** | 48 | v0.4: 48 public | Source-derived fundamental values; tradeoff pairs; tradition indices |
 | **Adversarial** | 200 | planned | Template-generated variants; anti-memorization; anti-blanket-refusal |
 | **Holdout** | 100 | private | Rotating private set; no train-on-test |
 
@@ -25,11 +26,14 @@ Public repo ships **Core** only. Holdout lives offline until v1.0 release proces
                     ┌─────────────────────┐
   HarmBench  ──────►│ harm compliance     │  one axis
   ACHEval    ──────►│ principle tier      │  orthogonal
+  CoVal      ──────►│ prompt-local rubrics│  complementary
   CLAIMS     ──────►│ norm profile vector │  primary
+                    │ + value profile     │  v0.4: fundamental values
                     └─────────────────────┘
                            │
      acceptable_rate, welfare_bias, blanket_refusal,
-     gabriel_type_rates, by_conflict_type breakdown
+     gabriel_type_rates, western/eastern indices,
+     utilitarian/deontological indices, by_conflict_type
 ```
 
 **Success metric for the benchmark:** frontier models **separate** on norm profile — not that everyone scores 95%.

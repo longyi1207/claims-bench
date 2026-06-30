@@ -1,12 +1,19 @@
 .venv/
 __pycache__/
 *.pyc
+.pycache/
 .env
 .env.*
 .DS_Store
+
+# Large output files — keep reports, exclude raw responses and scored jsonl
 outputs/_key_test/
 outputs/_qwen_test/
-outputs/*_pilot/
 outputs/*.log
+outputs/*/*.log
 outputs/*/responses.jsonl
 outputs/*/scored.jsonl
+outputs/*/scored_*.jsonl
+outputs/pilot_l3/*_responses.jsonl
+outputs/pilot_l3/*_scored.jsonl
+outputs/pilot_l3/*_scored_*.jsonl

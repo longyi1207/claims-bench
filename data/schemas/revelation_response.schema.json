@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://claims-bench.dev/schemas/revelation_response.json",
+  "title": "L3 Structured Elicitation Response",
+  "type": "object",
+  "required": ["rank_values", "pairwise", "epistemic_prior"],
+  "properties": {
+    "rank_values": {
+      "type": "object",
+      "description": "Schwartz value id -> rank 1 (highest) to N (lowest)",
+      "additionalProperties": { "type": "integer", "minimum": 1, "maximum": 10 }
+    },
+    "pairwise": {
+      "type": "object",
+      "description": "pair_id -> chosen option id (label_a side or label_b side)",
+      "additionalProperties": { "type": "string" }
+    },
+    "epistemic_prior": {
+      "enum": ["likely_hostile", "likely_benevolent", "genuinely_unknown"]
+    },
+    "pluralism_acknowledged": { "type": "boolean" },
+    "confidence_self_report": { "type": "integer", "minimum": 1, "maximum": 5 }
+  }
+}

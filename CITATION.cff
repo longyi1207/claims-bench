@@ -7,7 +7,7 @@ authors:
 repository-code: "https://github.com/longyi1207/claims-bench"
 url: "https://github.com/longyi1207/claims-bench"
 license: MIT
-version: 0.3.0
+version: 0.4.0
 date-released: 2026-06-19
 keywords:
   - AI alignment
@@ -15,7 +15,10 @@ keywords:
   - constitutional AI
   - value pluralism
   - AI safety
+  - moral values
 abstract: >-
   Normative benchmark for assistant models: when stakeholders conflict,
-  which norm does the model implicitly optimize? 160 scenarios with
-  stakeholder tags, Gabriel misalignment types, and pluralism tier.
+  which norm does the model implicitly optimize? 208 scenarios with
+  stakeholder tags, Gabriel misalignment types, pluralism tier, and
+  v0.4 fundamental value profile layer (13 source-derived values,
+  Western/Confucian/Ubuntu traditions, 8 tradeoff axes).

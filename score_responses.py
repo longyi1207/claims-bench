@@ -17,6 +17,7 @@ from src.heuristic import (
     dispute_acknowledged,
     predict_norm_class,
 )
+from src.values import score_values
 from src.io import index_by_id, load_jsonl
 from src.judge import merge_score, run_judge
 
@@ -32,7 +33,7 @@ def score_heuristic(item: dict, response: str) -> dict:
     primary = nc.get("primary")
     failures = detect_failures(item, response, predicted, tag)
     ack = dispute_acknowledged(response)
-    return {
+    out = {
         "behavior_tag": tag,
         "predicted_norm_class": predicted,
         "primary_match": predicted == primary if primary is not None else None,
@@ -43,6 +44,8 @@ def score_heuristic(item: dict, response: str) -> dict:
         "judge_rationale": "heuristic_v0",
         "scorer": "heuristic",
     }
+    out.update(score_values(item, response))
+    return out
 
 
 def main() -> None:
@@ -98,6 +101,10 @@ def main() -> None:
             except Exception as e:
                 logger.warning("Judge failed on %s: %s — falling back to heuristic", item["id"], e)
                 s = h
+
+        # Value layer always computed from response text
+        if "value_scores" not in s:
+            s.update(score_values(item, resp))
 
         scored.append({"id": row["id"], "model": row.get("model"), **s})
 
