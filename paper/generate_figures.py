@@ -79,7 +79,7 @@ def fig_pipeline(out: Path) -> None:
                         arrowprops=dict(arrowstyle="->", lw=1.2))
     ax.set_xlim(0, 1)
     ax.set_ylim(0, 1)
-    ax.set_title("L3 value revelation measurement pipeline")
+    ax.set_title("Value revelation measurement pipeline")
     fig.tight_layout()
     fig.savefig(out.with_suffix(".pdf"), bbox_inches="tight")
     fig.savefig(out.with_suffix(".png"), dpi=200, bbox_inches="tight")
