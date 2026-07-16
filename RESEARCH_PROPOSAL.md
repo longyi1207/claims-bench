@@ -1,6 +1,6 @@
 # CLAIMS-Bench — Research Proposal (v0.3)
 
-**Author:** Longyi Zhou  
+**Author:** Long Yi  
 **Status:** Public release v0.3 (June 2026)  
 **Repo:** https://github.com/longyi1207/claims-bench  
 **MATS target:** Anthropic Megastream (safeguards / evals / constitutional alignment)

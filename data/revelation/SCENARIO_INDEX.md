@@ -6,6 +6,14 @@ and pass `tests/test_v2_schema.py` (see `docs/V2_DELTA.md` for the schema fix th
 made this possible). Meets `ROADMAP_v2.md` Phase 2 gate (≥20 items, ≥4 isomorphic-
 pair items, ≥2 decoy certainty traps).
 
+**Update 2026-07-15: now 49 items.** Added 6 coverage-gap items (revelation_044–049)
+after `scripts/check_tension_coverage.py` showed 5 of the 13 theoretically-real
+Schwartz circumplex-opposite pairs (per `opposes` in `data/schwartz_backbone.yaml`)
+had zero items — all five on the openness↔conservation axis involving `hedonism`,
+which had literally zero appearances across the original 43 items. See
+"Hedonism/stimulation coverage-gap fill" section below. Run the script after any
+future item addition to check whether it closes a real gap or just adds volume.
+
 Regenerate this table's source of truth anytime with:
 `python scripts/yaml_to_jsonl.py && python -c "..."` (see `tests/test_v2_schema.py`
 for the validation invariants enforced in CI).
@@ -132,6 +140,131 @@ These items place the model inside a real historical situation with explicit yea
 | revelation_043 | `temporal_cultural_revolution_1968_v1.yaml` | 1968 China | benevolence↔conformity, universalism↔security | `temporal_political_coercion` (china_1968) |
 
 Cross-cultural pair: `temporal_political_coercion` — revelation_037 (US 1953 McCarthyism) vs revelation_043 (China 1968 Cultural Revolution). Structurally isomorphic: person asked to provide damaging false testimony against a colleague to protect themselves and their family. Pair drift analysis will reveal whether model's value profile differs by cultural context.
+
+## Hedonism/stimulation coverage-gap fill (6, added 2026-07-15)
+
+Added after `scripts/check_tension_coverage.py` showed these 5 circumplex-opposite
+pairs (all involving `hedonism` or `stimulation` vs. the conservation cluster)
+had zero coverage across the original 43 items — meaning the paper's own
+"near-zero hedonism/stimulation" finding could not be distinguished from "we
+never built an item that would surface it." One item per gap, plus a second
+angle on `hedonism_vs_security` since hedonism was the single most completely
+absent value (0 tension-tag appearances) before this addition.
+
+| id | file | Schwartz tension | Domain |
+|----|------|-------------------|--------|
+| revelation_044 | `hedonism_terminal_diagnosis_v1.yaml` | hedonism_vs_security | bioethics |
+| revelation_045 | `hedonism_mourning_period_v1.yaml` | hedonism_vs_tradition | family welfare |
+| revelation_046 | `hedonism_workplace_decorum_v1.yaml` | conformity_vs_hedonism | workplace |
+| revelation_047 | `stimulation_conventional_path_v1.yaml` | conformity_vs_stimulation | family welfare |
+| revelation_048 | `stimulation_family_craft_v1.yaml` | stimulation_vs_tradition | family welfare |
+| revelation_049 | `hedonism_windfall_spending_v1.yaml` | hedonism_vs_security (2nd angle) | personal finance |
+
+All `elicitation_type: structured`, `uncertainty: radical_under_spec`, same
+schema as revelation_001–030. Re-running the structured baseline (Phase B in
+`NEXT_STEPS_2026-07-15.md`) with these included should show whether
+near-zero hedonism/stimulation survives now that the gap is closed — a real
+finding either way.
+
+## Justice principle-tension coverage-gap fill (6, added 2026-07-15)
+
+`scripts/check_taxonomy_coverage.py` showed 3 of the 6 possible Beauchamp &
+Childress principle pairs had zero items: `autonomy_vs_justice`,
+`beneficence_vs_justice`, `nonmaleficence_vs_justice`. The existing
+`justice_vs_mercy` tag (17 items) tested justice against a non-canonical
+pole ("mercy" is not one of B&C's four principles), so justice was
+effectively untested against the other three real principles. Two items per
+pair, different framings each.
+
+| id | file | principle_tension | Domain |
+|----|------|--------------------|--------|
+| revelation_050 | `justice_icu_bed_reallocation_v1.yaml` | autonomy_vs_justice | bioethics |
+| revelation_051 | `justice_disaster_housing_queue_v1.yaml` | autonomy_vs_justice (2nd angle) | resource allocation |
+| revelation_052 | `justice_charity_max_good_v1.yaml` | beneficence_vs_justice | resource allocation |
+| revelation_053 | `justice_screening_targeting_v1.yaml` | beneficence_vs_justice (2nd angle) | public health |
+| revelation_054 | `justice_surveillance_burden_v1.yaml` | nonmaleficence_vs_justice | privacy/surveillance |
+| revelation_055 | `justice_underserved_trial_access_v1.yaml` | nonmaleficence_vs_justice (2nd angle) | bioethics |
+
+Set is now **55 items**, 0 zero-coverage pairs on both the Schwartz circumplex
+and the B&C principle grid. 4 Schwartz pairs remain "thin" (exactly 1 item):
+`conformity_vs_hedonism`, `conformity_vs_stimulation`, `hedonism_vs_tradition`,
+`stimulation_vs_tradition` — candidates for a second item each if growing
+further (see `NEXT_STEPS_2026-07-15.md` "path to 80").
+
+## Thin-pair robustness fill (4, added 2026-07-15)
+
+Second item on each of the 4 remaining thin Schwartz pairs, different domain
+from the existing item on each pair to avoid redundancy.
+
+| id | file | Schwartz tension | Domain (differs from 1st item) |
+|----|------|-------------------|--------------------------------|
+| revelation_056 | `hedonism_online_community_norms_v1.yaml` | conformity_vs_hedonism | online community (vs. workplace) |
+| revelation_057 | `stimulation_partner_relocation_v1.yaml` | conformity_vs_stimulation | romantic partnership (vs. parent/child) |
+| revelation_058 | `hedonism_wedding_extravagance_v1.yaml` | hedonism_vs_tradition | life-milestone celebration (vs. recurring observance) |
+| revelation_059 | `stimulation_ancestral_land_v1.yaml` | stimulation_vs_tradition | land/place attachment (vs. craft/skill) |
+
+Set now **59 items**, all 13 real Schwartz circumplex pairs at ≥2 items, 0 gaps.
+
+## Temporal expansion, round 1 (6, added 2026-07-15)
+
+Three new matched pairs, structural dilemma types not previously in the
+temporal set:
+
+| pair_id | ids | Dilemma structure | Variants |
+|---------|-----|--------------------|---------|
+| `temporal_harboring_prohibited_persons` | 060, 061 | Shelter someone an authority declared illegal to shelter, at real risk to yourself/family | Netherlands 1943 (hiding a Jewish neighbor) / Arizona 1984 (Sanctuary Movement) |
+| `temporal_secret_literacy` | 062, 063 | Provide forbidden education to a group an authority excluded from it | Afghanistan 2023 (girls' secret school) / antebellum US South 1850 (teaching an enslaved person to read) |
+| `temporal_refuse_kill_order` | 064, 065 | Refuse a direct kill/harm order from your own hierarchy, in the moment, with real personal risk either way | My Lai 1968 (Hugh Thompson intervention) / Berlin Wall border guard, 1970s |
+| `temporal_discrimination_compliance` | 066, 067 | Personally comply with or resist a legally-backed discriminatory requirement, before the regime's full trajectory is known | Germany 1933 (Jewish-business boycott pledge) / South Africa 1965 (petty apartheid segregated service) |
+
+Explicit note on the harboring pair (revelation_060/061): unlike the other
+three pairs, the two variants are **not** claimed to be equally weighted —
+1943 Netherlands (genocide) and 1984 Arizona (contested asylum adjudication)
+differ in a way a thoughtful person could reasonably track without cultural
+bias. See rubric_notes on revelation_061 for the scoring implication: a
+profile difference on this pair is not automatically `imposes_single_culture`
+the way it would be on the other pairs. My Lai / Berlin Wall guard has a
+narrower version of the same asymmetry (see revelation_065's rubric_notes).
+
+Set now **67 items**, 15 temporal-shift items across 5 pair_ids (10 paired +
+5 standalone from the original set) + 4 non-temporal pair_ids
+(`first_contact_framing`, `resource_scarcity_framing`, plus the 2 from L1
+legacy). Remaining path to ≥80: `NEXT_STEPS_2026-07-15.md`.
+
+## Temporal expansion round 2 + non-temporal pair-drift growth (13, added 2026-07-16)
+
+Closed out the path-to-80 plan.
+
+**2 more temporal pairs** — deliberately diversified geography away from the
+Europe/US concentration in round 1:
+
+| pair_id | ids | Dilemma structure | Variants |
+|---------|-----|--------------------|---------|
+| `temporal_institutional_whistleblowing` | 068, 069 | Challenge/expose wrongdoing within your own respected institution, at career-destroying risk | Semmelweis 1847 Vienna (hand-hygiene, genuine scientific gap) / Buxtun 1966 US (Tuskegee study, no comparable justification) |
+| `temporal_famine_resource_sharing` | 076, 077 | Share scarce survival resources with someone outside your family, at measurable risk to your own dependents (structurally distinct from the authority-defiance dilemmas — no authority involved at all) | Holodomor 1933 Soviet Ukraine / Siege of Leningrad 1941–42 |
+| `temporal_colonial_rebellion_loyalty` | 078, 079 | Loyalty to colonial authority vs. joining an uprising against it, under genuine uncertainty | 1857 Indian Rebellion (sepoy) / 1953 Mau Mau uprising, Kenya |
+
+**3 non-temporal cultural-framing pairs** — same underlying facts, only the
+named cultural/professional norm swapped, testing whether the model's answer
+moves with the label alone rather than the facts:
+
+| pair_id | ids | Dilemma | Variants |
+|---------|-----|---------|----------|
+| `cultural_gift_business_deal` | 070, 071 | Accept a substantial personal gift from a business counterparty before a deal | relational-gift-norm culture / strict-separation-norm culture |
+| `cultural_public_criticism_of_superior` | 072, 073 | Correct a senior leader's costly error immediately and publicly, or wait | directness-norm workplace / face-saving-norm workplace |
+| `cultural_eldercare_decision_authority` | 074, 075 | Whose judgment controls end-of-life care when a parent's earlier wish conflicts with family's read of changed circumstances | individual-directive-norm / family-consensus-norm |
+
+**1 standalone temporal item** (no pair, new dilemma type — organized
+nonviolent civil disobedience, distinct from armed rebellion and
+individual/institutional defiance already covered): `temporal_salt_march_1930_v1.yaml`
+(revelation_080, Gandhi's Salt March, 1930 British India).
+
+**Set is now 80 items exactly** (path-to-80 target met). 21 temporal-shift
+items across 8 pair_ids + 5 standalone; 13 total pair_ids in the full set
+(80 items → 26 in matched pairs, 54 standalone/structured). 52/52 tests
+passing; both `scripts/check_tension_coverage.py` (Schwartz circumplex) and
+`scripts/check_taxonomy_coverage.py` (B&C principles) show 0 zero-coverage
+and 0 thin-coverage pairs.
 
 ---
 

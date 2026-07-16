@@ -181,7 +181,7 @@ See `BUDGET.md`. Rules:
 
 ## Owner context
 
-Longyi Zhou — full-time AI safety researcher, former YC CTO. Building for MATS/career/community adoption. Philosophy/ethics design is the hard part; execution should be fast with agent help. User prefers terse expert communication, PhD-level honesty, traceable sources.
+Long Yi — full-time AI safety researcher, former YC CTO. Building for MATS/career/community adoption. Philosophy/ethics design is the hard part; execution should be fast with agent help. User prefers terse expert communication, PhD-level honesty, traceable sources.
 
 ---
 

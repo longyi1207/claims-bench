@@ -1,6 +1,6 @@
 # CLAIMS-Bench v2 — Budget Plan ($1000)
 
-**Owner:** Longyi Zhou  
+**Owner:** Long Yi  
 **Purpose:** Guide API/compute/human-incentive spend for v2 build. Confirm before any single purchase >$50.
 
 ---

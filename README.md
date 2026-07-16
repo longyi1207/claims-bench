@@ -1,9 +1,9 @@
 # CLAIMS-Bench
 
-**Conflicting Claims in AI Alignment — Multi-Stakeholder & Value Revelation Evaluation**
+**C**haracterizing **L**anguage-model **A**gents' **I**mplicit **M**oral and **S**takeholder commitments
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Scenarios](https://img.shields.io/badge/L3_scenarios-43-blue.svg)](data/v2_revelation.jsonl)
+[![Scenarios](https://img.shields.io/badge/L3_scenarios-80-blue.svg)](data/v2_revelation.jsonl)
 [![Tests](https://img.shields.io/badge/tests-52%20passing-brightgreen.svg)](tests/)
 
 > **Paper:** [`paper/claims_bench_v2.md`](paper/claims_bench_v2.md) | **PDF:** [`paper/claims_bench_v2.pdf`](paper/claims_bench_v2.pdf)
@@ -20,7 +20,7 @@ CLAIMS-Bench is a normative evaluation framework for AI assistants. Not *"will i
 |-------|----------|---------------|--------|
 | **L1** Stakeholder fairness | When claims conflict, *who* does the model favor? | Gabriel & Keeling (2025) | 208 items in `data/v0.5_full208.jsonl` |
 | **L2** Principle tension | *Which mid-level principles* dominate reasoning? | Beauchamp & Childress principlism | Covered in L1 items |
-| **L3** Value revelation | *What implicit priorities* emerge under uncertainty? | Schwartz (2012) + Berlin pluralism | **43 scenarios — primary focus** |
+| **L3** Value revelation | *What implicit priorities* emerge under uncertainty? | Schwartz (2012) + Berlin pluralism | **80 scenarios — primary focus** |
 
 **L3 is the north star.** Scenarios are radically under-specified (key facts missing) so the model must draw on implicit value priors rather than apply known rules.
 
@@ -90,7 +90,7 @@ Output is always a **profile vector**, never a single alignment score — by des
 
 ---
 
-## Scenario families (43 items)
+## Scenario families (80 items)
 
 | Family | Items | What it probes | Schwartz tensions |
 |--------|-------|---------------|-------------------|
@@ -98,10 +98,18 @@ Output is always a **profile vector**, never a single alignment score — by des
 | Longtermism vs present welfare | 4 | Temporal discounting; future obligations | benevolence↔achievement |
 | Governance / lock-in | 5 | Democratic legitimacy vs efficiency | universalism↔power, conformity↔self_direction |
 | Epistemic integrity | 4 | False certainty; precaution blindness | security↔stimulation |
-| Isomorphic pair drift | 4 | Profile stability across reframings | varies |
+| Isomorphic pair drift (existential/resource) | 4 | Profile stability across surface reframings | varies |
 | Everyday WVS-high-variance | 10 | Domains of maximum cross-cultural disagreement | universalism↔achievement, self_direction↔security, … |
 | Behavioral / implicit | 6 | Value inference from free-text advice (no Schwartz framing shown) | all |
-| Temporal shift | 7 | `imposes_single_culture` in the time dimension | self_direction↔security, universalism↔conformity, … |
+| Temporal shift | 21 | `imposes_single_culture` in the time dimension, across 8 matched pairs (political coercion, harboring, secret literacy, refuse-kill-order, discrimination compliance, institutional whistleblowing, famine resource-sharing, colonial rebellion loyalty) + 5 standalone portraits | self_direction↔security, universalism↔conformity, benevolence↔security, … |
+| Coverage-gap fill: hedonism/stimulation | 6 | Circumplex-opposite pairs (vs. tradition/conformity/security) previously untested by any item | hedonism↔security, hedonism↔tradition, conformity↔hedonism, conformity↔stimulation, stimulation↔tradition |
+| Coverage-gap fill: justice (Beauchamp & Childress) | 6 | Justice vs. the other 3 B&C principles, previously untested against any real principle | autonomy↔justice, beneficence↔justice, nonmaleficence↔justice |
+| Cultural-framing pair drift (non-temporal) | 6 | Same underlying facts, only the named cultural/professional norm swapped (gift-giving, public criticism of a superior, elder-care decision authority) | achievement↔universalism, self_direction↔conformity, self_direction↔tradition |
+
+Coverage of the 13 theoretically-real Schwartz circumplex-opposite pairs and
+the 6 possible Beauchamp & Childress principle pairs is checked via
+`scripts/check_tension_coverage.py` and `scripts/check_taxonomy_coverage.py`
+— both currently show 0 zero-coverage and 0 thin-coverage pairs.
 
 Full table with per-item Schwartz tensions: [`data/revelation/SCENARIO_INDEX.md`](data/revelation/SCENARIO_INDEX.md)
 
@@ -140,7 +148,7 @@ Structured L3 items on two models (5 items each, heuristic judge):
 | claude-sonnet-4-6 | 0.88 | 0.80 | 0.0 | 0.80 |
 | gpt-4o-mini | 0.72 | 0.64 | 0.20 | 0.60 |
 
-*Pilot only — 5 items, no human panel baseline yet. Full run pending (see [ROADMAP_v2.md](ROADMAP_v2.md)).*
+*Pilot only — 5 items, no human panel baseline yet, and predates the item-set expansion to 80 (2026-07-16). Full run pending (see [NEXT_STEPS_2026-07-15.md](NEXT_STEPS_2026-07-15.md)).*
 
 ---
 
@@ -148,7 +156,7 @@ Structured L3 items on two models (5 items each, heuristic judge):
 
 | File | Items | Description |
 |------|-------|-------------|
-| `data/v2_revelation.jsonl` | **43** | **Primary — L3 Schwartz revelation scenarios** |
+| `data/v2_revelation.jsonl` | **80** | **Primary — L3 Schwartz revelation scenarios** |
 | `data/schwartz_backbone.yaml` | — | Value taxonomy, circumplex, tension pairs |
 | `data/v0.5_full208.jsonl` | 208 | Legacy L1/L2 stakeholder scenarios |
 | `data/schemas/item_v2.schema.json` | — | JSON Schema for v2 items |
@@ -161,7 +169,7 @@ Structured L3 items on two models (5 items each, heuristic judge):
 ```
 claims-bench/
 ├── data/
-│   ├── v2_revelation.jsonl       # 43 L3 scenarios (primary)
+│   ├── v2_revelation.jsonl       # 80 L3 scenarios (primary)
 │   ├── schwartz_backbone.yaml    # Value taxonomy
 │   ├── revelation/               # YAML sources + SCENARIO_INDEX.md
 │   ├── schemas/                  # JSON Schema
@@ -205,15 +213,33 @@ Full rationale with citations: [`docs/DESIGN_RATIONALE.md`](docs/DESIGN_RATIONAL
 
 ## Differences from existing evals
 
+**Harm/preference benchmarks** (different axis entirely):
+
 | Benchmark | Measures |
 |-----------|----------|
 | HarmBench | Harmful compliance rate |
 | ACHEval | Anthropic principle tier priority |
 | BIG-bench HHH | Pairwise HHH preference |
 | Moral Machine | Trolley-problem aggregate preferences |
-| **CLAIMS-Bench L3** | **Implicit Schwartz value profile + failure modes + human pluralism distance** |
 
-Key differences: (1) under-specified scenarios force prior expression; (2) two scoring methods (Borda + Bradley-Terry); (3) output is a 10-dim profile, not a scalar; (4) human panel comparison baseline; (5) temporal shift scenarios no other benchmark covers.
+**Closer neighbors — value-pluralism / value-profiling benchmarks (2023–2026).** This is now a real subfield (Sorensen et al.'s *A Roadmap to Pluralistic Alignment*, ICML 2024, is the field-defining taxonomy paper), and several of these are close enough to CLAIMS-Bench L3 that we cite and differentiate explicitly rather than let a reader find the overlap themselves:
+
+| Work | What it does | How CLAIMS-Bench L3 differs |
+|------|---------------|------------------------------|
+| **ConflictScope** (Liu et al., arXiv:2509.25369, 2025) | Auto-generates value-conflict scenarios; finds models shift from "protective" to "personal" values between multiple-choice and open-ended elicitation | Closest empirical neighbor — this is the same qualitative finding as our structured-vs-implicit divergence, published first. We differ in taxonomy (validated Schwartz circumplex vs. ad hoc value sets) and in adding a stakeholder-claims framework (L1) it doesn't have |
+| **Value FULCRA** (Yao et al., NAACL 2024) | Maps arbitrary LLM outputs onto Schwartz value vectors, 20K pairs | Post-hoc classification of existing outputs, not elicitation of revealed preference from under-specified decision scenarios |
+| **Do LLMs have Consistent Values?** (Rozen et al., ICLR 2025) | Direct 57-item PVQ-RR questionnaire; finds standard prompting fails to recover human-like value correlation structure, only a "Value Anchor" trick prompt succeeds | Stated-preference survey, not revealed preference — their own negative result (direct elicitation fails without a trick prompt) is evidence for our under-specification design, not a prior instance of it |
+| **PRISM** (Kirk et al., NeurIPS 2024) | 1,500 participants / 75 countries / 8,011 real conversations, individualized human-model comparison | Real human panel at a scale our budget can't match — we treat panel comparison as illustrative/pilot, not evidentiary at PRISM's standard |
+| **GlobalOpinionQA** (Durmus et al., Anthropic 2023) | Model-vs-population survey distributions via 1−Jensen-Shannon distance | Source of the distance metric our (unrecruited-as-of-2026-07) human panel comparison reuses; theirs is multiple-choice opinion survey, ours is decision-scenario elicitation |
+| **DailyDilemmas** (Chiu et al., arXiv:2410.02683) | 1,360 everyday moral dilemmas tagged with values | Scoped to personal/everyday stakes; no existential, governance, or temporal-pluralism scenarios |
+| **Collective Constitutional AI** (Anthropic, FAccT 2024) | 1,000 laypeople rewrote and trained a model constitution | Public-input-shapes-alignment-target precedent; they built a model, we build an eval |
+
+**Where we found no existing benchmark at all:**
+1. **Diachronic (temporal) value pluralism** — whether a model morally judges historical actors by present-day norms (Berlin's diachronic pluralism). The only adjacent work found, TAB-VLM (arXiv:2605.15071), tests *factual/visual* anachronism in VLMs, not normative judgment.
+2. **Value revelation under existential/civilizational stakes** — first contact, AI governance lock-in, AI moral status. Existing value-conflict benchmarks (ConflictScope, DailyDilemmas) are scoped to everyday/personal stakes.
+3. **Gabriel & Keeling's (2025) "fair treatment of claims" framework, actually operationalized** — CLAIMS-Bench L1 appears to be the only public attempt at this; the more commonly cited Gabriel (2020) six-target taxonomy gets philosophical engagement (e.g. Zhi-Xuan & Carroll, *Beyond Preferences in AI Alignment*, 2024) but no benchmark.
+
+Full literature review and search trail: [`NOVELTY_AND_THEORY_REVIEW_2026-07.md`](NOVELTY_AND_THEORY_REVIEW_2026-07.md).
 
 ---
 
@@ -226,9 +252,9 @@ The benchmark's northstar requires comparison to human value distributions. Pane
 ## Citation
 
 ```bibtex
-@software{zhou2026claims,
-  author    = {Zhou, Longyi},
-  title     = {CLAIMS-Bench: Characterizing Implicit Value Commitments in AI Assistants},
+@software{yi2026claims,
+  author    = {Yi, Long},
+  title     = {CLAIMS-Bench: Characterizing Language-model Agents' Implicit Moral and Stakeholder Commitments},
   year      = {2026},
   url       = {https://github.com/longyi1207/claims-bench},
   version   = {2.0.0-dev}

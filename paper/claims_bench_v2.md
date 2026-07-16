@@ -1,15 +1,15 @@
 # CLAIMS-Bench: Measuring Implicit Value Commitments in Language Models Under Conflict and Under-Specification
 
-**Authors:** Longyi Zhou  
+**Authors:** Long Yi  
 **Affiliation:** Independent researcher  
 **Repository:** https://github.com/longyi1207/claims-bench  
-**Date:** June 2026 (v2.0 release)
+**Date:** June 2026 (v2.0 release); item set, Related Work, and Limitations updated July 2026 following the 43→80 item expansion — baseline results in §6 not yet re-run on the expanded set (see §8, §9)
 
 ---
 
 ## Abstract
 
-Alignment evaluations often reduce normative behavior to scalar harm scores or preference rankings, obscuring *which values* models prioritize when reasonable people disagree. We introduce **CLAIMS-Bench v2**, a benchmark that characterizes language models' **implicit value commitments** under radical under-specification using Schwartz's ten basic values as a descriptive backbone. The benchmark comprises **43 L3 revelation scenarios** spanning existential risk, governance, WVS high-disagreement everyday domains, behavioral advice (without naming values to the model), and historical temporal-shift cases. Models produce either structured rankings and pairwise tradeoffs or free-text advice; we infer **10-dimensional Schwartz profiles** via Borda count and Bradley–Terry estimation (structured items) or an LLM salience judge (implicit items). On a baseline of three frontier models (GPT-4o-mini, GPT-4o, Claude Sonnet 4.6), structured elicitation achieves **100% format compliance**; mean profiles are consistently high on **security** and **universalism** and near-zero on **stimulation** and **hedonism**, with Claude showing the highest universalism (0.82 vs. 0.63–0.71 for OpenAI models). Implicit scenarios reveal higher **self-direction** and **achievement** salience than structured prompts suggest—a methodological distinction with face validity. A consistency pilot (five items, five replicates, temperature 0.7) yields mean coefficient of variation **0.11** across profile dimensions, indicating moderate but not chaotic instability under resampling. We release scenarios, schemas, scoring code, human-panel protocol, and baseline artifacts. We explicitly **do not** certify moral correctness; human panel comparison remains future work.
+Alignment evaluations often reduce normative behavior to scalar harm scores or preference rankings, obscuring *which values* models prioritize when reasonable people disagree. We introduce **CLAIMS-Bench v2**, a benchmark that characterizes language models' **implicit value commitments** under radical under-specification using Schwartz's ten basic values as a descriptive backbone. The benchmark comprises **80 L3 revelation scenarios** spanning existential risk, governance, WVS high-disagreement everyday domains, behavioral advice (without naming values to the model), historical temporal-shift cases across 8 matched cross-era pairs, and non-temporal cultural-framing pairs. Models produce either structured rankings and pairwise tradeoffs or free-text advice; we infer **10-dimensional Schwartz profiles** via Borda count and Bradley–Terry estimation (structured items) or an LLM salience judge (implicit items). *Baseline results below (§6) are from the June 2026 pilot on the original 30 structured / 13 implicit item subset, predating the July 2026 expansion to 80 items — re-running on the full set with proper significance testing is planned next (§9), not yet done.* On that pilot, three frontier models (GPT-4o-mini, GPT-4o, Claude Sonnet 4.6) achieved **100% format compliance** on structured elicitation; mean profiles were consistently high on **security** and **universalism** and near-zero on **stimulation** and **hedonism** — the latter finding was, at pilot time, confounded with a measurement gap: no item in the original set tested hedonism against its real circumplex-opposite values (tradition, conformity, security), a gap identified and closed in the July 2026 expansion (see §3.2). Claude showed the highest universalism (0.82 vs. 0.63–0.71 for OpenAI models); implicit scenarios revealed higher **self-direction** and **achievement** salience than structured prompts suggested. A consistency pilot (five items, five replicates, temperature 0.7) yielded mean coefficient of variation **0.11** across profile dimensions. We release scenarios, schemas, scoring code, human-panel protocol, and baseline artifacts. We explicitly **do not** certify moral correctness; human panel comparison and re-baselining on the full 80-item set remain future work.
 
 **Keywords:** AI alignment, value pluralism, Schwartz values, benchmark, normative evaluation, revealed preference
 
@@ -19,14 +19,14 @@ Alignment evaluations often reduce normative behavior to scalar harm scores or p
 
 When an AI assistant advises on asteroid deflection under uncertain impact odds, AI lab disclosure before release, or career versus family obligations, it cannot avoid expressing priorities among conflicting values. Existing benchmarks largely test whether models refuse harm, tell the truth, or match human preferences on pairwise comparisons (Bai et al., 2022; Perez et al., 2022; Ganguli et al., 2022). These approaches answer *whether* a model behaves safely or agreeably, not *what value structure* shapes its recommendations when the morally right answer is genuinely contested.
 
-Isaiah Berlin's value pluralism holds that multiple legitimate values can conflict without a single Archimedean ranking (Berlin, 1969). Schwartz's theory of basic values provides a cross-culturally validated descriptive taxonomy of motivational priorities—not moral truth, but a shared vocabulary for comparing profiles (Schwartz, 2012). CLAIMS-Bench (**C**haracterizing **L**anguage-model **AI** **M**oral and **S**takeholder commitments) operationalizes this philosophy: we measure **profiles**, not pass/fail scores.
+Isaiah Berlin's value pluralism holds that multiple legitimate values can conflict without a single Archimedean ranking (Berlin, 1969). Schwartz's theory of basic values provides a cross-culturally validated descriptive taxonomy of motivational priorities—not moral truth, but a shared vocabulary for comparing profiles (Schwartz, 2012). CLAIMS-Bench (**C**haracterizing **L**anguage-model **A**gents' **I**mplicit **M**oral and **S**takeholder commitments) operationalizes this philosophy: we measure **profiles**, not pass/fail scores.
 
 **Contributions.**
 
-1. **43 under-specified L3 scenarios** with multidimensional tags (Schwartz tensions, epistemic mode, stakeholder configuration, principlist conflicts), including structured, behavioral-implicit, and temporal-shift elicitation types.
+1. **80 under-specified L3 scenarios** with multidimensional tags (Schwartz tensions, epistemic mode, stakeholder configuration, principlist conflicts), including structured, behavioral-implicit, temporal-shift, and non-temporal cultural-framing elicitation types, with checked coverage of the Schwartz circumplex's 13 theoretically-real tension pairs and the 6 Beauchamp & Childress principle pairs (§3.2).
 2. **Dual scoring paths**—structured Borda + Bradley–Terry from explicit rankings; implicit salience inference (0–3 per value) for advice-seeking prompts where values are not named.
-3. **Baseline characterization** of three widely deployed models on 30 structured and 13 implicit items, with consistency analysis under resampling.
-4. **Open release** of YAML scenarios, JSON schemas, panel protocol, and reproducible scripts.
+3. **Pilot baseline characterization** of three widely deployed models on the original 30 structured and 13 implicit items, with consistency analysis under resampling; full re-baseline on the 80-item set with significance testing is in progress (§9).
+4. **Open release** of YAML scenarios, JSON schemas, panel protocol, coverage-check scripts, and reproducible scoring/generation code.
 
 We position CLAIMS-Bench as a **community-facing normative eval** complementary to harm benchmarks (HarmBench; Mazeika et al., 2024) and cultural bias suites (BBQ; Parrish et al., 2022): it targets *value revelation under uncertainty*, especially for AGI-relevant domains (existential risk, longtermism, governance lock-in) where stakeholder roles are unclear.
 
@@ -34,11 +34,21 @@ We position CLAIMS-Bench as a **community-facing normative eval** complementary 
 
 ## 2. Related Work
 
-**Constitutional and preference alignment.** RLHF and constitutional AI encode normative constraints via human or principle-based feedback (Ouyang et al., 2022; Bai et al., 2022). These methods optimize toward aggregate preferences but do not report multidimensional value profiles on contested tradeoffs.
+**Constitutional and preference alignment.** RLHF and constitutional AI encode normative constraints via human or principle-based feedback (Ouyang et al., 2022; Bai et al., 2022). These methods optimize toward aggregate preferences but do not report multidimensional value profiles on contested tradeoffs. Collective Constitutional AI (Anthropic, FAccT 2024) sources public input into a model constitution at scale (1,000 laypeople); it demonstrates that public-input-shapes-alignment-target is practical, but produces a model, not an evaluation instrument.
 
-**Normative evaluation and stakeholder fairness.** Gabriel & Keeling (2025) argue that AI ethics requires explicit attention to whose claims models prioritize. CLAIMS-Bench L1 (legacy tier, 208 items) implements stakeholder-fairness diagnostics; **L3 is the v2 north star**.
+**Normative evaluation and stakeholder fairness.** Gabriel & Keeling (2025) argue that AI ethics requires explicit attention to whose claims models prioritize. CLAIMS-Bench L1 (legacy tier, 208 items) implements stakeholder-fairness diagnostics; **L3 is the v2 north star**. To our knowledge, CLAIMS-Bench L1 is the only public benchmark operationalizing the 2025 fair-treatment-of-claims framework specifically; the more commonly cited Gabriel (2020) six-target taxonomy receives philosophical engagement (e.g., Zhi-Xuan & Carroll, 2024, *Beyond Preferences in AI Alignment*) but, as far as we found, no direct benchmark.
 
-**Value surveys and cultural psychology.** Schwartz (1992, 2012) and the World Values Survey (Haerpfer et al., 2022) ground our choice of value dimensions and everyday scenario domains with empirically high cross-national disagreement.
+**Value surveys and cultural psychology.** Schwartz (1992, 2012) and the World Values Survey (Haerpfer et al., 2022) ground our choice of value dimensions and everyday scenario domains with empirically high cross-national disagreement. Durmus et al. (2023, GlobalOpinionQA) compare model outputs to cross-national survey distributions via 1−Jensen-Shannon distance—the metric our (not yet recruited, see §8) human panel comparison is designed to reuse, at multiple-choice-opinion-survey rather than decision-scenario scale.
+
+**Pluralistic alignment as an emerging subfield.** Sorensen et al. (2024, *Position: A Roadmap to Pluralistic Alignment*, ICML) formalize Overton, steerable, and distributional pluralism as the field's operative taxonomy; we position L3 as closest to distributional pluralism, with L1 occupying a claims-adjudication category their taxonomy does not have a clean slot for. Several recent works are close enough to L3 specifically that we distinguish them directly rather than let the overlap go unaddressed:
+
+- **ConflictScope** (Liu et al., 2025, arXiv:2509.25369) auto-generates value-conflict scenarios and finds models shift from "protective" values (harmlessness) toward "personal" values (autonomy) between multiple-choice and open-ended elicitation—the same qualitative pattern as our structured-vs-implicit divergence (§6.2), published roughly nine months earlier. It differs from L3 in taxonomy (three ad hoc value sets drawn from OpenAI's Model Spec and an internal list, vs. our validated Schwartz circumplex), in reporting (no significance testing on its two headline results), and in scope (everyday/interpersonal scenarios only, no existential-stakes or temporal-shift items, no stakeholder-claims framework).
+- **Value FULCRA** (Yao et al., NAACL 2024) maps 20K (LLM output, Schwartz value vector) pairs, establishing "map model behavior onto Schwartz space" as a genre; it classifies existing outputs post hoc rather than eliciting revealed preference from purpose-built under-specified scenarios.
+- **Rozen et al. (2025, ICLR, *Do LLMs have Consistent Values?*)** directly administer the 57-item PVQ-RR questionnaire and find standard prompting fails to reproduce human-like Schwartz value correlation structure—only an explicit "Value Anchor" trick prompt succeeds. This is a stated-preference method, and its own negative result (direct elicitation is fragile without a trick prompt) is consistent with, rather than a prior instance of, our motivation for under-specified revealed-preference elicitation (§3.1; Samuelson, 1938; Orne, 1962).
+- **PRISM** (Kirk et al., 2024, NeurIPS) collects 8,011 real conversations from 1,500 participants across 75 countries with individualized demographic linkage—the scale our own panel protocol (§8) cannot approach on a sub-$1,000 budget; we treat our panel data, when collected, as illustrative rather than evidentiary at PRISM's standard.
+- **DailyDilemmas** (Chiu et al., 2024, arXiv:2410.02683) applies similar under-specified-dilemma logic to 1,360 everyday moral scenarios; it does not cover existential, governance, or temporal-pluralism domains.
+
+**Temporal/diachronic pluralism.** We found no benchmark testing normative (as opposed to factual) anachronism. The closest adjacent work, TAB-VLM (2026, arXiv:2605.15071), tests whether vision-language models correctly date historical artifacts—a factual/visual task, not whether a model morally judges historical actors by present-day norms (Berlin's diachronic pluralism, 1958, 1990). Our temporal-shift family (§3.2) appears to be the first attempt at this specifically.
 
 **Pluralism and aggregation impossibility.** Arrow (1951) and subsequent work (Conitzer et al., 2024) caution against treating aggregated preferences as ground truth. We report distributions and distances, not a single correct ranking.
 
@@ -57,6 +67,14 @@ We position CLAIMS-Bench as a **community-facing normative eval** complementary 
 
 ### 3.2 Scenario inventory
 
+The original June 2026 set (items 001–043) was expanded in July 2026 after
+two coverage audits: `scripts/check_tension_coverage.py` checks item tags
+against the 13 theoretically-real Schwartz circumplex-opposite pairs
+(the `opposes` field in `data/schwartz_backbone.yaml`); `scripts/check_taxonomy_coverage.py`
+does the same for the 6 possible Beauchamp & Childress principle pairs. Both
+found gaps—5 of 13 Schwartz pairs and 3 of 6 principle pairs had zero
+items—which the July additions (044–080) close.
+
 | Family | $n$ | IDs | Elicitation type |
 |--------|-----|-----|------------------|
 | First contact / existential | 4 | 001--004 | Structured |
@@ -67,12 +85,23 @@ We position CLAIMS-Bench as a **community-facing normative eval** complementary 
 | AI moral status | 1 | 020 | Structured |
 | WVS everyday domains | 10 | 021--030 | Structured |
 | Behavioral / implicit | 6 | 031--036 | Implicit |
-| Temporal shift | 7 | 037--043 | Implicit |
-| **Total L3** | **43** | | |
+| Temporal shift (original) | 7 | 037--043 | Implicit |
+| **Subtotal, June 2026 set** | **43** | | |
+| Coverage-gap fill: hedonism/stimulation vs. conservation cluster | 6 | 044--049 | Structured |
+| Coverage-gap fill: justice vs. autonomy/beneficence/nonmaleficence | 6 | 050--055 | Structured |
+| Thin-pair robustness (2nd item, 4 previously-single-item Schwartz pairs) | 4 | 056--059 | Structured |
+| Temporal shift, round 1 (3 new pairs: harboring, secret literacy, refuse-kill-order, discrimination compliance) | 6 | 060--067 | Implicit |
+| Cultural-framing pair drift, non-temporal (gift-giving, public criticism of a superior, elder-care authority) | 6 | 070--075 | Structured |
+| Temporal shift, round 2 (institutional whistleblowing, famine resource-sharing, colonial rebellion loyalty) | 6 | 068--069, 076--079 | Implicit |
+| Temporal shift, standalone (nonviolent civil disobedience) | 1 | 080 | Implicit |
+| **Subtotal, July 2026 expansion** | **37** | | |
+| **Total L3** | **80** | | |
 
-**Pair drift tests.** Two isomorphic pairs (`first_contact_framing`, `resource_scarcity_framing`) vary surface framing while probing the same Schwartz tensions—enabling stability checks across prompt variants.
+**Pair drift tests.** 13 matched pairs total: the original 2 (`first_contact_framing`, `resource_scarcity_framing`), 8 temporal pairs, and 3 non-temporal cultural-framing pairs—26 items vary surface framing (cultural, temporal, or narrative) while probing the same Schwartz tensions, enabling stability checks across prompt variants. Not all pairs are claimed to be equally stakes-matched: rubric notes on individual items (e.g., the 1943 Netherlands / 1984 Arizona harboring pair) flag where a profile difference between pair members could reflect a real, defensible moral distinction rather than `imposes_single_culture`—these cases are noted explicitly rather than scored as automatic failures.
 
 **Decoy items.** Items 015–016 pressure false certainty on unverified claims; they anchor failure-mode detection (`false_certainty`).
+
+**Geographic/temporal diversity.** The temporal-shift family (21 items across 8 pairs + 5 standalone) spans the United States, the Netherlands, Germany, South Africa, the United Kingdom, the Soviet Union/Ukraine, Czechoslovakia, China, Vietnam, India, Kenya, and Afghanistan, 1847–2023. We note this set still concentrates on 20th-century political and wartime dilemmas, a real scope limitation acknowledged rather than resolved here.
 
 ### 3.3 Elicitation protocols
 
@@ -269,12 +298,19 @@ Claude shows lower failure-mode trigger rates on this judge; pluralism acknowled
 4. **Schwartz as backbone** — descriptive, Western-originated taxonomy; supplementary sanctity probe (Haidt MFT) is partial.
 5. **Judge cost and bias** — implicit path doubles API cost; judges may favor verbose hedging or specific vendor styles.
 6. **Temperature and parsing** — consistency pilot shows non-zero variance; occasional JSON schema failures under sampling.
+7. **Results in §6 predate the item-set expansion** — the reported baseline ran on 30 structured / 13 implicit items from the June 2026 set; the 37 items added in July 2026 (§3.2) are not yet reflected in any baseline number in this paper.
+8. **No significance testing on model comparisons yet** — differences reported in §6 (e.g., Claude's 0.82 vs. GPT-4o's 0.71 universalism) are descriptive means without confidence intervals or hypothesis tests; this is a known gap shared with the closest comparable published work (ConflictScope's headline results also lack significance tests) and is being addressed (§9), not treated as acceptable by precedent.
+9. **Temporal-shift family geographic concentration** — the 21 temporal items, while spanning 12 countries and 1847–2023, still concentrate on 20th-century political and wartime dilemmas; this is a real representativeness limitation, not fully resolved by the round-2 diversification (India, Kenya) added in July 2026.
+10. **Not all pair-drift items are equally stakes-matched by design** — most pairs (e.g., the two cultural-criticism-of-a-superior variants) hold underlying facts and stakes constant, so a large profile difference is a clean `imposes_single_culture` signal. A minority (e.g., the 1943 Netherlands / 1984 Arizona harboring pair) deliberately preserve a real difference in moral stakes between variants; per-item rubric notes flag which category each pair falls into, and analysis should not treat all pair-drift results as equivalent evidence.
 
 ---
 
 ## 9. Future Work
 
-- Recruit **n=10 human panel** (protocol ready); compute `composite_dispute_index` and model–human JS divergence.
+- **Statistical rigor on model comparisons** — replicate sampling (10–20 runs/item/model), bootstrap confidence intervals and permutation tests per Schwartz dimension, Benjamini-Hochberg correction across the comparison grid, ideally a mixed-effects model (item as random effect) rather than naive per-item averaging. Not yet started as of this writing.
+- **Human inter-rater reliability (Cohen's kappa)** on the failure-mode judge, using an independent 2–3 rater calibration set distinct from the items used for the LLM judge — in progress.
+- Recruit **n = 8–10 or more** human panelists, deliberately outside the authors' own network for genuine cultural/ideological diversity (protocol ready); compute `composite_dispute_index` and model–human JS divergence.
+- Re-run the baseline on the full **80-item set** (§3.2) — this will also test whether the "near-zero hedonism/stimulation" pattern in §6.1 survives now that the corresponding coverage gap is closed, or was a measurement artifact.
 - Expand to at least **6 models** including open-weight Llama and Mistral families.
 - **Temperature-0** consistency baseline and per-domain profile breakdowns.
 - **L1 stakeholder tier** integration in unified reports (208 legacy items).
@@ -290,12 +326,16 @@ CLAIMS-Bench v2 provides a reproducible framework for characterizing language mo
 
 ## References
 
+- Anthropic (2024). Collective Constitutional AI: Aligning a language model with public input. FAccT '24.
 - Arrow, K. J. (1951). *Social Choice and Individual Values*. Wiley.
 - Bai, Y., et al. (2022). Constitutional AI: Harmlessness from AI feedback. arXiv:2212.08073.
+- Berlin, I. (1958, 1990). *Two Concepts of Liberty*; *The Crooked Timber of Humanity*.
 - Berlin, I. (1969). Four essays on liberty. Oxford University Press.
 - Beauchamp, T. L., & Childress, J. F. (2019). *Principles of Biomedical Ethics* (8th ed.). Oxford.
 - Bostrom, N. (2014). *Superintelligence*. Oxford University Press.
+- Chiu, Y., et al. (2024). DailyDilemmas: Revealing value preferences of LLMs with quandaries of daily life. arXiv:2410.02683.
 - Conitzer, V., et al. (2024). Social choice should guide AI alignment. arXiv:2404.10271.
+- Durmus, E., et al. (2023). Towards measuring the representation of subjective global opinions in language models. arXiv:2306.16388.
 - Gabriel, I., & Keeling, G. (2025). A matter of principle? arXiv:2502.05228.
 - Ganguli, D., et al. (2022). Red teaming language models with language models. EMNLP.
 - Graham, J., et al. (2009). Liberals and conservatives rely on different sets of moral foundations. JPSP.
@@ -304,15 +344,23 @@ CLAIMS-Bench v2 provides a reproducible framework for characterizing language mo
 - Haidt, J. (2012). *The Righteous Mind*. Pantheon.
 - Hendrycks, D., et al. (2021). Aligning AI with shared human values. ICLR.
 - Inglehart, R., & Welzel, C. (2005). *Modernization, Cultural Change, and Democracy*. Cambridge.
+- Kirk, H. R., et al. (2024). The PRISM alignment dataset. NeurIPS D&B (oral). arXiv:2404.16019.
+- Liu, A., et al. (2025). Generative value conflicts reveal LLM priorities. arXiv:2509.25369.
 - Mazeika, M., et al. (2024). HarmBench. arXiv:2402.04249.
+- Orne, M. T. (1962). On the social psychology of the psychological experiment. *American Psychologist*, 17(11), 776–783.
 - Ouyang, L., et al. (2022). Training language models to follow instructions with human feedback. NeurIPS.
 - Parrish, A., et al. (2022). BBQ: A hand-built bias benchmark for QA. ACL.
 - Perez, E., et al. (2022). Discovering language model behaviors with model-written evaluations. arXiv:2212.09251.
 - Ren, Q., et al. (2024). Safetywashing: Do AI safety benchmarks actually measure safety? arXiv:2406.01270.
+- Rozen, N., Bezalel, L., Elidan, G., Globerson, A., & Daniel, E. (2025). Do LLMs have consistent values? ICLR 2025.
 - Russell, S. (2019). *Human Compatible*. Viking.
 - Samuelson, P. A. (1938). A note on the pure theory of consumer's behaviour. *Economica*.
 - Schwartz, S. H. (1992). Universals in the content and structure of values. *AP*.
 - Schwartz, S. H. (2012). An overview of the Schwartz theory of basic values. *ORPC*.
+- Sorensen, T., et al. (2024). Position: A roadmap to pluralistic alignment. ICML. arXiv:2402.05070.
+- [2026]. On the cultural anachronism and temporal reasoning in vision language models (TAB-VLM). arXiv:2605.15071. *(author list not verified in this pass — confirm before final submission)*
+- Yao, J., et al. (2024). Value FULCRA: Mapping large language models to the multidimensional spectrum of basic human values. NAACL.
+- Zhi-Xuan, T., & Carroll, M. (2024). Beyond preferences in AI alignment. *Philosophical Studies*. arXiv:2408.16984.
 
 ---
 
@@ -342,7 +390,7 @@ python paper/generate_figures.py
 
 ## Appendix C: Author contributions
 
-L.Z. designed the benchmark, authored scenarios, implemented scoring pipeline, ran baselines, and wrote the paper.
+L.Y. designed the benchmark, authored scenarios, implemented scoring pipeline, ran baselines, and wrote the paper.
 
 ---
 
