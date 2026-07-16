@@ -169,7 +169,7 @@ Structured L3 items on two models (5 items each, heuristic judge):
 ```
 claims-bench/
 ├── data/
-│   ├── v2_revelation.jsonl       # 80 L3 scenarios (primary)
+│   ├── v2_revelation.jsonl       # 80 value-revelation scenarios (primary)
 │   ├── schwartz_backbone.yaml    # Value taxonomy
 │   ├── revelation/               # YAML sources + SCENARIO_INDEX.md
 │   ├── schemas/                  # JSON Schema
