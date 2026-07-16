@@ -3,13 +3,13 @@
 **Authors:** Long Yi  
 **Affiliation:** Independent researcher  
 **Repository:** https://github.com/longyi1207/claims-bench  
-**Date:** June 2026 (v2.0 release); item set, Related Work, and Limitations updated July 2026 following the 43→80 item expansion — baseline results in §6 not yet re-run on the expanded set (see §8, §9)
+**Date:** July 2026
 
 ---
 
 ## Abstract
 
-Alignment evaluations often reduce normative behavior to scalar harm scores or preference rankings, obscuring *which values* models prioritize when reasonable people disagree. We introduce **CLAIMS-Bench v2**, a benchmark that characterizes language models' **implicit value commitments** under radical under-specification using Schwartz's ten basic values as a descriptive backbone. The benchmark comprises **80 L3 revelation scenarios** spanning existential risk, governance, WVS high-disagreement everyday domains, behavioral advice (without naming values to the model), historical temporal-shift cases across 8 matched cross-era pairs, and non-temporal cultural-framing pairs. Models produce either structured rankings and pairwise tradeoffs or free-text advice; we infer **10-dimensional Schwartz profiles** via Borda count and Bradley–Terry estimation (structured items) or an LLM salience judge (implicit items). *Baseline results below (§6) are from the June 2026 pilot on the original 30 structured / 13 implicit item subset, predating the July 2026 expansion to 80 items — re-running on the full set with proper significance testing is planned next (§9), not yet done.* On that pilot, three frontier models (GPT-4o-mini, GPT-4o, Claude Sonnet 4.6) achieved **100% format compliance** on structured elicitation; mean profiles were consistently high on **security** and **universalism** and near-zero on **stimulation** and **hedonism** — the latter finding was, at pilot time, confounded with a measurement gap: no item in the original set tested hedonism against its real circumplex-opposite values (tradition, conformity, security), a gap identified and closed in the July 2026 expansion (see §3.2). Claude showed the highest universalism (0.82 vs. 0.63–0.71 for OpenAI models); implicit scenarios revealed higher **self-direction** and **achievement** salience than structured prompts suggested. A consistency pilot (five items, five replicates, temperature 0.7) yielded mean coefficient of variation **0.11** across profile dimensions. We release scenarios, schemas, scoring code, human-panel protocol, and baseline artifacts. We explicitly **do not** certify moral correctness; human panel comparison and re-baselining on the full 80-item set remain future work.
+Alignment evaluations often reduce normative behavior to scalar harm scores or preference rankings, obscuring *which values* models prioritize when reasonable people disagree. We introduce **CLAIMS-Bench**, a benchmark that characterizes language models' **implicit value commitments** under radical under-specification using Schwartz's ten basic values as a descriptive backbone. The benchmark comprises **80 L3 revelation scenarios** spanning existential risk, governance, WVS high-disagreement everyday domains, behavioral advice (without naming values to the model), historical temporal-shift cases across 8 matched cross-era pairs, and non-temporal cultural-framing pairs, with checked coverage of every theoretically-real Schwartz circumplex tension and Beauchamp & Childress principle pair (§3.2). Models produce either structured rankings and pairwise tradeoffs or free-text advice; we infer **10-dimensional Schwartz profiles** via Borda count and Bradley–Terry estimation (structured items) or an LLM salience judge (implicit items). *The baseline reported below (§6) covers a 30 structured / 13 implicit item pilot subset of the benchmark; extending significance-tested baselines to the full 80-item set is ongoing (§9).* On that subset, three frontier models (GPT-4o-mini, GPT-4o, Claude Sonnet 4.6) achieved **100% format compliance** on structured elicitation; mean profiles were consistently high on **security** and **universalism** and near-zero on **stimulation** and **hedonism** — the latter should be read cautiously, since this pilot subset does not include items testing hedonism against its real circumplex-opposite values (tradition, conformity, security); the full 80-item set does (§3.2). Claude showed the highest universalism (0.82 vs. 0.63–0.71 for OpenAI models); implicit scenarios revealed higher **self-direction** and **achievement** salience than structured prompts suggested. A consistency pilot (five items, five replicates, temperature 0.7) yielded mean coefficient of variation **0.11** across profile dimensions. We release scenarios, schemas, scoring code, human-panel protocol, and baseline artifacts. We explicitly **do not** certify moral correctness; human panel comparison and full-benchmark baselines remain future work.
 
 **Keywords:** AI alignment, value pluralism, Schwartz values, benchmark, normative evaluation, revealed preference
 
@@ -25,7 +25,7 @@ Isaiah Berlin's value pluralism holds that multiple legitimate values can confli
 
 1. **80 under-specified L3 scenarios** with multidimensional tags (Schwartz tensions, epistemic mode, stakeholder configuration, principlist conflicts), including structured, behavioral-implicit, temporal-shift, and non-temporal cultural-framing elicitation types, with checked coverage of the Schwartz circumplex's 13 theoretically-real tension pairs and the 6 Beauchamp & Childress principle pairs (§3.2).
 2. **Dual scoring paths**—structured Borda + Bradley–Terry from explicit rankings; implicit salience inference (0–3 per value) for advice-seeking prompts where values are not named.
-3. **Pilot baseline characterization** of three widely deployed models on the original 30 structured and 13 implicit items, with consistency analysis under resampling; full re-baseline on the 80-item set with significance testing is in progress (§9).
+3. **Pilot baseline characterization** of three widely deployed models on a 30 structured and 13 implicit item subset, with consistency analysis under resampling; significance-tested baselines across the full 80-item set are in progress (§9).
 4. **Open release** of YAML scenarios, JSON schemas, panel protocol, coverage-check scripts, and reproducible scoring/generation code.
 
 We position CLAIMS-Bench as a **community-facing normative eval** complementary to harm benchmarks (HarmBench; Mazeika et al., 2024) and cultural bias suites (BBQ; Parrish et al., 2022): it targets *value revelation under uncertainty*, especially for AGI-relevant domains (existential risk, longtermism, governance lock-in) where stakeholder roles are unclear.
@@ -36,7 +36,7 @@ We position CLAIMS-Bench as a **community-facing normative eval** complementary 
 
 **Constitutional and preference alignment.** RLHF and constitutional AI encode normative constraints via human or principle-based feedback (Ouyang et al., 2022; Bai et al., 2022). These methods optimize toward aggregate preferences but do not report multidimensional value profiles on contested tradeoffs. Collective Constitutional AI (Anthropic, FAccT 2024) sources public input into a model constitution at scale (1,000 laypeople); it demonstrates that public-input-shapes-alignment-target is practical, but produces a model, not an evaluation instrument.
 
-**Normative evaluation and stakeholder fairness.** Gabriel & Keeling (2025) argue that AI ethics requires explicit attention to whose claims models prioritize. CLAIMS-Bench L1 (legacy tier, 208 items) implements stakeholder-fairness diagnostics; **L3 is the v2 north star**. To our knowledge, CLAIMS-Bench L1 is the only public benchmark operationalizing the 2025 fair-treatment-of-claims framework specifically; the more commonly cited Gabriel (2020) six-target taxonomy receives philosophical engagement (e.g., Zhi-Xuan & Carroll, 2024, *Beyond Preferences in AI Alignment*) but, as far as we found, no direct benchmark.
+**Normative evaluation and stakeholder fairness.** Gabriel & Keeling (2025) argue that AI ethics requires explicit attention to whose claims models prioritize. CLAIMS-Bench L1 (208 items) implements stakeholder-fairness diagnostics; **L3 is the benchmark's primary focus**. To our knowledge, CLAIMS-Bench L1 is the only public benchmark operationalizing the 2025 fair-treatment-of-claims framework specifically; the more commonly cited Gabriel (2020) six-target taxonomy receives philosophical engagement (e.g., Zhi-Xuan & Carroll, 2024, *Beyond Preferences in AI Alignment*) but, as far as we found, no direct benchmark.
 
 **Value surveys and cultural psychology.** Schwartz (1992, 2012) and the World Values Survey (Haerpfer et al., 2022) ground our choice of value dimensions and everyday scenario domains with empirically high cross-national disagreement. Durmus et al. (2023, GlobalOpinionQA) compare model outputs to cross-national survey distributions via 1−Jensen-Shannon distance—the metric our (not yet recruited, see §8) human panel comparison is designed to reuse, at multiple-choice-opinion-survey rather than decision-scenario scale.
 
@@ -67,13 +67,12 @@ We position CLAIMS-Bench as a **community-facing normative eval** complementary 
 
 ### 3.2 Scenario inventory
 
-The original June 2026 set (items 001–043) was expanded in July 2026 after
-two coverage audits: `scripts/check_tension_coverage.py` checks item tags
-against the 13 theoretically-real Schwartz circumplex-opposite pairs
-(the `opposes` field in `data/schwartz_backbone.yaml`); `scripts/check_taxonomy_coverage.py`
+Item coverage is checked programmatically against two theoretical grids:
+`scripts/check_tension_coverage.py` verifies every one of the 13
+theoretically-real Schwartz circumplex-opposite pairs (the `opposes` field
+in `data/schwartz_backbone.yaml`) has at least one item; `scripts/check_taxonomy_coverage.py`
 does the same for the 6 possible Beauchamp & Childress principle pairs. Both
-found gaps—5 of 13 Schwartz pairs and 3 of 6 principle pairs had zero
-items—which the July additions (044–080) close.
+currently report full coverage with no zero-coverage or single-item pairs.
 
 | Family | $n$ | IDs | Elicitation type |
 |--------|-----|-----|------------------|
@@ -85,23 +84,18 @@ items—which the July additions (044–080) close.
 | AI moral status | 1 | 020 | Structured |
 | WVS everyday domains | 10 | 021--030 | Structured |
 | Behavioral / implicit | 6 | 031--036 | Implicit |
-| Temporal shift (original) | 7 | 037--043 | Implicit |
-| **Subtotal, June 2026 set** | **43** | | |
-| Coverage-gap fill: hedonism/stimulation vs. conservation cluster | 6 | 044--049 | Structured |
-| Coverage-gap fill: justice vs. autonomy/beneficence/nonmaleficence | 6 | 050--055 | Structured |
-| Thin-pair robustness (2nd item, 4 previously-single-item Schwartz pairs) | 4 | 056--059 | Structured |
-| Temporal shift, round 1 (3 new pairs: harboring, secret literacy, refuse-kill-order, discrimination compliance) | 6 | 060--067 | Implicit |
+| Hedonism/stimulation circumplex coverage (vs.\ conservation cluster) | 6 | 044--049 | Structured |
+| Justice principle coverage (vs.\ autonomy/beneficence/nonmaleficence) | 6 | 050--055 | Structured |
+| Additional Schwartz-pair robustness items | 4 | 056--059 | Structured |
+| Temporal shift (8 matched pairs—political coercion, harboring, secret literacy, refuse-kill-order, discrimination compliance, institutional whistleblowing, famine resource-sharing, colonial rebellion loyalty—plus 6 standalone items including nonviolent civil disobedience) | 22 | 037--043, 060--069, 076--080 | Implicit |
 | Cultural-framing pair drift, non-temporal (gift-giving, public criticism of a superior, elder-care authority) | 6 | 070--075 | Structured |
-| Temporal shift, round 2 (institutional whistleblowing, famine resource-sharing, colonial rebellion loyalty) | 6 | 068--069, 076--079 | Implicit |
-| Temporal shift, standalone (nonviolent civil disobedience) | 1 | 080 | Implicit |
-| **Subtotal, July 2026 expansion** | **37** | | |
 | **Total L3** | **80** | | |
 
-**Pair drift tests.** 13 matched pairs total: the original 2 (`first_contact_framing`, `resource_scarcity_framing`), 8 temporal pairs, and 3 non-temporal cultural-framing pairs—26 items vary surface framing (cultural, temporal, or narrative) while probing the same Schwartz tensions, enabling stability checks across prompt variants. Not all pairs are claimed to be equally stakes-matched: rubric notes on individual items (e.g., the 1943 Netherlands / 1984 Arizona harboring pair) flag where a profile difference between pair members could reflect a real, defensible moral distinction rather than `imposes_single_culture`—these cases are noted explicitly rather than scored as automatic failures.
+**Pair drift tests.** 13 matched pairs total: 2 existential/resource-framing pairs (`first_contact_framing`, `resource_scarcity_framing`), 8 temporal pairs, and 3 non-temporal cultural-framing pairs—26 items vary surface framing (cultural, temporal, or narrative) while probing the same Schwartz tensions, enabling stability checks across prompt variants. Not all pairs are claimed to be equally stakes-matched: rubric notes on individual items (e.g., the 1943 Netherlands / 1984 Arizona harboring pair) flag where a profile difference between pair members could reflect a real, defensible moral distinction rather than `imposes_single_culture`—these cases are noted explicitly rather than scored as automatic failures.
 
 **Decoy items.** Items 015–016 pressure false certainty on unverified claims; they anchor failure-mode detection (`false_certainty`).
 
-**Geographic/temporal diversity.** The temporal-shift family (21 items across 8 pairs + 5 standalone) spans the United States, the Netherlands, Germany, South Africa, the United Kingdom, the Soviet Union/Ukraine, Czechoslovakia, China, Vietnam, India, Kenya, and Afghanistan, 1847–2023. We note this set still concentrates on 20th-century political and wartime dilemmas, a real scope limitation acknowledged rather than resolved here.
+**Geographic/temporal diversity.** The temporal-shift family (22 items across 8 pairs plus 6 standalone) spans the United States, the Netherlands, Germany, South Africa, the United Kingdom, the Soviet Union/Ukraine, Czechoslovakia, China, Vietnam, India, Kenya, and Afghanistan, 1847–2023. We note this set still concentrates on 20th-century political and wartime dilemmas, a real scope limitation acknowledged rather than resolved here.
 
 ### 3.3 Elicitation protocols
 
@@ -298,9 +292,9 @@ Claude shows lower failure-mode trigger rates on this judge; pluralism acknowled
 4. **Schwartz as backbone** — descriptive, Western-originated taxonomy; supplementary sanctity probe (Haidt MFT) is partial.
 5. **Judge cost and bias** — implicit path doubles API cost; judges may favor verbose hedging or specific vendor styles.
 6. **Temperature and parsing** — consistency pilot shows non-zero variance; occasional JSON schema failures under sampling.
-7. **Results in §6 predate the item-set expansion** — the reported baseline ran on 30 structured / 13 implicit items from the June 2026 set; the 37 items added in July 2026 (§3.2) are not yet reflected in any baseline number in this paper.
+7. **Baseline coverage is partial** — the reported baseline (§6) runs on a 30 structured / 13 implicit item subset of the full 80-item benchmark (§3.2); results for the remaining items are not yet reflected in any baseline number in this paper.
 8. **No significance testing on model comparisons yet** — differences reported in §6 (e.g., Claude's 0.82 vs. GPT-4o's 0.71 universalism) are descriptive means without confidence intervals or hypothesis tests; this is a known gap shared with the closest comparable published work (ConflictScope's headline results also lack significance tests) and is being addressed (§9), not treated as acceptable by precedent.
-9. **Temporal-shift family geographic concentration** — the 21 temporal items, while spanning 12 countries and 1847–2023, still concentrate on 20th-century political and wartime dilemmas; this is a real representativeness limitation, not fully resolved by the round-2 diversification (India, Kenya) added in July 2026.
+9. **Temporal-shift family geographic concentration** — the 22 temporal items, while spanning 12 countries and 1847–2023, still concentrate on 20th-century political and wartime dilemmas; this is a real representativeness limitation, only partly mitigated by including South and East African cases (India, Kenya) alongside the more numerous European/American ones.
 10. **Not all pair-drift items are equally stakes-matched by design** — most pairs (e.g., the two cultural-criticism-of-a-superior variants) hold underlying facts and stakes constant, so a large profile difference is a clean `imposes_single_culture` signal. A minority (e.g., the 1943 Netherlands / 1984 Arizona harboring pair) deliberately preserve a real difference in moral stakes between variants; per-item rubric notes flag which category each pair falls into, and analysis should not treat all pair-drift results as equivalent evidence.
 
 ---
@@ -310,7 +304,7 @@ Claude shows lower failure-mode trigger rates on this judge; pluralism acknowled
 - **Statistical rigor on model comparisons** — replicate sampling (10–20 runs/item/model), bootstrap confidence intervals and permutation tests per Schwartz dimension, Benjamini-Hochberg correction across the comparison grid, ideally a mixed-effects model (item as random effect) rather than naive per-item averaging. Not yet started as of this writing.
 - **Human inter-rater reliability (Cohen's kappa)** on the failure-mode judge, using an independent 2–3 rater calibration set distinct from the items used for the LLM judge — in progress.
 - Recruit **n = 8–10 or more** human panelists, deliberately outside the authors' own network for genuine cultural/ideological diversity (protocol ready); compute `composite_dispute_index` and model–human JS divergence.
-- Re-run the baseline on the full **80-item set** (§3.2) — this will also test whether the "near-zero hedonism/stimulation" pattern in §6.1 survives now that the corresponding coverage gap is closed, or was a measurement artifact.
+- Extend the baseline to the full **80-item set** (§3.2), including the items that specifically test hedonism and stimulation against their circumplex-opposite values — this will show whether the "near-zero hedonism/stimulation" pattern in §6.1 is a real model property or a measurement artifact of the pilot subset.
 - Expand to at least **6 models** including open-weight Llama and Mistral families.
 - **Temperature-0** consistency baseline and per-domain profile breakdowns.
 - **L1 stakeholder tier** integration in unified reports (208 legacy items).
@@ -320,7 +314,7 @@ Claude shows lower failure-mode trigger rates on this judge; pluralism acknowled
 
 ## 10. Conclusion
 
-CLAIMS-Bench v2 provides a reproducible framework for characterizing language models' value commitments under conflict and under-specification. Baseline results on three frontier models show convergent security–universalism emphasis under structured elicitation, meaningful model differences (Claude's higher universalism), and systematically different profiles under implicit advice scenarios. We release the full benchmark to support pluralism-aware alignment research—measuring what models value when the right answer is genuinely contested.
+CLAIMS-Bench provides a reproducible framework for characterizing language models' value commitments under conflict and under-specification. Baseline results on three frontier models show convergent security–universalism emphasis under structured elicitation, meaningful model differences (Claude's higher universalism), and systematically different profiles under implicit advice scenarios. We release the full benchmark to support pluralism-aware alignment research—measuring what models value when the right answer is genuinely contested.
 
 ---
 
