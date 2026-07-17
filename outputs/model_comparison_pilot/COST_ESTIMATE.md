@@ -1,18 +1,26 @@
 # Model comparison pilot — cost & run summary (2026-07-17)
 
-**Total estimated spend: ~$2.58** (budget cap was $20; well under).
+**Verified actual spend: $2.55** (budget cap was $20; well under), confirmed
+from provider billing dashboards: **$0.97 OpenAI** (gpt-4o-mini + gpt-4o
+combined — the dashboard doesn't split per-model) + **$1.58 Anthropic**
+(claude-sonnet-4-6).
 
-| Model | Calls | Est. cost |
+Original estimate (below, from response-length heuristics, before checking
+the dashboards) was **$2.58** — within 1% of the verified total.
+
+| Model | Calls | Estimated cost | 
 |---|---|---|
 | gpt-4o-mini | 160 (16 items x 10 replicates) | $0.05 |
 | gpt-4o | 160 | $0.93 |
-| claude-sonnet-4-6 | 160 | $1.60 |
+| claude-sonnet-4-6 | 160 | $1.60 (verified: $1.58) |
 
 Cost estimated from actual response character counts / 4 (token approximation)
 applied to approximate current per-model pricing — not pulled from provider
-dashboards, since `run_eval.py`'s `generate_openai`/`generate_anthropic` don't
-currently surface token usage from the API response (a real gap; patching
-this would give exact rather than estimated costs for future runs).
+dashboards *at generation time*, since `run_eval.py`'s `generate_openai`/
+`generate_anthropic` don't currently surface token usage from the API
+response (a real gap; patching this would give exact rather than estimated
+costs for future runs without needing to manually check dashboards after
+the fact).
 
 ## Scope
 
