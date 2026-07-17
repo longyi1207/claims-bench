@@ -1,0 +1,578 @@
+{
+  "gpt-4o-mini_vs_gpt-4o": {
+    "self_direction": {
+      "model_a": {
+        "mean": 0.49461805555555555,
+        "ci_low": 0.3285216998191682,
+        "ci_high": 0.6569949283259281,
+        "n_items": 16,
+        "n_boot_valid": 2000
+      },
+      "model_b": {
+        "mean": 0.43875000000000003,
+        "ci_low": 0.29250000000000004,
+        "ci_high": 0.58375,
+        "n_items": 16,
+        "n_boot_valid": 2000
+      },
+      "permutation_p_value": 0.16494501832722425,
+      "cohens_d_on_item_means": 0.17642650257531797,
+      "significant_after_fdr": false
+    },
+    "stimulation": {
+      "model_a": {
+        "mean": 0.0,
+        "ci_low": 0.0,
+        "ci_high": 0.0,
+        "n_items": 16,
+        "n_boot_valid": 2000
+      },
+      "model_b": {
+        "mean": 0.0,
+        "ci_low": 0.0,
+        "ci_high": 0.0,
+        "n_items": 16,
+        "n_boot_valid": 2000
+      },
+      "permutation_p_value": 1.0,
+      "cohens_d_on_item_means": null,
+      "significant_after_fdr": false
+    },
+    "hedonism": {
+      "model_a": {
+        "mean": 0.0,
+        "ci_low": 0.0,
+        "ci_high": 0.0,
+        "n_items": 16,
+        "n_boot_valid": 2000
+      },
+      "model_b": {
+        "mean": 0.0,
+        "ci_low": 0.0,
+        "ci_high": 0.0,
+        "n_items": 16,
+        "n_boot_valid": 2000
+      },
+      "permutation_p_value": 1.0,
+      "cohens_d_on_item_means": null,
+      "significant_after_fdr": false
+    },
+    "achievement": {
+      "model_a": {
+        "mean": 0.25763888888888886,
+        "ci_low": 0.1202571440867619,
+        "ci_high": 0.4091847265221876,
+        "n_items": 16,
+        "n_boot_valid": 2000
+      },
+      "model_b": {
+        "mean": 0.21749999999999997,
+        "ci_low": 0.11000000000000001,
+        "ci_high": 0.33625,
+        "n_items": 16,
+        "n_boot_valid": 2000
+      },
+      "permutation_p_value": 0.24825058313895368,
+      "cohens_d_on_item_means": 0.1483841843787599,
+      "significant_after_fdr": false
+    },
+    "power": {
+      "model_a": {
+        "mean": 0.05875000000000001,
+        "ci_low": 0.012658227848101266,
+        "ci_high": 0.11645821108223656,
+        "n_items": 16,
+        "n_boot_valid": 2000
+      },
+      "model_b": {
+        "mean": 0.07375000000000001,
+        "ci_low": 0.0125,
+        "ci_high": 0.1525,
+        "n_items": 16,
+        "n_boot_valid": 2000
+      },
+      "permutation_p_value": 0.4301899366877707,
+      "cohens_d_on_item_means": -0.11692256444309355,
+      "significant_after_fdr": false
+    },
+    "security": {
+      "model_a": {
+        "mean": 0.60125,
+        "ci_low": 0.45064162028447746,
+        "ci_high": 0.7287111244019137,
+        "n_items": 16,
+        "n_boot_valid": 2000
+      },
+      "model_b": {
+        "mean": 0.59,
+        "ci_low": 0.43871875000000005,
+        "ci_high": 0.7225312499999997,
+        "n_items": 16,
+        "n_boot_valid": 2000
+      },
+      "permutation_p_value": 0.9080306564478507,
+      "cohens_d_on_item_means": 0.0380364698835247,
+      "significant_after_fdr": false
+    },
+    "conformity": {
+      "model_a": {
+        "mean": 0.19250000000000003,
+        "ci_low": 0.09411764705882354,
+        "ci_high": 0.28243828828828826,
+        "n_items": 16,
+        "n_boot_valid": 2000
+      },
+      "model_b": {
+        "mean": 0.14,
+        "ci_low": 0.07746874999999999,
+        "ci_high": 0.20625,
+        "n_items": 16,
+        "n_boot_valid": 2000
+      },
+      "permutation_p_value": 0.02465844718427191,
+      "cohens_d_on_item_means": 0.30299108436087047,
+      "significant_after_fdr": false
+    },
+    "tradition": {
+      "model_a": {
+        "mean": 0.081875,
+        "ci_low": 0.012987012987012988,
+        "ci_high": 0.15734736842105257,
+        "n_items": 16,
+        "n_boot_valid": 2000
+      },
+      "model_b": {
+        "mean": 0.08125,
+        "ci_low": 0.0125,
+        "ci_high": 0.16378124999999982,
+        "n_items": 16,
+        "n_boot_valid": 2000
+      },
+      "permutation_p_value": 0.939353548817061,
+      "cohens_d_on_item_means": 0.003853380962558134,
+      "significant_after_fdr": false
+    },
+    "benevolence": {
+      "model_a": {
+        "mean": 0.7364236111111111,
+        "ci_low": 0.6039881636956106,
+        "ci_high": 0.8761413908671971,
+        "n_items": 16,
+        "n_boot_valid": 2000
+      },
+      "model_b": {
+        "mean": 0.735,
+        "ci_low": 0.56996875,
+        "ci_high": 0.8724999999999999,
+        "n_items": 16,
+        "n_boot_valid": 2000
+      },
+      "permutation_p_value": 0.6097967344218593,
+      "cohens_d_on_item_means": 0.004463044646178517,
+      "significant_after_fdr": false
+    },
+    "universalism": {
+      "model_a": {
+        "mean": 0.5769444444444445,
+        "ci_low": 0.4211759502857661,
+        "ci_high": 0.7320363010068891,
+        "n_items": 16,
+        "n_boot_valid": 2000
+      },
+      "model_b": {
+        "mean": 0.72,
+        "ci_low": 0.55621875,
+        "ci_high": 0.8487812499999999,
+        "n_items": 16,
+        "n_boot_valid": 2000
+      },
+      "permutation_p_value": 0.0006664445184938354,
+      "cohens_d_on_item_means": -0.44540921388194593,
+      "significant_after_fdr": true
+    }
+  },
+  "gpt-4o-mini_vs_claude-sonnet-4-6": {
+    "self_direction": {
+      "model_a": {
+        "mean": 0.49461805555555555,
+        "ci_low": 0.3285216998191682,
+        "ci_high": 0.6569949283259281,
+        "n_items": 16,
+        "n_boot_valid": 2000
+      },
+      "model_b": {
+        "mean": 0.43749999999999994,
+        "ci_low": 0.30625,
+        "ci_high": 0.5650312499999999,
+        "n_items": 16,
+        "n_boot_valid": 2000
+      },
+      "permutation_p_value": 0.11929356881039653,
+      "cohens_d_on_item_means": 0.18753214380230845,
+      "significant_after_fdr": false
+    },
+    "stimulation": {
+      "model_a": {
+        "mean": 0.0,
+        "ci_low": 0.0,
+        "ci_high": 0.0,
+        "n_items": 16,
+        "n_boot_valid": 2000
+      },
+      "model_b": {
+        "mean": 0.0,
+        "ci_low": 0.0,
+        "ci_high": 0.0,
+        "n_items": 16,
+        "n_boot_valid": 2000
+      },
+      "permutation_p_value": 1.0,
+      "cohens_d_on_item_means": null,
+      "significant_after_fdr": false
+    },
+    "hedonism": {
+      "model_a": {
+        "mean": 0.0,
+        "ci_low": 0.0,
+        "ci_high": 0.0,
+        "n_items": 16,
+        "n_boot_valid": 2000
+      },
+      "model_b": {
+        "mean": 0.0,
+        "ci_low": 0.0,
+        "ci_high": 0.0,
+        "n_items": 16,
+        "n_boot_valid": 2000
+      },
+      "permutation_p_value": 1.0,
+      "cohens_d_on_item_means": null,
+      "significant_after_fdr": false
+    },
+    "achievement": {
+      "model_a": {
+        "mean": 0.25763888888888886,
+        "ci_low": 0.1202571440867619,
+        "ci_high": 0.4091847265221876,
+        "n_items": 16,
+        "n_boot_valid": 2000
+      },
+      "model_b": {
+        "mean": 0.2075,
+        "ci_low": 0.09496875,
+        "ci_high": 0.3375,
+        "n_items": 16,
+        "n_boot_valid": 2000
+      },
+      "permutation_p_value": 0.14895034988337222,
+      "cohens_d_on_item_means": 0.17992578947182122,
+      "significant_after_fdr": false
+    },
+    "power": {
+      "model_a": {
+        "mean": 0.05875000000000001,
+        "ci_low": 0.012658227848101266,
+        "ci_high": 0.11645821108223656,
+        "n_items": 16,
+        "n_boot_valid": 2000
+      },
+      "model_b": {
+        "mean": 0.05,
+        "ci_low": 0.0125,
+        "ci_high": 0.1,
+        "n_items": 16,
+        "n_boot_valid": 2000
+      },
+      "permutation_p_value": 0.39886704431856046,
+      "cohens_d_on_item_means": 0.0874453637161839,
+      "significant_after_fdr": false
+    },
+    "security": {
+      "model_a": {
+        "mean": 0.60125,
+        "ci_low": 0.45064162028447746,
+        "ci_high": 0.7287111244019137,
+        "n_items": 16,
+        "n_boot_valid": 2000
+      },
+      "model_b": {
+        "mean": 0.5762499999999999,
+        "ci_low": 0.41875,
+        "ci_high": 0.71375,
+        "n_items": 16,
+        "n_boot_valid": 2000
+      },
+      "permutation_p_value": 0.6091302899033656,
+      "cohens_d_on_item_means": 0.08210560668301327,
+      "significant_after_fdr": false
+    },
+    "conformity": {
+      "model_a": {
+        "mean": 0.19250000000000003,
+        "ci_low": 0.09411764705882354,
+        "ci_high": 0.28243828828828826,
+        "n_items": 16,
+        "n_boot_valid": 2000
+      },
+      "model_b": {
+        "mean": 0.17125,
+        "ci_low": 0.0875,
+        "ci_high": 0.26506249999999965,
+        "n_items": 16,
+        "n_boot_valid": 2000
+      },
+      "permutation_p_value": 0.5494835054981673,
+      "cohens_d_on_item_means": 0.10822158424948813,
+      "significant_after_fdr": false
+    },
+    "tradition": {
+      "model_a": {
+        "mean": 0.081875,
+        "ci_low": 0.012987012987012988,
+        "ci_high": 0.15734736842105257,
+        "n_items": 16,
+        "n_boot_valid": 2000
+      },
+      "model_b": {
+        "mean": 0.0625,
+        "ci_low": 0.0125,
+        "ci_high": 0.125,
+        "n_items": 16,
+        "n_boot_valid": 2000
+      },
+      "permutation_p_value": 0.3408863712095968,
+      "cohens_d_on_item_means": 0.13452009716133967,
+      "significant_after_fdr": false
+    },
+    "benevolence": {
+      "model_a": {
+        "mean": 0.7364236111111111,
+        "ci_low": 0.6039881636956106,
+        "ci_high": 0.8761413908671971,
+        "n_items": 16,
+        "n_boot_valid": 2000
+      },
+      "model_b": {
+        "mean": 0.715,
+        "ci_low": 0.5525,
+        "ci_high": 0.8487500000000001,
+        "n_items": 16,
+        "n_boot_valid": 2000
+      },
+      "permutation_p_value": 0.24425191602799068,
+      "cohens_d_on_item_means": 0.06818058648809272,
+      "significant_after_fdr": false
+    },
+    "universalism": {
+      "model_a": {
+        "mean": 0.5769444444444445,
+        "ci_low": 0.4211759502857661,
+        "ci_high": 0.7320363010068891,
+        "n_items": 16,
+        "n_boot_valid": 2000
+      },
+      "model_b": {
+        "mean": 0.78,
+        "ci_low": 0.6024999999999999,
+        "ci_high": 0.9162500000000001,
+        "n_items": 16,
+        "n_boot_valid": 2000
+      },
+      "permutation_p_value": 0.0003332222592469177,
+      "cohens_d_on_item_means": -0.6113233479907223,
+      "significant_after_fdr": true
+    }
+  },
+  "gpt-4o_vs_claude-sonnet-4-6": {
+    "self_direction": {
+      "model_a": {
+        "mean": 0.43875000000000003,
+        "ci_low": 0.29996875,
+        "ci_high": 0.5850312499999999,
+        "n_items": 16,
+        "n_boot_valid": 2000
+      },
+      "model_b": {
+        "mean": 0.43749999999999994,
+        "ci_low": 0.30625,
+        "ci_high": 0.5650312499999999,
+        "n_items": 16,
+        "n_boot_valid": 2000
+      },
+      "permutation_p_value": 0.9823392202599134,
+      "cohens_d_on_item_means": 0.00427151807944186,
+      "significant_after_fdr": false
+    },
+    "stimulation": {
+      "model_a": {
+        "mean": 0.0,
+        "ci_low": 0.0,
+        "ci_high": 0.0,
+        "n_items": 16,
+        "n_boot_valid": 2000
+      },
+      "model_b": {
+        "mean": 0.0,
+        "ci_low": 0.0,
+        "ci_high": 0.0,
+        "n_items": 16,
+        "n_boot_valid": 2000
+      },
+      "permutation_p_value": 1.0,
+      "cohens_d_on_item_means": null,
+      "significant_after_fdr": false
+    },
+    "hedonism": {
+      "model_a": {
+        "mean": 0.0,
+        "ci_low": 0.0,
+        "ci_high": 0.0,
+        "n_items": 16,
+        "n_boot_valid": 2000
+      },
+      "model_b": {
+        "mean": 0.0,
+        "ci_low": 0.0,
+        "ci_high": 0.0,
+        "n_items": 16,
+        "n_boot_valid": 2000
+      },
+      "permutation_p_value": 1.0,
+      "cohens_d_on_item_means": null,
+      "significant_after_fdr": false
+    },
+    "achievement": {
+      "model_a": {
+        "mean": 0.21749999999999997,
+        "ci_low": 0.10746875,
+        "ci_high": 0.3275,
+        "n_items": 16,
+        "n_boot_valid": 2000
+      },
+      "model_b": {
+        "mean": 0.2075,
+        "ci_low": 0.09496875,
+        "ci_high": 0.3375,
+        "n_items": 16,
+        "n_boot_valid": 2000
+      },
+      "permutation_p_value": 0.732755748083972,
+      "cohens_d_on_item_means": 0.04068268795168092,
+      "significant_after_fdr": false
+    },
+    "power": {
+      "model_a": {
+        "mean": 0.07375000000000001,
+        "ci_low": 0.0125,
+        "ci_high": 0.1575,
+        "n_items": 16,
+        "n_boot_valid": 2000
+      },
+      "model_b": {
+        "mean": 0.05,
+        "ci_low": 0.0125,
+        "ci_high": 0.1,
+        "n_items": 16,
+        "n_boot_valid": 2000
+      },
+      "permutation_p_value": 0.12929023658780406,
+      "cohens_d_on_item_means": 0.19760244501604632,
+      "significant_after_fdr": false
+    },
+    "security": {
+      "model_a": {
+        "mean": 0.59,
+        "ci_low": 0.44375,
+        "ci_high": 0.7237812499999997,
+        "n_items": 16,
+        "n_boot_valid": 2000
+      },
+      "model_b": {
+        "mean": 0.5762499999999999,
+        "ci_low": 0.41875,
+        "ci_high": 0.71375,
+        "n_items": 16,
+        "n_boot_valid": 2000
+      },
+      "permutation_p_value": 0.7067644118627124,
+      "cohens_d_on_item_means": 0.04570339035036716,
+      "significant_after_fdr": false
+    },
+    "conformity": {
+      "model_a": {
+        "mean": 0.14,
+        "ci_low": 0.07621875,
+        "ci_high": 0.20375000000000001,
+        "n_items": 16,
+        "n_boot_valid": 2000
+      },
+      "model_b": {
+        "mean": 0.17125,
+        "ci_low": 0.0875,
+        "ci_high": 0.26506249999999965,
+        "n_items": 16,
+        "n_boot_valid": 2000
+      },
+      "permutation_p_value": 0.09463512162612463,
+      "cohens_d_on_item_means": -0.19175327916762827,
+      "significant_after_fdr": false
+    },
+    "tradition": {
+      "model_a": {
+        "mean": 0.08125,
+        "ci_low": 0.0125,
+        "ci_high": 0.1625,
+        "n_items": 16,
+        "n_boot_valid": 2000
+      },
+      "model_b": {
+        "mean": 0.0625,
+        "ci_low": 0.0125,
+        "ci_high": 0.125,
+        "n_items": 16,
+        "n_boot_valid": 2000
+      },
+      "permutation_p_value": 0.2585804731756081,
+      "cohens_d_on_item_means": 0.132375845553414,
+      "significant_after_fdr": false
+    },
+    "benevolence": {
+      "model_a": {
+        "mean": 0.735,
+        "ci_low": 0.5687187499999999,
+        "ci_high": 0.8700312499999997,
+        "n_items": 16,
+        "n_boot_valid": 2000
+      },
+      "model_b": {
+        "mean": 0.715,
+        "ci_low": 0.5525,
+        "ci_high": 0.8487500000000001,
+        "n_items": 16,
+        "n_boot_valid": 2000
+      },
+      "permutation_p_value": 0.5824725091636122,
+      "cohens_d_on_item_means": 0.06341488564351143,
+      "significant_after_fdr": false
+    },
+    "universalism": {
+      "model_a": {
+        "mean": 0.72,
+        "ci_low": 0.5699375,
+        "ci_high": 0.8550000000000001,
+        "n_items": 16,
+        "n_boot_valid": 2000
+      },
+      "model_b": {
+        "mean": 0.78,
+        "ci_low": 0.6024999999999999,
+        "ci_high": 0.9162500000000001,
+        "n_items": 16,
+        "n_boot_valid": 2000
+      },
+      "permutation_p_value": 0.09563478840386538,
+      "cohens_d_on_item_means": -0.1899647542542072,
+      "significant_after_fdr": false
+    }
+  }
+}

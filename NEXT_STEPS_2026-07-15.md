@@ -50,7 +50,30 @@ Full breakdown: `data/revelation/SCENARIO_INDEX.md`. **Final: 80 items exactly**
 
 ---
 
-## Phase B — Statistical rigor on model comparisons (needs API budget, no panel/κ dependency — start immediately)
+## Phase B — Statistical rigor on model comparisons — ✅ PILOT COMPLETE (2026-07-17)
+
+Ran the 16-item core structured set x 10 replicates x 3 models (gpt-4o-mini,
+gpt-4o, claude-sonnet-4-6), ~$2.58 actual spend (well under the $20 cap set
+for this session). Built `src/v2/significance.py` (bootstrap CI, permutation
+test, Cohen's d, Benjamini-Hochberg FDR correction — pure numpy, no
+scipy/statsmodels dependency; sanity-tested against synthetic data first).
+
+**Key finding — revises the original pilot's headline claim.** With proper
+statistics, "Claude shows highest universalism" (paper §6.1) does not hold
+up as a Claude-vs-GPT-4o difference: gpt-4o vs. claude-sonnet-4-6 is NOT
+significant after FDR correction (p=0.0956). The real, FDR-significant
+pattern is gpt-4o-mini scoring lower on universalism than *both* larger
+models (p=0.0007 vs gpt-4o, p=0.0003 vs claude) — a small-vs-large-model
+gap, not a Claude-specific one. No other dimension survives correction.
+Full writeup: `outputs/model_comparison_pilot/COST_ESTIMATE.md`.
+
+**Not yet done:** the 6 behavioral/implicit items (needs judge scoring,
+deferred pending kappa), mixed-effects modeling proper (used item-cluster
+bootstrap as a nonparametric stand-in), exact token-usage-based cost
+tracking (currently estimated from response character counts since
+`run_eval.py` doesn't surface API usage data).
+
+### Original plan (for reference, now partially superseded by the above)
 
 This is the concrete "do it better than ConflictScope" work, and it doesn't wait on anything.
 
