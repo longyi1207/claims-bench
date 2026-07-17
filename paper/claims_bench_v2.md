@@ -9,7 +9,7 @@
 
 ## Abstract
 
-Alignment evaluations often reduce normative behavior to scalar harm scores or preference rankings, obscuring *which values* models prioritize when reasonable people disagree. We introduce **CLAIMS-Bench**, a benchmark that characterizes language models' **implicit value commitments** under radical under-specification using Schwartz's ten basic values as a descriptive backbone. The benchmark comprises **80 value-revelation scenarios** spanning existential risk, governance, WVS high-disagreement everyday domains, behavioral advice (without naming values to the model), historical temporal-shift cases across 8 matched cross-era pairs, and non-temporal cultural-framing pairs, with checked coverage of every theoretically-real Schwartz circumplex tension and Beauchamp & Childress principle pair (§3.2). Models produce either structured rankings and pairwise tradeoffs or free-text advice; we infer **10-dimensional Schwartz profiles** via Borda count and Bradley–Terry estimation (structured items) or an LLM salience judge (implicit items). *The baseline reported below (§6) covers a 30 structured / 13 implicit item pilot subset of the benchmark; extending significance-tested baselines to the full 80-item set is ongoing (§9).* On that subset, three frontier models (GPT-4o-mini, GPT-4o, Claude Sonnet 4.6) achieved **100% format compliance** on structured elicitation; mean profiles were consistently high on **security** and **universalism** and near-zero on **stimulation** and **hedonism** — the latter should be read cautiously, since this pilot subset does not include items testing hedonism against its real circumplex-opposite values (tradition, conformity, security); the full 80-item set does (§3.2). Claude showed the highest universalism (0.82 vs. 0.63–0.71 for OpenAI models); implicit scenarios revealed higher **self-direction** and **achievement** salience than structured prompts suggested. A consistency pilot (five items, five replicates, temperature 0.7) yielded mean coefficient of variation **0.11** across profile dimensions. We release scenarios, schemas, scoring code, human-panel protocol, and baseline artifacts. We explicitly **do not** certify moral correctness; human panel comparison and full-benchmark baselines remain future work.
+Alignment evaluations often reduce normative behavior to scalar harm scores or preference rankings, obscuring *which values* models prioritize when reasonable people disagree. We introduce **CLAIMS-Bench**, a benchmark that characterizes language models' **implicit value commitments** under radical under-specification using Schwartz's ten basic values as a descriptive backbone. The benchmark comprises **80 value-revelation scenarios** spanning existential risk, governance, WVS high-disagreement everyday domains, behavioral advice (without naming values to the model), historical temporal-shift cases across 8 matched cross-era pairs, and non-temporal cultural-framing pairs, with checked coverage of every theoretically-real Schwartz circumplex tension and Beauchamp & Childress principle pair (§3.2). Models produce either structured rankings and pairwise tradeoffs or free-text advice; we infer **10-dimensional Schwartz profiles** via Borda count and Bradley–Terry estimation (structured items) or an LLM salience judge (implicit items). *The baseline reported below (§6) covers a 30 structured / 13 implicit item pilot subset of the benchmark; extending significance-tested baselines to the full 80-item set is ongoing (§9).* On that subset, three frontier models (GPT-4o-mini, GPT-4o, Claude Sonnet 4.6) achieved **100% format compliance** on structured elicitation; mean profiles were consistently high on **security** and **universalism** and near-zero on **stimulation** and **hedonism** — the latter should be read cautiously, since this pilot subset does not include items testing hedonism against its real circumplex-opposite values (tradition, conformity, security); the full 80-item set does (§3.2). A single-run pass suggested Claude scored highest on universalism (0.82 vs. 0.63–0.71 for OpenAI models); a follow-up **replicated, significance-tested** run (10 replicates/item, bootstrap confidence intervals, permutation tests, Benjamini–Hochberg correction across all 10 dimensions, on a 16-item structured subset) found this specific Claude-vs-GPT-4o gap does **not** survive correction (p=0.096) — the only FDR-significant pattern is GPT-4o-mini scoring lower on universalism than *both* larger models (p<0.001 in each comparison), not a Claude-specific effect. This directly illustrates why we report profiles with significance testing rather than single-run point estimates. Implicit scenarios revealed higher **self-direction** and **achievement** salience than structured prompts suggested. A consistency pilot (five items, five replicates, temperature 0.7) yielded mean coefficient of variation **0.11** across profile dimensions. We release scenarios, schemas, scoring code, human-panel protocol, and baseline artifacts. We explicitly **do not** certify moral correctness; human panel comparison and full-benchmark baselines remain future work.
 
 **Keywords:** AI alignment, value pluralism, Schwartz values, benchmark, normative evaluation, revealed preference
 
@@ -25,8 +25,9 @@ Isaiah Berlin's value pluralism holds that multiple legitimate values can confli
 
 1. **80 under-specified scenarios** with multidimensional tags (Schwartz tensions, epistemic mode, stakeholder configuration, principlist conflicts), including structured, behavioral-implicit, temporal-shift, and non-temporal cultural-framing elicitation types, with checked coverage of the Schwartz circumplex's 13 theoretically-real tension pairs and the 6 Beauchamp & Childress principle pairs (§3.2).
 2. **Dual scoring paths**—structured Borda + Bradley–Terry from explicit rankings; implicit salience inference (0–3 per value) for advice-seeking prompts where values are not named.
-3. **Pilot baseline characterization** of three widely deployed models on a 30 structured and 13 implicit item subset, with consistency analysis under resampling; significance-tested baselines across the full 80-item set are in progress (§9).
-4. **Open release** of YAML scenarios, JSON schemas, panel protocol, coverage-check scripts, and reproducible scoring/generation code.
+3. **Pilot baseline characterization** of three widely deployed models on a 30 structured and 13 implicit item subset, with consistency analysis under resampling.
+4. **Replicated, significance-tested comparison** (10 replicates/item, bootstrap CIs, permutation tests, Benjamini–Hochberg FDR correction) on a 16-item structured subset, which corrects a single-run impression from (3): the apparent Claude-vs-GPT-4o universalism gap does not survive proper testing, while a GPT-4o-mini-vs-larger-models gap does (§6.1b). Extending this to the full 80-item set is in progress (§9).
+5. **Open release** of YAML scenarios, JSON schemas, panel protocol, coverage-check scripts, and reproducible scoring/generation code.
 
 CLAIMS-Bench is designed as an open, reproducible normative eval complementary to harm benchmarks (HarmBench; Mazeika et al., 2024) and social bias suites (BBQ; Parrish et al., 2022): it targets *value revelation under uncertainty* across everyday high-disagreement domains, diachronic (temporal) value pluralism, and AGI-relevant domains (existential risk, longtermism, governance lock-in) where stakeholder roles are unclear.
 
@@ -165,6 +166,7 @@ Per-model reports include:
 | Failure-mode judge | `gpt-4o` |
 | Implicit salience judge | `gpt-4o` |
 | Consistency pilot | 5 items × 5 replicates, `gpt-4o-mini`, T=0.7 and T=0.0 |
+| Replicated significance run | 16-item core structured subset × 10 replicates × 3 models, T=0.7 (§6.1b) |
 | Code / data | GitHub `longyi1207/claims-bench`, commit `acc94fe`+ |
 
 ---
@@ -189,14 +191,30 @@ All three models achieved **30/30** parse success on structured items.
 \label{fig:structured}
 \end{figure}
 
-**Findings.**
+**Findings (single-run, not yet replicated — see §6.1b for the corrected, significance-tested version of the universalism claim).**
 
 - **Security–universalism dominance.** All models prioritize safety/stability and inclusive justice framing on high-stakes under-specified scenarios—consistent with safety-tuned assistant behavior.
-- **Claude universalism gap.** Claude's mean universalism (0.82) exceeds both OpenAI models (0.63–0.71) by a noticeable margin on this scenario set.
-- **Near-zero stimulation and hedonism.** Rankings rarely elevate excitement-seeking or pleasure values—partly scenario selection (existential/governance heavy), partly training bias.
+- **Apparent Claude universalism gap.** On this single run, Claude's mean universalism (0.82) exceeds both OpenAI models (0.63–0.71). §6.1b shows this specific Claude-vs-GPT-4o gap does not survive replication and correction; treat the number here as a single-run observation, not a finding.
+- **Near-zero stimulation and hedonism.** Rankings rarely elevate excitement-seeking or pleasure values on this 30-item subset—partly scenario selection (existential/governance heavy; this subset predates the hedonism/stimulation circumplex-coverage items added in the July 2026 expansion, §3.2), partly possible training bias. Not yet distinguishable between those two explanations.
 - **Non-trivial self-direction.** Self-direction scores (0.45–0.50) remain material—models do not collapse to pure paternalistic security.
 
 Full vectors appear in `outputs/baseline_v2_structured/comparison_table.md`.
+
+### 6.1b Replicated significance testing (core subset)
+
+Single-run point estimates (§6.1) cannot distinguish a real model difference from sampling noise. We re-ran a 16-item structured subset (`data/v2_core_structured16.jsonl`: WVS everyday domains 021–030, epistemic integrity 013–016, isomorphic pairs 017–018 — the statistically-clean subset excluding items whose stakes are not matched across comparisons, per §3.2) with **10 replicates per item per model** at $T=0.7$, then computed, per Schwartz dimension: a bootstrap 95% CI using item-cluster resampling (item as the resampling unit, then replicate-within-item — a nonparametric stand-in for a mixed-effects model with item as a random intercept, avoiding scipy/statsmodels dependencies), a permutation test on the pooled replicate observations, Cohen's $d$ on per-item means, and Benjamini–Hochberg FDR correction across all 10 dimensions. Implementation: `src/v2/significance.py`.
+
+Parse success: gpt-4o-mini 152/160 (95%), gpt-4o 160/160, claude-sonnet-4-6 160/160. Total generation cost: **$2.55** (verified from provider billing dashboards: $0.97 OpenAI + $1.58 Anthropic; a priori estimate from response-length heuristics was $2.58, within 1% of actuals).
+
+| Comparison | universalism $p$ | Cohen's $d$ | Significant after FDR? |
+|---|---|---|---|
+| gpt-4o-mini vs. gpt-4o | 0.0007 | $-0.45$ | Yes |
+| gpt-4o-mini vs. claude-sonnet-4-6 | 0.0003 | $-0.61$ | Yes |
+| gpt-4o vs. claude-sonnet-4-6 | 0.0956 | $-0.19$ | **No** |
+
+**Finding.** `universalism` is the only dimension significant after correction in any pairwise comparison, and the significant pattern is **gpt-4o-mini scoring lower than both larger models**, not a Claude-vs-GPT-4o difference — GPT-4o (0.720, 95% CI [0.570, 0.855]) and Claude (0.780, 95% CI [0.602, 0.916]) are not statistically distinguishable on this subset at this sample size. No other Schwartz dimension survives FDR correction between any model pair. `stimulation` and `hedonism` are exactly 0 for all three models on this subset (it predates the July 2026 coverage-gap items, §3.2, which specifically test those two values). Full per-dimension results: `outputs/model_comparison_pilot/significance_report.json`.
+
+This result is a direct, in-repo illustration of the point made in §2 about ConflictScope's headline results lacking significance testing: a plausible-looking single-run gap (§6.1) did not replicate as stated once tested properly.
 
 ### 6.2 Implicit vs. structured profiles (Table 2)
 
@@ -293,7 +311,7 @@ Claude shows lower failure-mode trigger rates on this judge; pluralism acknowled
 5. **Judge cost and bias** — implicit path doubles API cost; judges may favor verbose hedging or specific vendor styles.
 6. **Temperature and parsing** — consistency pilot shows non-zero variance; occasional JSON schema failures under sampling.
 7. **Baseline coverage is partial** — the reported baseline (§6) runs on a 30 structured / 13 implicit item subset of the full 80-item benchmark (§3.2); results for the remaining items are not yet reflected in any baseline number in this paper.
-8. **No significance testing on model comparisons yet** — differences reported in §6 (e.g., Claude's 0.82 vs. GPT-4o's 0.71 universalism) are descriptive means without confidence intervals or hypothesis tests; this is a known gap shared with the closest comparable published work (ConflictScope's headline results also lack significance tests) and is being addressed (§9), not treated as acceptable by precedent.
+8. **Significance testing addressed only for a 16-item subset so far** — §6.1b applies bootstrap CIs, permutation tests, and FDR correction to a 16-item structured subset (30% of the 80-item benchmark) across 3 models. The full 80-item set, the 6 behavioral/implicit items (needs judge scoring), and the existential/temporal/cultural-framing families remain untested this way. §6.1's single-run numbers on the remaining items should be read with the same caution §6.1b demonstrates is warranted — as §6.1b shows concretely, a plausible-looking single-run gap did not hold up under replication.
 9. **Temporal-shift family geographic concentration** — the 22 temporal items, while spanning 12 countries and 1847–2023, still concentrate on 20th-century political and wartime dilemmas; this is a real representativeness limitation, only partly mitigated by including South and East African cases (India, Kenya) alongside the more numerous European/American ones.
 10. **Not all pair-drift items are equally stakes-matched by design** — most pairs (e.g., the two cultural-criticism-of-a-superior variants) hold underlying facts and stakes constant, so a large profile difference is a clean `imposes_single_culture` signal. A minority (e.g., the 1943 Netherlands / 1984 Arizona harboring pair) deliberately preserve a real difference in moral stakes between variants; per-item rubric notes flag which category each pair falls into, and analysis should not treat all pair-drift results as equivalent evidence.
 
@@ -301,7 +319,7 @@ Claude shows lower failure-mode trigger rates on this judge; pluralism acknowled
 
 ## 9. Future Work
 
-- **Statistical rigor on model comparisons** — replicate sampling (10–20 runs/item/model), bootstrap confidence intervals and permutation tests per Schwartz dimension, Benjamini-Hochberg correction across the comparison grid, ideally a mixed-effects model (item as random effect) rather than naive per-item averaging. Not yet started as of this writing.
+- **Extend replicated significance testing (§6.1b) to the full benchmark** — currently covers 16 of 80 items (structured core subset only). Next: the 6 behavioral/implicit items (needs judge scoring, gated on the human-rater kappa calibration in progress), then the existential/governance, temporal-shift, and cultural-framing families, with matched-pair designs where a causal (not just descriptive) claim is intended. A proper mixed-effects model (item as random effect, via statsmodels) would sharpen the current item-cluster-bootstrap approximation.
 - **Human inter-rater reliability (Cohen's kappa)** on the failure-mode judge, using an independent 2–3 rater calibration set distinct from the items used for the LLM judge — in progress.
 - Recruit **n = 8–10 or more** human panelists, deliberately outside the authors' own network for genuine cultural/ideological diversity (protocol ready); compute `composite_dispute_index` and model–human JS divergence.
 - Extend the baseline to the full **80-item set** (§3.2), including the items that specifically test hedonism and stimulation against their circumplex-opposite values — this will show whether the "near-zero hedonism/stimulation" pattern in §6.1 is a real model property or a measurement artifact of the pilot subset.
@@ -314,7 +332,7 @@ Claude shows lower failure-mode trigger rates on this judge; pluralism acknowled
 
 ## 10. Conclusion
 
-CLAIMS-Bench provides a reproducible framework for characterizing language models' value commitments under conflict and under-specification. Baseline results on three frontier models show convergent security–universalism emphasis under structured elicitation, meaningful model differences (Claude's higher universalism), and systematically different profiles under implicit advice scenarios. We release the full benchmark to support pluralism-aware alignment research—measuring what models value when the right answer is genuinely contested.
+CLAIMS-Bench provides a reproducible framework for characterizing language models' value commitments under conflict and under-specification. Baseline results on three frontier models show convergent security–universalism emphasis under structured elicitation and systematically different profiles under implicit advice scenarios. A replicated, significance-tested re-analysis (§6.1b) found a genuine model difference — GPT-4o-mini scores lower on universalism than both larger models tested — but did **not** confirm the single-run impression of a Claude-specific universalism advantage over GPT-4o; we report this correction as a substantive result in its own right, illustrating why single-run point estimates are insufficient for this kind of claim. We release the full benchmark to support pluralism-aware alignment research—measuring what models value when the right answer is genuinely contested.
 
 ---
 
