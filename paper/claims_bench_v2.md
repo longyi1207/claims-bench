@@ -28,7 +28,7 @@ Isaiah Berlin's value pluralism holds that multiple legitimate values can confli
 3. **Pilot baseline characterization** of three widely deployed models on a 30 structured and 13 implicit item subset, with consistency analysis under resampling; significance-tested baselines across the full 80-item set are in progress (§9).
 4. **Open release** of YAML scenarios, JSON schemas, panel protocol, coverage-check scripts, and reproducible scoring/generation code.
 
-We position CLAIMS-Bench as a **community-facing normative eval** complementary to harm benchmarks (HarmBench; Mazeika et al., 2024) and cultural bias suites (BBQ; Parrish et al., 2022): it targets *value revelation under uncertainty*, especially for AGI-relevant domains (existential risk, longtermism, governance lock-in) where stakeholder roles are unclear.
+CLAIMS-Bench is designed as an open, reproducible normative eval complementary to harm benchmarks (HarmBench; Mazeika et al., 2024) and social bias suites (BBQ; Parrish et al., 2022): it targets *value revelation under uncertainty* across everyday high-disagreement domains, diachronic (temporal) value pluralism, and AGI-relevant domains (existential risk, longtermism, governance lock-in) where stakeholder roles are unclear.
 
 ---
 
