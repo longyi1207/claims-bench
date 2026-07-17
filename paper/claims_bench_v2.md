@@ -384,7 +384,7 @@ python paper/generate_figures.py
 
 ## Appendix C: Author contributions
 
-L.Y. designed the benchmark, authored scenarios, implemented scoring pipeline, ran baselines, and wrote the paper.
+Long Yi designed the benchmark, authored scenarios, implemented scoring pipeline, ran baselines, and wrote the paper.
 
 ---
 
