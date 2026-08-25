@@ -54,7 +54,9 @@ def load_schema() -> dict:
     return json.loads(SCHEMA_PATH.read_text())
 
 
-def parse_response(text: str, schema: dict | None = None) -> dict[str, Any]:
+def parse_response(
+    text: str, schema: dict | None = None, value_order: list[str] | None = None
+) -> dict[str, Any]:
     """Extract and validate a structured response.
 
     Returns the parsed dict with an added ``_parse_status`` key:
@@ -67,6 +69,27 @@ def parse_response(text: str, schema: dict | None = None) -> dict[str, Any]:
         parsed = extract_json_block(text)
     except RevelationParseError:
         return {"_parse_status": "non_compliant_format", "_raw": text}
+
+    # "rank_values" is read both ways in practice ({value: rank} per the schema,
+    # and {rank: value}); canonicalise before validating so the orientation a
+    # model happened to pick does not become differential dropout. See
+    # normalize_rank_orientation() for what this cost before it was handled.
+    raw_ranks = parsed.get("rank_values")
+    if isinstance(raw_ranks, (dict, list)):
+        from src.v2.schwartz_profile import normalize_rank_orientation
+
+        try:
+            normalized = normalize_rank_orientation(raw_ranks, value_order)
+            if normalized:
+                original = (
+                    {str(k): v for k, v in raw_ranks.items()}
+                    if isinstance(raw_ranks, dict)
+                    else None
+                )
+                parsed["_rank_values_reoriented"] = normalized != original
+                parsed["rank_values"] = normalized
+        except (ValueError, TypeError):
+            pass  # leave it alone; schema validation will flag it
 
     try:
         jsonschema.validate(parsed, schema)

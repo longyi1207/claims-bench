@@ -63,6 +63,7 @@ from src.v2.schwartz_profile import (
     extract_pairwise_comparisons,
     infer_full_profile,
     pairwise_summary,
+    rank_value_order,
 )
 
 logger = logging.getLogger(__name__)
@@ -193,7 +194,7 @@ def revelation_scorer(
                         row["judge_error_kind"] = "provider_content_filter"
                         row["judge_filter_categories"] = content_filter_categories(e)
         else:
-            structured = parse_response(response, schema)
+            structured = parse_response(response, schema, rank_value_order(item))
             parse_status = structured.get("_parse_status", "ok")
             ok = parse_status == "ok"
             row = {

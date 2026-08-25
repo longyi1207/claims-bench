@@ -441,3 +441,100 @@ def test_aggregate_implicit_pending_not_counted() -> None:
     report = aggregate(scored, items)
     assert report["n_with_valid_profile"] == 0
     assert report["implicit_judge_pending_n"] == 1
+
+
+# --------------------------------------------------------------------------- #
+# rank_values orientation
+# --------------------------------------------------------------------------- #
+#
+# Found 2026-08-25 on the full 80-item run: the schema asks for {value: rank},
+# but models also emit {rank: value} — a fair reading of the field name. Rejecting
+# the second form cost claude-sonnet-4-6 23 of 520 structured observations (all 10
+# replicates of revelation_071) against 2 for gpt-4o. Dropout that correlates with
+# the model under test is a validity threat, so both orientations must parse.
+
+
+def test_rank_values_schema_orientation_is_unchanged():
+    from src.v2.schwartz_profile import normalize_rank_orientation
+
+    canonical = {"security": 1, "universalism": 2, "conformity": 3}
+    assert normalize_rank_orientation(canonical) == {
+        "security": 1,
+        "universalism": 2,
+        "conformity": 3,
+    }
+
+
+def test_rank_values_inverted_orientation_is_recovered():
+    from src.v2.schwartz_profile import normalize_rank_orientation
+
+    inverted = {"1": "security", "2": "universalism", "3": "conformity"}
+    assert normalize_rank_orientation(inverted) == {
+        "security": 1,
+        "universalism": 2,
+        "conformity": 3,
+    }
+
+
+def test_both_orientations_give_the_same_borda_scores():
+    from src.v2.schwartz_profile import ranks_to_scores
+
+    canonical = {"security": 1, "universalism": 2, "conformity": 3}
+    inverted = {"1": "security", "2": "universalism", "3": "conformity"}
+    assert ranks_to_scores(canonical) == ranks_to_scores(inverted)
+
+
+def test_inverted_rank_values_now_parse_as_ok():
+    from src.v2.revelation_parse import load_schema, parse_response
+
+    text = (
+        '```json\n{"rank_values": {"1": "security", "2": "universalism", '
+        '"3": "conformity", "4": "self_direction", "5": "achievement"}, '
+        '"pairwise": {"a_vs_b": "A"}, "epistemic_prior": "likely_hostile"}\n```\n\n'
+        "(B) Reasoning: the local norm is consequential."
+    )
+    parsed = parse_response(text, load_schema())
+    assert parsed["_parse_status"] == "ok"
+    assert parsed["rank_values"]["security"] == 1
+    assert parsed["_rank_values_reoriented"] is True
+
+
+def test_empty_rank_values_is_still_empty():
+    from src.v2.schwartz_profile import normalize_rank_orientation, ranks_to_scores
+
+    assert normalize_rank_orientation({}) == {}
+    assert ranks_to_scores({}) == {}
+
+
+def test_positional_array_rank_values_recovered_with_item_order():
+    """gpt-4o-mini emitted `rank_values: [1, 4, 3, 5, 2]` — ranks positionally
+    matched to the ordered value list the item presented (11/520 observations on
+    the 2026-08-25 run). Deterministically recoverable, but only against that
+    list."""
+    from src.v2.schwartz_profile import normalize_rank_orientation
+
+    order = ["security", "self_direction", "achievement", "universalism", "conformity"]
+    assert normalize_rank_orientation([1, 4, 3, 5, 2], order) == {
+        "security": 1,
+        "self_direction": 4,
+        "achievement": 3,
+        "universalism": 5,
+        "conformity": 2,
+    }
+
+
+def test_positional_array_without_order_is_not_guessed():
+    from src.v2.schwartz_profile import normalize_rank_orientation
+
+    assert normalize_rank_orientation([1, 4, 3, 5, 2]) == {}
+    # length mismatch must not be silently zipped short
+    assert normalize_rank_orientation([1, 2, 3], ["a", "b", "c", "d", "e"]) == {}
+
+
+def test_rank_value_order_reads_the_items_rank_task():
+    from src.io import index_by_id, load_jsonl
+    from src.v2.schwartz_profile import rank_value_order
+
+    items = index_by_id(load_jsonl("data/v2_revelation.jsonl"))
+    order = rank_value_order(items["revelation_016"])
+    assert order == ["security", "self_direction", "achievement", "universalism", "conformity"]

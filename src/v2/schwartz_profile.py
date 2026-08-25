@@ -46,8 +46,56 @@ SUPPLEMENTARY_PROBES = ["sanctity"]
 ALL_TRACKED_VALUES = SCHWARTZ_VALUES + SUPPLEMENTARY_PROBES
 
 
-def ranks_to_scores(rank_values: dict[str, int]) -> dict[str, float]:
+def rank_value_order(item: dict) -> list[str]:
+    """The ordered value list an item's rank task presented to the model.
+
+    Needed to disambiguate the positional-array form of `rank_values`, which
+    carries ranks but no value names.
+    """
+    for task in (item.get("elicitation") or {}).get("tasks", []):
+        if task.get("type") == "rank_values":
+            return list(task.get("schwartz_values") or [])
+    return []
+
+
+def normalize_rank_orientation(rank_values, value_order: list[str] | None = None) -> dict[str, int]:
+    """Accept both orientations of the `rank_values` map.
+
+    The schema asks for `{value_id: rank}`, e.g. `{"security": 1}`. Models also
+    read "rank_values" the other way round and emit `{rank: value_id}`, e.g.
+    `{"1": "security"}` — a defensible reading of an ambiguous field name.
+
+    Measured 2026-08-25 on the full 80-item run: rejecting the inverted form cost
+    `claude-sonnet-4-6` 23 of 520 structured observations (all 10 replicates of
+    revelation_071) against 2 for `gpt-4o`. Differential dropout that correlates
+    with the model under test is a validity threat, not a compliance statistic —
+    so parse both, and keep format compliance about formatting.
+    """
+    if not rank_values:
+        return {}
+
+    # Positional array: `[1, 4, 3, 5, 2]` means "rank i for the i-th value the
+    # item listed". Recoverable only against that ordered list, and only when the
+    # lengths agree — otherwise it stays invalid rather than being guessed at.
+    if isinstance(rank_values, list):
+        if value_order and len(value_order) == len(rank_values):
+            try:
+                return {str(v): int(r) for v, r in zip(value_order, rank_values)}
+            except (TypeError, ValueError):
+                return {}
+        return {}
+
+    items = list(rank_values.items())
+    keys_are_ranks = all(str(k).strip().isdigit() for k, _ in items)
+    values_are_ranks = all(isinstance(v, int) or str(v).strip().isdigit() for _, v in items)
+    if keys_are_ranks and not values_are_ranks:
+        return {str(v): int(k) for k, v in items}
+    return {str(k): int(v) for k, v in items}
+
+
+def ranks_to_scores(rank_values, value_order: list[str] | None = None) -> dict[str, float]:
     """Convert rank dict (1=best) to normalized 0-1 scores (Borda count)."""
+    rank_values = normalize_rank_orientation(rank_values, value_order)
     if not rank_values:
         return {}
     n = len(rank_values)
@@ -64,8 +112,7 @@ def infer_profile(elicitation_response: dict[str, Any]) -> dict[str, float]:
     Returns scores only for the values the model actually ranked (partial
     vector — most items rank 5 of the 10 Schwartz values).
     """
-    rank_values = elicitation_response.get("rank_values") or {}
-    return ranks_to_scores({k: int(v) for k, v in rank_values.items()})
+    return ranks_to_scores(elicitation_response.get("rank_values") or {})
 
 
 def infer_full_profile(elicitation_response: dict[str, Any]) -> dict[str, float]:

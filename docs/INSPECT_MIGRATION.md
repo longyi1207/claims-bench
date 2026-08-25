@@ -17,6 +17,13 @@ grow with the size of the runs still ahead of us:
 | Four backends hand-written | `run_eval.py:30-134` | Every new provider is new code. |
 | Spend logged by hand-copying a dashboard number into `--est-usd` | `src/v2/spend_log.py:1-6` | Of 82 rows in `outputs/spend_log.jsonl`, **one** has a real dollar figure. |
 
+**One caveat on that last row:** generation tokens now come from the eval log, but
+**judge tokens do not**. The judges call the raw OpenAI/Anthropic SDKs from inside
+the scorer rather than going through Inspect's model layer, so they never reach
+`log.stats.model_usage`. Routing them through `inspect_ai.model.get_model()` would
+close the gap; until then, cost figures in `FINDINGS_full80_2026-08-25.md` cover
+generation only.
+
 Inspect solves all four (`--max-connections`, `max_retries`, one `--model` string
 across providers, token usage in the eval log) and adds `--epochs N` for replicates,
 `inspect view` for per-sample transcript inspection, and `inspect score` for

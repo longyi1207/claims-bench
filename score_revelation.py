@@ -25,6 +25,7 @@ from src.v2.implicit_judge import merge_implicit_score, run_implicit_judge
 from src.v2.item_utils import is_implicit_item, is_structured_item
 from src.v2.revelation_parse import extract_reasoning, load_schema, parse_response
 from src.v2.schwartz_profile import (
+    rank_value_order,
     SCHWARTZ_VALUES,
     bradley_terry_profile,
     extract_pairwise_comparisons,
@@ -82,7 +83,7 @@ def score_one_implicit(item: dict, response: str) -> dict:
 
 
 def score_one(item: dict, response: str, schema: dict) -> dict:
-    structured = parse_response(response, schema)
+    structured = parse_response(response, schema, rank_value_order(item))
     parse_status = structured.get("_parse_status", "ok")
 
     reasoning_text = extract_reasoning(response)
