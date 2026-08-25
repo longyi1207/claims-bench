@@ -89,7 +89,8 @@ is the largest per-item profile difference in the run (4.67 vs. a 0.62 mean).
 Repo policy (`../../docs/AZURE.md`) is Azure credits over a personal card, so every
 OpenAI call — generation *and* judges — routes through `src/providers.py`.
 Deployments `gpt-4o` (2024-11-20) and `gpt-4o-mini` (2024-07-18) were created in
-`yilongjack2001-6481-resource` so model identity matches the published pilot.
+the project's Azure AI Services resource so model identity matches the
+published pilot (resource/deployment specifics live in the private ops doc, not here).
 Anthropic stays direct: that Foundry resource offers `claude-opus-5`,
 `claude-sonnet-5`, `claude-opus-4-8`, `claude-haiku-4-5` — but **not**
 `claude-sonnet-4-6`, the model in the published baseline.

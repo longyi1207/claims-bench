@@ -11,7 +11,7 @@ Routing, in order:
   3. else raise.
 
 On Azure the `model` argument must be a **deployment name**, not a base model id.
-The deployments in `yilongjack2001-6481-resource` are named after their models
+The deployments in this project's Azure resource are named after their models
 (`gpt-4o` -> gpt-4o 2024-11-20, `gpt-4o-mini` -> gpt-4o-mini 2024-07-18), so the
 mapping is the identity by default; override per-model with
 `AZURE_DEPLOYMENT_MAP="gpt-4o=my-4o-deploy,gpt-4o-mini=my-mini"`.
