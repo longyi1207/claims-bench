@@ -1,0 +1,57 @@
+{
+  "label_a": "openai-direct+legacy",
+  "label_b": "azure+inspect",
+  "n_common": 37,
+  "only_a": [],
+  "only_b": [],
+  "parse_flips": [],
+  "one_sided_filter_markers": [
+    {
+      "item_id": "revelation_064",
+      "openai-direct+legacy": [],
+      "azure+inspect": [
+        "content management policy",
+        "was filtered"
+      ]
+    }
+  ],
+  "mean_l1_profile_distance": 0.6204,
+  "per_item_distance": {
+    "revelation_044": 0.0,
+    "revelation_045": 0.0,
+    "revelation_046": 0.8,
+    "revelation_047": 0.0,
+    "revelation_048": 0.4,
+    "revelation_049": 0.0,
+    "revelation_050": 0.0,
+    "revelation_051": 0.8,
+    "revelation_052": 0.0,
+    "revelation_053": 0.0,
+    "revelation_054": 0.0,
+    "revelation_055": 1.2,
+    "revelation_056": 0.8,
+    "revelation_057": 0.4,
+    "revelation_058": 0.0,
+    "revelation_059": 0.8,
+    "revelation_060": 0.3333,
+    "revelation_061": 0.9999,
+    "revelation_062": 0.6666,
+    "revelation_063": 0.0,
+    "revelation_064": 4.6667,
+    "revelation_065": 0.3334,
+    "revelation_067": 0.3333,
+    "revelation_068": 0.6667,
+    "revelation_069": 0.6666,
+    "revelation_070": 1.2,
+    "revelation_071": 0.4,
+    "revelation_072": 0.8,
+    "revelation_073": 0.8,
+    "revelation_074": 0.8,
+    "revelation_075": 0.8,
+    "revelation_076": 0.3333,
+    "revelation_077": 0.6666,
+    "revelation_078": 0.6666,
+    "revelation_079": 1.3332,
+    "revelation_080": 0.6666
+  }
+}

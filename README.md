@@ -28,12 +28,42 @@ CLAIMS-Bench is a normative evaluation framework for AI assistants. Not *"will i
 
 ## Quick start — L3 value revelation
 
+Generation runs on [Inspect](https://inspect.aisi.org.uk/) (`inspect_ai`): concurrency,
+retries, token accounting, `--epochs N` for replicates, and `inspect view` for
+per-sample transcripts. Cross-sample analysis (Bradley–Terry, bootstrap CIs,
+permutation tests, human-panel distance) stays in `src/v2` + `scripts/` — see
+[`docs/INSPECT_MIGRATION.md`](docs/INSPECT_MIGRATION.md) for what moved and what didn't.
+
 ```bash
 git clone https://github.com/longyi1207/claims-bench.git
 cd claims-bench
 python3 -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
+export OPENAI_API_KEY=sk-...   # ANTHROPIC_API_KEY for claude models
 
+# 1. Generate + score in one pass (structured items, Borda/BT need no judge)
+inspect eval inspect_task.py --model openai/gpt-4o \
+    --max-connections 8 -T subset=structured
+
+# 2. Export to the analysis-stack jsonl shape
+python scripts/eval_log_to_jsonl.py --log logs/*.eval --out-dir outputs/my_run
+
+# 3. Aggregate report (profile vector + failure rates + BT)
+python score_revelation.py \
+    --data data/v2_revelation.jsonl \
+    --responses outputs/my_run/gpt-4o_responses.jsonl \
+    --report outputs/my_run/report.json \
+    --judge-model gpt-4o-mini
+```
+
+Implicit/temporal items need a judge to produce a profile at all
+(`-T subset=implicit -T judge_model=gpt-4o`); the full baseline across both is
+wired up in `scripts/run_full80_inspect.sh`.
+
+<details>
+<summary>Legacy CLI (pre-Inspect, still works)</summary>
+
+```bash
 # 1. Generate model responses on L3 scenarios
 export OPENAI_API_KEY=sk-...
 python run_eval_v2.py \
@@ -57,6 +87,8 @@ print(json.dumps(r['summary']['mean_schwartz_profile'], indent=2))
 print('BT profile:', r['summary']['bradley_terry_profile'])
 "
 ```
+
+</details>
 
 ---
 

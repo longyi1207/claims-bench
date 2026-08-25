@@ -121,11 +121,11 @@ def _parse_json_blob(text: str) -> dict[str, Any]:
 
 
 def _judge_openai(model: str, item: dict, response_text: str) -> dict[str, Any]:
-    from openai import OpenAI
+    from src.providers import openai_client, resolve_model
 
-    client = OpenAI()
+    client = openai_client()
     resp = client.chat.completions.create(
-        model=model,
+        model=resolve_model(model),
         temperature=0,
         response_format={"type": "json_object"},
         messages=[
@@ -143,7 +143,7 @@ def _judge_anthropic(model: str, item: dict, response_text: str) -> dict[str, An
     msg = client.messages.create(
         model=model,
         max_tokens=1024,
-        temperature=0,
+        extra_body={"temperature": 0},
         system=IMPLICIT_JUDGE_SYSTEM,
         messages=[{"role": "user", "content": _build_implicit_prompt(item, response_text)}],
     )

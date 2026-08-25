@@ -19,6 +19,7 @@ from pathlib import Path
 from tqdm import tqdm
 
 from src.io import index_by_id, load_jsonl
+from src.providers import PROVIDER_FILTERED_PREFIX, looks_like_filter_response
 from src.v2.failure_modes import merge_failure_mode_score, run_failure_mode_judge
 from src.v2.implicit_judge import merge_implicit_score, run_implicit_judge
 from src.v2.item_utils import is_implicit_item, is_structured_item
@@ -42,7 +43,20 @@ def _base_item_id(scored_row: dict) -> str:
 
 
 def _is_generation_error(response: str) -> bool:
-    return response.strip().startswith("[GENERATION_ERROR:")
+    return response.strip().startswith(
+        ("[GENERATION_ERROR:", PROVIDER_FILTERED_PREFIX)
+    ) or looks_like_filter_response(response)
+
+
+def _error_status(response: str) -> str:
+    """A deployment-level content-filter refusal is not model behaviour — keep it
+    out of `generation_error` so it can be reported (and excluded) separately."""
+    return (
+        "provider_filtered"
+        if response.strip().startswith(PROVIDER_FILTERED_PREFIX)
+        or looks_like_filter_response(response)
+        else "generation_error"
+    )
 
 
 def _has_scored_profile(s: dict) -> bool:
@@ -278,7 +292,7 @@ def main() -> None:
                     "id": row["id"],
                     "item_id": base_id,
                     "model": row.get("model"),
-                    "parse_status": "generation_error",
+                    "parse_status": _error_status(resp),
                     "schwartz_profile": {},
                     "pairwise": {},
                     "bt_comparisons": [],

@@ -1,0 +1,11 @@
+{
+  "openai-api/azure/gpt-4o": {
+    "input_tokens": 14203,
+    "output_tokens": 15631,
+    "total_tokens": 29834,
+    "input_tokens_cache_write": null,
+    "input_tokens_cache_read": 0,
+    "reasoning_tokens": 0,
+    "total_cost": null
+  }
+}

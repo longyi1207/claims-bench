@@ -1,0 +1,408 @@
+[
+  {
+    "label": "coverage-gap items (044\u2013080)",
+    "models": {
+      "claude-sonnet-4-6": {
+        "ALL": {
+          "n_items": 37,
+          "n_with_profile": 29,
+          "mean_profile": {
+            "self_direction": 0.7379,
+            "stimulation": 0.0942,
+            "hedonism": 0.069,
+            "achievement": 0.1816,
+            "power": 0.0115,
+            "security": 0.5885,
+            "conformity": 0.2644,
+            "tradition": 0.1632,
+            "benevolence": 0.7793,
+            "universalism": 0.4667
+          }
+        },
+        "other": {
+          "n_items": 21,
+          "n_with_profile": 14,
+          "mean_profile": {
+            "self_direction": 0.8,
+            "stimulation": 0.0952,
+            "hedonism": 0.0,
+            "achievement": 0.2333,
+            "power": 0.0238,
+            "security": 0.6619,
+            "conformity": 0.319,
+            "tradition": 0.1809,
+            "benevolence": 0.9,
+            "universalism": 0.5238
+          }
+        },
+        "tests_hedonism_or_stimulation": {
+          "n_items": 10,
+          "n_with_profile": 9,
+          "mean_profile": {
+            "self_direction": 0.8667,
+            "stimulation": 0.1556,
+            "hedonism": 0.2222,
+            "achievement": 0.0444,
+            "power": 0.0,
+            "security": 0.4222,
+            "conformity": 0.2,
+            "tradition": 0.2444,
+            "benevolence": 0.7556,
+            "universalism": 0.0889
+          }
+        },
+        "tests_justice": {
+          "n_items": 6,
+          "n_with_profile": 6,
+          "mean_profile": {
+            "self_direction": 0.4,
+            "stimulation": 0.0,
+            "hedonism": 0.0,
+            "achievement": 0.2667,
+            "power": 0.0,
+            "security": 0.6667,
+            "conformity": 0.2333,
+            "tradition": 0.0,
+            "benevolence": 0.5333,
+            "universalism": 0.9
+          }
+        }
+      },
+      "gpt-4o": {
+        "ALL": {
+          "n_items": 37,
+          "n_with_profile": 36,
+          "mean_profile": {
+            "self_direction": 0.7167,
+            "stimulation": 0.1074,
+            "hedonism": 0.0778,
+            "achievement": 0.2648,
+            "power": 0.0185,
+            "security": 0.5704,
+            "conformity": 0.3444,
+            "tradition": 0.1722,
+            "benevolence": 0.6444,
+            "universalism": 0.5
+          }
+        },
+        "other": {
+          "n_items": 21,
+          "n_with_profile": 20,
+          "mean_profile": {
+            "self_direction": 0.74,
+            "stimulation": 0.0833,
+            "hedonism": 0.0,
+            "achievement": 0.3167,
+            "power": 0.0333,
+            "security": 0.6267,
+            "conformity": 0.44,
+            "tradition": 0.16,
+            "benevolence": 0.77,
+            "universalism": 0.58
+          }
+        },
+        "tests_hedonism_or_stimulation": {
+          "n_items": 10,
+          "n_with_profile": 10,
+          "mean_profile": {
+            "self_direction": 0.88,
+            "stimulation": 0.22,
+            "hedonism": 0.28,
+            "achievement": 0.04,
+            "power": 0.0,
+            "security": 0.4,
+            "conformity": 0.24,
+            "tradition": 0.3,
+            "benevolence": 0.52,
+            "universalism": 0.12
+          }
+        },
+        "tests_justice": {
+          "n_items": 6,
+          "n_with_profile": 6,
+          "mean_profile": {
+            "self_direction": 0.3667,
+            "stimulation": 0.0,
+            "hedonism": 0.0,
+            "achievement": 0.4667,
+            "power": 0.0,
+            "security": 0.6667,
+            "conformity": 0.2,
+            "tradition": 0.0,
+            "benevolence": 0.4333,
+            "universalism": 0.8667
+          }
+        }
+      },
+      "gpt-4o-mini": {
+        "ALL": {
+          "n_items": 37,
+          "n_with_profile": 36,
+          "mean_profile": {
+            "self_direction": 0.7111,
+            "stimulation": 0.1315,
+            "hedonism": 0.1111,
+            "achievement": 0.2611,
+            "power": 0.0278,
+            "security": 0.5685,
+            "conformity": 0.3611,
+            "tradition": 0.1704,
+            "benevolence": 0.6093,
+            "universalism": 0.4463
+          }
+        },
+        "other": {
+          "n_items": 21,
+          "n_with_profile": 20,
+          "mean_profile": {
+            "self_direction": 0.73,
+            "stimulation": 0.0667,
+            "hedonism": 0.0,
+            "achievement": 0.31,
+            "power": 0.05,
+            "security": 0.6734,
+            "conformity": 0.47,
+            "tradition": 0.1567,
+            "benevolence": 0.7167,
+            "universalism": 0.5433
+          }
+        },
+        "tests_hedonism_or_stimulation": {
+          "n_items": 10,
+          "n_with_profile": 10,
+          "mean_profile": {
+            "self_direction": 0.82,
+            "stimulation": 0.34,
+            "hedonism": 0.4,
+            "achievement": 0.04,
+            "power": 0.0,
+            "security": 0.34,
+            "conformity": 0.26,
+            "tradition": 0.3,
+            "benevolence": 0.46,
+            "universalism": 0.04
+          }
+        },
+        "tests_justice": {
+          "n_items": 6,
+          "n_with_profile": 6,
+          "mean_profile": {
+            "self_direction": 0.4667,
+            "stimulation": 0.0,
+            "hedonism": 0.0,
+            "achievement": 0.4667,
+            "power": 0.0,
+            "security": 0.6,
+            "conformity": 0.1667,
+            "tradition": 0.0,
+            "benevolence": 0.5,
+            "universalism": 0.8
+          }
+        }
+      }
+    }
+  },
+  {
+    "label": "pilot subset (001\u2013030, published \u00a76.1)",
+    "models": {
+      "claude-sonnet-4-6": {
+        "ALL": {
+          "n_items": 30,
+          "n_with_profile": 30,
+          "mean_profile": {
+            "self_direction": 0.4533,
+            "stimulation": 0.0,
+            "hedonism": 0.0133,
+            "achievement": 0.2133,
+            "power": 0.08,
+            "security": 0.6667,
+            "conformity": 0.1267,
+            "tradition": 0.0533,
+            "benevolence": 0.5733,
+            "universalism": 0.82
+          }
+        },
+        "other": {
+          "n_items": 9,
+          "n_with_profile": 9,
+          "mean_profile": {
+            "self_direction": 0.5556,
+            "stimulation": 0.0,
+            "hedonism": 0.0222,
+            "achievement": 0.1111,
+            "power": 0.1111,
+            "security": 0.6889,
+            "conformity": 0.1778,
+            "tradition": 0.0444,
+            "benevolence": 0.4,
+            "universalism": 0.8889
+          }
+        },
+        "tests_hedonism_or_stimulation": {
+          "n_items": 8,
+          "n_with_profile": 8,
+          "mean_profile": {
+            "self_direction": 0.45,
+            "stimulation": 0.0,
+            "hedonism": 0.0,
+            "achievement": 0.325,
+            "power": 0.05,
+            "security": 0.825,
+            "conformity": 0.125,
+            "tradition": 0.025,
+            "benevolence": 0.45,
+            "universalism": 0.75
+          }
+        },
+        "tests_justice": {
+          "n_items": 14,
+          "n_with_profile": 14,
+          "mean_profile": {
+            "self_direction": 0.3857,
+            "stimulation": 0.0,
+            "hedonism": 0.0143,
+            "achievement": 0.2143,
+            "power": 0.0714,
+            "security": 0.5857,
+            "conformity": 0.0857,
+            "tradition": 0.0714,
+            "benevolence": 0.7714,
+            "universalism": 0.8
+          }
+        }
+      },
+      "gpt-4o": {
+        "ALL": {
+          "n_items": 30,
+          "n_with_profile": 30,
+          "mean_profile": {
+            "self_direction": 0.4867,
+            "stimulation": 0.0,
+            "hedonism": 0.0133,
+            "achievement": 0.2267,
+            "power": 0.0933,
+            "security": 0.74,
+            "conformity": 0.1067,
+            "tradition": 0.0733,
+            "benevolence": 0.5467,
+            "universalism": 0.7133
+          }
+        },
+        "other": {
+          "n_items": 9,
+          "n_with_profile": 9,
+          "mean_profile": {
+            "self_direction": 0.6667,
+            "stimulation": 0.0,
+            "hedonism": 0.0222,
+            "achievement": 0.1333,
+            "power": 0.1333,
+            "security": 0.8,
+            "conformity": 0.0889,
+            "tradition": 0.0667,
+            "benevolence": 0.3778,
+            "universalism": 0.7111
+          }
+        },
+        "tests_hedonism_or_stimulation": {
+          "n_items": 8,
+          "n_with_profile": 8,
+          "mean_profile": {
+            "self_direction": 0.475,
+            "stimulation": 0.0,
+            "hedonism": 0.0,
+            "achievement": 0.3,
+            "power": 0.1,
+            "security": 0.975,
+            "conformity": 0.125,
+            "tradition": 0.025,
+            "benevolence": 0.325,
+            "universalism": 0.675
+          }
+        },
+        "tests_justice": {
+          "n_items": 14,
+          "n_with_profile": 14,
+          "mean_profile": {
+            "self_direction": 0.3571,
+            "stimulation": 0.0,
+            "hedonism": 0.0143,
+            "achievement": 0.2571,
+            "power": 0.0571,
+            "security": 0.5714,
+            "conformity": 0.1,
+            "tradition": 0.1,
+            "benevolence": 0.7857,
+            "universalism": 0.7571
+          }
+        }
+      },
+      "gpt-4o-mini": {
+        "ALL": {
+          "n_items": 30,
+          "n_with_profile": 30,
+          "mean_profile": {
+            "self_direction": 0.5,
+            "stimulation": 0.0,
+            "hedonism": 0.0133,
+            "achievement": 0.2733,
+            "power": 0.1133,
+            "security": 0.7133,
+            "conformity": 0.1267,
+            "tradition": 0.0667,
+            "benevolence": 0.5667,
+            "universalism": 0.6267
+          }
+        },
+        "other": {
+          "n_items": 9,
+          "n_with_profile": 9,
+          "mean_profile": {
+            "self_direction": 0.6,
+            "stimulation": 0.0,
+            "hedonism": 0.0222,
+            "achievement": 0.1778,
+            "power": 0.1556,
+            "security": 0.8222,
+            "conformity": 0.1333,
+            "tradition": 0.0667,
+            "benevolence": 0.3778,
+            "universalism": 0.6444
+          }
+        },
+        "tests_hedonism_or_stimulation": {
+          "n_items": 8,
+          "n_with_profile": 8,
+          "mean_profile": {
+            "self_direction": 0.475,
+            "stimulation": 0.0,
+            "hedonism": 0.0,
+            "achievement": 0.35,
+            "power": 0.15,
+            "security": 0.925,
+            "conformity": 0.075,
+            "tradition": 0.05,
+            "benevolence": 0.35,
+            "universalism": 0.625
+          }
+        },
+        "tests_justice": {
+          "n_items": 14,
+          "n_with_profile": 14,
+          "mean_profile": {
+            "self_direction": 0.4286,
+            "stimulation": 0.0,
+            "hedonism": 0.0143,
+            "achievement": 0.3,
+            "power": 0.0571,
+            "security": 0.5286,
+            "conformity": 0.1429,
+            "tradition": 0.0714,
+            "benevolence": 0.8143,
+            "universalism": 0.6429
+          }
+        }
+      }
+    }
+  }
+]

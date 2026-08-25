@@ -2,9 +2,20 @@ torch>=2.1.0
 transformers>=4.40.0
 tqdm>=4.66.0
 accelerate>=0.28.0
-openai>=1.30.0
-anthropic>=0.25.0
+# openai>=3.1.0 required by inspect-ai's OpenAI provider. 3.0's only breaking
+# change is httpx2 as the default HTTP client; this repo uses no custom httpx
+# client, so the judge modules and legacy run_eval.py are unaffected.
+openai>=3.1.0
+# anthropic>=1.0.0 required by inspect-ai's Anthropic provider. 1.0 removed
+# temperature/top_p/top_k from Messages.create(); the API still accepts them for
+# models that support them (e.g. Sonnet 4.6), so both Inspect and this repo's
+# legacy path route them through extra_body. Dropping them silently would move
+# replicate runs from T=0 / T=0.7 to the API default of 1.0.
+anthropic>=1.0.0
 pyyaml>=6.0
 jsonschema>=4.0
 pytest>=8.0
 matplotlib>=3.8.0
+# Generation + per-sample scoring layer (see docs/INSPECT_MIGRATION.md).
+# Cross-sample aggregation deliberately stays in src/v2 + scripts/.
+inspect-ai>=0.3.260

@@ -83,12 +83,12 @@ def generate_hf(
 
 
 def generate_openai(model_id: str, item: dict, max_new_tokens: int, *, temperature: float = 0.0) -> str:
-    from openai import OpenAI
+    from src.providers import openai_client, resolve_model
 
-    client = OpenAI()
+    client = openai_client()
     messages = build_messages(item)
     resp = client.chat.completions.create(
-        model=model_id,
+        model=resolve_model(model_id),
         messages=messages,
         max_tokens=max_new_tokens,
         temperature=temperature,
@@ -124,12 +124,17 @@ def generate_anthropic(model_id: str, item: dict, max_new_tokens: int, *, temper
         system = messages[0]["content"]
         user_msgs = messages[1:]
 
+    # anthropic >= 1.0 removed temperature/top_p/top_k from the method signature
+    # (the API still accepts them for models that support them, e.g. Sonnet 4.6),
+    # so route sampling params through extra_body. Dropping them silently would
+    # change replicate runs from T=0 / T=0.7 to the API default of 1.0.
+    extra_body = {"temperature": temperature} if temperature is not None else {}
     msg = client.messages.create(
         model=model_id,
         max_tokens=max_new_tokens,
-        temperature=temperature,
         system=system or anthropic.NOT_GIVEN,
         messages=[{"role": m["role"], "content": m["content"]} for m in user_msgs],
+        extra_body=extra_body,
     )
     parts = [b.text for b in msg.content if hasattr(b, "text")]
     return "\n".join(parts).strip()

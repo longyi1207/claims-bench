@@ -1,0 +1,12 @@
+{
+  "revelation_064": {
+    "jailbreak": {
+      "detected": true,
+      "filtered": true
+    },
+    "violence": {
+      "filtered": true,
+      "severity": "medium"
+    }
+  }
+}

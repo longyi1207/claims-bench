@@ -17,3 +17,8 @@ outputs/*/scored_*.jsonl
 outputs/pilot_l3/*_responses.jsonl
 outputs/pilot_l3/*_scored.jsonl
 outputs/pilot_l3/*_scored_*.jsonl
+
+# Inspect eval logs (.eval bundles: full transcripts + token usage).
+# Large and regenerable; the committed artifacts are the exported
+# outputs/**/ *_responses.jsonl / *_scored.jsonl / *_usage.json.
+logs/
